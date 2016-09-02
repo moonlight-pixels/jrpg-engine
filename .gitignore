@@ -1,0 +1,21 @@
+## Java
+*.class
+*.jar
+
+## Intellij
+.idea/
+*.ipr
+*.iws
+*.iml
+out/
+com_crashlytics_export_strings.xml
+
+## Gradle
+.gradle
+gradle-app.setting
+build/
+!/gradle/wrapper/gradle-wrapper.jar
+
+## OS Specific
+.DS_Store
+Thumbs.db

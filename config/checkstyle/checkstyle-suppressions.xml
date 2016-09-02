@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+<suppressions>
+    <!--
+      This Checkstyle suppressions file contains suppressions for any checks
+      that we don't want to enforce against unit tests.
+    -->
+
+    <!-- Don't require Javadoc -->
+    <suppress checks="JavadocPackage"              files="[/\\]src[/\\]test[/\\]java[/\\]" />
+    <suppress checks="JavadocType"                 files="[/\\]src[/\\]test[/\\]java[/\\]" />
+    <suppress checks="JavadocMethod"               files="[/\\]src[/\\]test[/\\]java[/\\]" />
+    <suppress checks="JavadocVariable"             files="[/\\]src[/\\]test[/\\]java[/\\]" />
+    <suppress checks="JavadocStyle"                files="[/\\]src[/\\]test[/\\]java[/\\]" />
+
+    <!-- Relax some code conventions -->
+    <suppress checks="FileLength"                  files="[/\\]src[/\\]test[/\\]java[/\\]" />
+    <suppress checks="MethodLength"                files="[/\\]src[/\\]test[/\\]java[/\\]" />
+    <suppress checks="MethodCount"                 files="[/\\]src[/\\]test[/\\]java[/\\]" />
+    <suppress checks="ExecutableStatementCount"    files="[/\\]src[/\\]test[/\\]java[/\\]" />
+    <suppress checks="ParameterNumber"             files="[/\\]src[/\\]test[/\\]java[/\\]" />
+
+    <!-- Allow for * import of Junit assertions -->
+    <suppress checks="AvoidStarImport"             files="[/\\]src[/\\]test[/\\]java[/\\]" />
+
+</suppressions>
