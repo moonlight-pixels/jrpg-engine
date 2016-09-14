@@ -1,4 +1,4 @@
-package com.github.jaystgelais.rpg;
+package com.github.jaystgelais.jrpg;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.github.jaystgelais.jrpg.state.StackedStateMachine;
