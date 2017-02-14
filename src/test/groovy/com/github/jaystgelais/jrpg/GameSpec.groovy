@@ -1,6 +1,5 @@
 package com.github.jaystgelais.jrpg
 
-import com.github.jaystgelais.jrpg.Game
 import com.github.jaystgelais.jrpg.state.StackedStateMachine
 import com.github.jaystgelais.jrpg.state.State
 import spock.lang.Specification
