@@ -1,11 +1,13 @@
 package com.github.jaystgelais.jrpg.state;
 
+import com.github.jaystgelais.jrpg.graphics.Renderable;
+
 import java.util.Map;
 
-public interface State {
+
+public interface State extends Updatable, Renderable {
     String getKey();
-    void update(final long elapsedTime);
-    void render();
+
     void onEnter(Map<String, Object> params);
     void onExit();
 }

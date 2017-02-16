@@ -1,5 +1,7 @@
 package com.github.jaystgelais.jrpg.state;
 
+import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -34,8 +36,8 @@ public class StateMachine {
         currentState.update(elapsedTime);
     }
 
-    public final void render() {
-        currentState.render();
+    public final void render(final GraphicsService graphicsService) {
+        currentState.render(graphicsService);
     }
 
     public final void change(final String stateKey) {

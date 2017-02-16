@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.state
 
+import com.github.jaystgelais.jrpg.graphics.GraphicsService
 import spock.lang.Specification
 
 class StateMachineSpec extends Specification {
@@ -34,15 +35,16 @@ class StateMachineSpec extends Specification {
         setup:
         State state = Mock(State)
         StateMachine stateMachine = new StateMachine([state] as Set<State>, state)
+        GraphicsService graphicsService = Mock(GraphicsService)
 
         when:
         stateMachine.update(100)
-        stateMachine.render()
+        stateMachine.render(graphicsService)
 
         then:
         _ * state.getKey() >> 'somekey'
         1 * state.update(100)
-        1 * state.render()
+        1 * state.render(graphicsService)
     }
 
     void 'change throws exception if stateKey is not recognized'() {
