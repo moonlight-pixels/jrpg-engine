@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg
 
+import com.github.jaystgelais.jrpg.graphics.GraphicsService
 import com.github.jaystgelais.jrpg.state.StackedStateMachine
 import com.github.jaystgelais.jrpg.state.State
 import spock.lang.Specification
@@ -13,14 +14,15 @@ class GameSpec extends Specification {
             _ * getKey() >> 'key1'
         }
         StackedStateMachine gameModes = new StackedStateMachine([mockState] as Set<State>, mockState)
+        GraphicsService graphicsService = Mock(GraphicsService)
 
         when:
-        Game game = new Game(gameModes)
+        Game game = new Game(gameModes, graphicsService)
         game.render()
 
         then:
         1 * mockState.update(_)
-        1 * mockState.render()
+        1 * mockState.render(graphicsService)
     }
 
     void 'Game correctly measures time elapsed'() {
@@ -32,13 +34,14 @@ class GameSpec extends Specification {
             _ * getKey() >> 'key1'
         }
         StackedStateMachine gameModes = new StackedStateMachine([mockState] as Set<State>, mockState)
+        GraphicsService graphicsService = Mock(GraphicsService)
 
         when:
-        Game game = new Game(gameModes, mockClock)
+        Game game = new Game(gameModes, graphicsService, mockClock)
         game.render()
 
         then:
         1 * mockState.update(1)
-        1 * mockState.render()
+        1 * mockState.render(graphicsService)
     }
 }
