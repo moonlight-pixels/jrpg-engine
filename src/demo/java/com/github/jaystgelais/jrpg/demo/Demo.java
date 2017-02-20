@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.GraphicsServiceImpl;
+import com.github.jaystgelais.jrpg.input.InputService;
+import com.github.jaystgelais.jrpg.input.Inputs;
+import com.github.jaystgelais.jrpg.input.KeyboardInputService;
 import com.github.jaystgelais.jrpg.state.StackedStateMachine;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
@@ -29,9 +32,11 @@ public final class Demo {
     }
 
     private static Game initGame() {
-        GraphicsService graphicsService = new GraphicsServiceImpl(initAssetManager());
+        final GraphicsService graphicsService = new GraphicsServiceImpl(initAssetManager());
+        final InputService inputService = new KeyboardInputService();
 
         State panelState = new State() {
+            private PanelText panelText;
             private Panel panel;
             @Override
             public void dispose() {
@@ -53,7 +58,8 @@ public final class Demo {
                         "based games. On [GREEN]Android[], the mouse is replaced with a (capacitive) touch screen, and a " +
                         "hardware keyboard is often missing. All (compatible) Android devices also feature an " +
                         "accelerometer and sometimes even a compass (magnetic field sensor).";
-                panel.add(new PanelText(panel, graphicsService.getDefaultFont(), displayText));
+                panelText = new PanelText(panel, graphicsService.getDefaultFont(), displayText);
+                panel.add(panelText);
             }
 
             @Override
@@ -68,7 +74,9 @@ public final class Demo {
 
             @Override
             public void update(final long elapsedTime) {
-
+                if (inputService.isPressed(Inputs.OK)) {
+                    panelText.updatePage();
+                }
             }
         };
         StackedStateMachine gameModes = new StackedStateMachine(Collections.singleton(panelState), panelState);

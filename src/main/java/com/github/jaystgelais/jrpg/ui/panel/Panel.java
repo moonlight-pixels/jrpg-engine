@@ -94,7 +94,7 @@ public class Panel implements Renderable, PanelContainer {
         return new Color[]{
                 palette.getBorderEdgeMedium(), palette.getBorderPrimary(),    palette.getBorderEdgeDark(),
                 null,                          palette.getBorderEdgeMedium(), palette.getBorderPrimary(),
-                null,                          null,                          palette.getBorderEdgeLight()
+                null,                          null,                          palette.getBorderEdgeDark()
         };
     }
 
