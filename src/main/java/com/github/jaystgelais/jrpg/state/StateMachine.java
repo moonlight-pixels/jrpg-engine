@@ -1,12 +1,13 @@
 package com.github.jaystgelais.jrpg.state;
 
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.graphics.Renderable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class StateMachine {
+public class StateMachine implements Renderable {
     private Map<String, State> states = new HashMap<>();
     private State currentState;
 
@@ -24,7 +25,7 @@ public class StateMachine {
         currentState = initialState;
     }
 
-    protected final State getCurrentState() {
+    public final State getCurrentState() {
         return currentState;
     }
 
@@ -62,4 +63,9 @@ public class StateMachine {
     }
 
     protected void onChange(final State oldState, final State newState) { }
+
+    @Override
+    public final void dispose() {
+        states.values().forEach(state -> state.dispose());
+    }
 }

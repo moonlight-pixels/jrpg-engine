@@ -13,6 +13,29 @@ version = '0.1.0'
 ext {
     gdxVersion = '1.9.4'
 }
+sourceSets {
+    demo {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
+    }
+}
+
+configurations {
+    demoCompile.extendsFrom compile
+    demoRuntime.extendsFrom runtime
+}
+
+task demo(type: JavaExec) {
+    classpath = sourceSets.demo.runtimeClasspath
+
+    main = 'com.github.jaystgelais.jrpg.demo.Demo'
+}
+
+checkstyle {
+    sourceSets = [sourceSets.main]
+}
 
 tasks.withType(FindBugs) {
     reports {

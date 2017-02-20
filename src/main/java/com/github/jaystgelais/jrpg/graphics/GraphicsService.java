@@ -1,26 +1,39 @@
 package com.github.jaystgelais.jrpg.graphics;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.github.jaystgelais.jrpg.Game;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 
-public class GraphicsService {
-    public static final int DEFAULT_RESOLUTION_WIDTH = 480;
-    public static final int DEFAULT_RESOLUTION_HEIGHT = 320;
-    private final AssetManager assetManager;
+/**
+ * Created by jgelais on 2/19/17.
+ */
+public interface GraphicsService extends Disposable {
+    LwjglApplicationConfiguration getConfiguration();
 
-    public GraphicsService(final AssetManager assetManager) {
-        this.assetManager = assetManager;
-    }
+    void renderStart();
 
-    public final void runGame(final Game game) {
-        LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-        cfg.title = "my-gdx-game";
-        cfg.useGL30 = false;
-        cfg.width = DEFAULT_RESOLUTION_WIDTH;
-        cfg.height = DEFAULT_RESOLUTION_HEIGHT;
+    void renderEnd();
 
-        new LwjglApplication(game, cfg);
-    }
+    void init();
+
+    void resize(int width, int height);
+
+    void drawSprite(Texture texture, float posX, float posY);
+
+    void drawSprite(Pixmap pixmap, float posX, float posY);
+
+    SpriteBatch getSpriteBatch();
+
+    BitmapFont getDefaultFont();
+
+    int getResolutionWidth();
+
+    void setResolutionWidth(int resolutionWidth);
+
+    int getResolutionHeight();
+
+    void setResolutionHeight(int resolutionHeight);
 }

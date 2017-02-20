@@ -14,7 +14,7 @@ public final class StackedStateMachine extends StateMachine {
     public void exitCurrentState() {
         if (stateHistory.isEmpty()) {
             throw new IllegalStateException(
-                    "Attempted to exitCurrentState() with not states saved in history to transition to."
+                    "Attempted to exitCurrentState() with no states saved in history to transition to."
             );
         }
 
