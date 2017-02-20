@@ -41,11 +41,11 @@ public class Panel implements Renderable, PanelContainer {
 
     @Override
     public final void render(final GraphicsService graphicsService) {
-        drawTileFromArray(getTopLeftCorner(), CORNER_WIDTH, CORNER_HEIGHT, 0,         0);
-        drawTileFromArray(getTopRightCorner(), CORNER_WIDTH, CORNER_HEIGHT, width - (CORNER_WIDTH + 1), 0);
-        drawTileFromArray(getBottomLeftCorner(), CORNER_WIDTH, CORNER_HEIGHT, 0,         height - (CORNER_HEIGHT + 1));
+        drawTileFromArray(getBottomLeftCorner(), CORNER_WIDTH, CORNER_HEIGHT, 0,         0);
+        drawTileFromArray(getBottomRightCorner(), CORNER_WIDTH, CORNER_HEIGHT, width - (CORNER_WIDTH + 1), 0);
+        drawTileFromArray(getTopLeftCorner(), CORNER_WIDTH, CORNER_HEIGHT, 0,         height - (CORNER_HEIGHT + 1));
         drawTileFromArray(
-                getBottomRightCorner(),
+                getTopRightCorner(),
                 CORNER_WIDTH, CORNER_HEIGHT,
                 width - (CORNER_WIDTH + 1), height - (CORNER_HEIGHT + 1)
         );
@@ -92,9 +92,9 @@ public class Panel implements Renderable, PanelContainer {
 
     private Color[] getTopLeftCorner() {
         return new Color[]{
-                null,                          null,                          palette.getBorderEdgeLight(),
+                palette.getBorderEdgeMedium(), palette.getBorderPrimary(),    palette.getBorderEdgeDark(),
                 null,                          palette.getBorderEdgeMedium(), palette.getBorderPrimary(),
-                palette.getBorderEdgeMedium(), palette.getBorderPrimary(),    palette.getBorderEdgeDark()
+                null,                          null,                          palette.getBorderEdgeLight()
         };
     }
 
@@ -108,9 +108,9 @@ public class Panel implements Renderable, PanelContainer {
 
     private Color[] getTopRightCorner() {
         return new Color[]{
-                palette.getBorderEdgeDark(),   null,                          null,
+                palette.getBorderPrimary(),    palette.getBorderEdgeMedium(), palette.getBorderEdgeDark(),
                 palette.getBorderEdgeLight(),  palette.getBorderEdgeDark(),   null,
-                palette.getBorderPrimary(),    palette.getBorderEdgeMedium(), palette.getBorderEdgeDark()
+                palette.getBorderEdgeDark(),   null,                          null
         };
     }
 
@@ -128,9 +128,9 @@ public class Panel implements Renderable, PanelContainer {
 
     private Color[] getBottomLeftCorner() {
         return new Color[]{
-                palette.getBorderEdgeMedium(), palette.getBorderPrimary(),    palette.getBorderEdgeMedium(),
+                null,                          null,                          palette.getBorderEdgeLight(),
                 null,                          palette.getBorderEdgeMedium(), palette.getBorderPrimary(),
-                null,                          null,                          palette.getBorderEdgeLight()
+                palette.getBorderEdgeMedium(), palette.getBorderPrimary(),    palette.getBorderEdgeMedium()
         };
     }
 
@@ -144,9 +144,9 @@ public class Panel implements Renderable, PanelContainer {
 
     private Color[] getBottomRightCorner() {
         return new Color[]{
-                palette.getBorderPrimary(),    palette.getBorderEdgeMedium(), palette.getBorderEdgeDark(),
+                palette.getBorderEdgeDark(),   null,                          null,
                 palette.getBorderEdgeMedium(), palette.getBorderEdgeDark(),   null,
-                palette.getBorderEdgeDark(),   null,                          null
+                palette.getBorderPrimary(),    palette.getBorderEdgeMedium(), palette.getBorderEdgeDark()
         };
     }
 
