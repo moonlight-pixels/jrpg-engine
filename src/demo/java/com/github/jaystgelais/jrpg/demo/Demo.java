@@ -33,6 +33,8 @@ public final class Demo {
 
     private static Game initGame() {
         final GraphicsService graphicsService = new GraphicsServiceImpl(initAssetManager());
+        graphicsService.setResolutionWidth(640);
+        graphicsService.setResolutionHeight(480);
         final InputService inputService = new KeyboardInputService();
 
         State panelState = new State() {
@@ -50,9 +52,9 @@ public final class Demo {
 
             @Override
             public void onEnter(final Map<String, Object> params) {
-                panel = new Panel(new PanelPalette(), 180, 66);
-                panel.setPositionX(150);
-                panel.setPositionY(254);
+                panel = new Panel(new PanelPalette(), graphicsService.getResolutionWidth() / 2, graphicsService.getResolutionHeight() / 2);
+                panel.setPositionX(graphicsService.getResolutionWidth() / 4);
+                panel.setPositionY(graphicsService.getResolutionHeight() / 2);
                 String displayText = "Different platforms have different input facilities. On the desktop users " +
                         "can talk to your application via the keyboard and a mouse. The same is true for browser " +
                         "based games. On [GREEN]Android[], the mouse is replaced with a (capacitive) touch screen, and a " +

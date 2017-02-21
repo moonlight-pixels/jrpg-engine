@@ -30,7 +30,11 @@ public abstract class AbstractInputService implements InputService {
             }
             inputLastRead.remove(input);
         }
-        return checkForInput(input);
+        boolean isPressed = checkForInput(input);
+        if (isPressed) {
+            inputLastRead.put(input, currentTime);
+        }
+        return isPressed;
     }
 
     protected abstract boolean checkForInput(Inputs inputs);

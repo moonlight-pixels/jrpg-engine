@@ -18,7 +18,7 @@ import java.util.Deque;
 public final class GraphicsServiceImpl implements GraphicsService {
     public static final int DEFAULT_RESOLUTION_WIDTH = 480;
     public static final int DEFAULT_RESOLUTION_HEIGHT = 320;
-    public static final float DEFAULT_FONT_SCALE = 0.6f;
+    public static final float DEFAULT_FONT_TARGET_LINES = 25f;
 
     private final AssetManager assetManager;
     private final Deque<Disposable> disposables = new ArrayDeque<>();
@@ -67,12 +67,16 @@ public final class GraphicsServiceImpl implements GraphicsService {
         spriteBatch = new SpriteBatch();
 
         defaultFont = new BitmapFont();
-        defaultFont.getData().setScale(DEFAULT_FONT_SCALE);
+        defaultFont.getData().setScale(calculateDefaultFontScale(defaultFont));
         defaultFont.getData().markupEnabled = true;
 
         Graphics.Monitor monitor = Gdx.graphics.getMonitor();
         Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode(monitor);
         Gdx.graphics.setFullscreenMode(displayMode);
+    }
+
+    private float calculateDefaultFontScale(final BitmapFont font) {
+        return getResolutionHeight() / (DEFAULT_FONT_TARGET_LINES * font.getLineHeight());
     }
 
     @Override
