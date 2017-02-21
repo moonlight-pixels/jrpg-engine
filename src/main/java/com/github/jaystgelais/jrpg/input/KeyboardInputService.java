@@ -3,7 +3,6 @@ package com.github.jaystgelais.jrpg.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
-import java.time.Clock;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +40,7 @@ public final class KeyboardInputService extends AbstractInputService {
     }
 
     @Override
-    protected boolean checkForInput(Inputs inputs) {
+    protected boolean checkForInput(final Inputs inputs) {
         return Gdx.input.isKeyPressed(keyMap.get(inputs));
     }
 

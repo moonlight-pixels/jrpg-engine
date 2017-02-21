@@ -37,6 +37,10 @@ checkstyle {
     sourceSets = [sourceSets.main]
 }
 
+findbugs {
+    sourceSets = [sourceSets.main]
+}
+
 tasks.withType(FindBugs) {
     reports {
         xml.enabled = false
