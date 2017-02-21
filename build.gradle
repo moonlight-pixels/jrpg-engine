@@ -7,11 +7,12 @@ plugins {
     id 'codenarc'
     id 'jacoco'
     id 'idea'
+    id 'com.github.ben-manes.versions' version '0.14.0'
 }
 
 version = '0.1.0'
 ext {
-    gdxVersion = '1.9.4'
+    gdxVersion = '1.9.5'
 }
 sourceSets {
     demo {
@@ -69,6 +70,19 @@ codenarc {
 
 test.finalizedBy jacocoTestReport
 
+dependencyUpdates.resolutionStrategy = {
+    componentSelection { rules ->
+        rules.all { ComponentSelection selection ->
+            boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
+                selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+            }
+            if (rejected) {
+                selection.reject('Release candidate')
+            }
+        }
+    }
+}
+
 repositories {
     jcenter()
 }
@@ -84,8 +98,8 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 
-    testCompile "org.codehaus.groovy:groovy-all:2.4.1"
+    testCompile "org.codehaus.groovy:groovy-all:2.4.8"
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
-    testRuntime "cglib:cglib-nodep:3.1"
-    testRuntime "org.objenesis:objenesis:2.1"
+    testRuntime "cglib:cglib-nodep:3.2.4"
+    testRuntime "org.objenesis:objenesis:2.5.1"
 }
