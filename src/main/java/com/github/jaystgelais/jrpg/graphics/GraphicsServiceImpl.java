@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
+import com.github.jaystgelais.jrpg.graphics.factory.SpriteBatchFactory;
+import com.github.jaystgelais.jrpg.graphics.factory.SpriteBatchFactoryImpl;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -21,6 +23,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
     public static final float DEFAULT_FONT_TARGET_LINES = 25f;
 
     private final AssetManager assetManager;
+    private final SpriteBatchFactory spriteBatchFactory;
     private final Deque<Disposable> disposables = new ArrayDeque<>();
     private BitmapFont defaultFont;
     private SpriteBatch spriteBatch;
@@ -29,7 +32,12 @@ public final class GraphicsServiceImpl implements GraphicsService {
     private int resolutionHeight = DEFAULT_RESOLUTION_HEIGHT;
 
     public GraphicsServiceImpl(final AssetManager assetManager) {
+        this(assetManager, new SpriteBatchFactoryImpl());
+    }
+
+    GraphicsServiceImpl(final AssetManager assetManager, final SpriteBatchFactory spriteBatchFactory) {
         this.assetManager = assetManager;
+        this.spriteBatchFactory = spriteBatchFactory;
     }
 
     @Override
@@ -69,7 +77,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
         camera = new OrthographicCamera(resolutionWidth, resolutionHeight);
         camera.position.set(resolutionWidth / 2f, resolutionHeight / 2f, 0);
         camera.update();
-        spriteBatch = new SpriteBatch();
+        spriteBatch = spriteBatchFactory.createSpriteBatch();
 
         defaultFont = new BitmapFont();
         defaultFont.getData().setScale(calculateDefaultFontScale(defaultFont));
