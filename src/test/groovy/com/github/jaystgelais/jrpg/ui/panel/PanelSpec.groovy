@@ -9,7 +9,7 @@ class PanelSpec extends GdxSpecification {
     void 'Panel constructs a properly sized sprite'() {
         given:
         GraphicsService graphicsService = Mock(GraphicsService)
-        Panel panel = new Panel(new PanelPalette(), 100, 200)
+        Panel panel = new Panel(100, 200, new PanelPalette())
 
         when:
         panel.render(graphicsService)

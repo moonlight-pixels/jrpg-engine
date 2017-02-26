@@ -11,9 +11,10 @@ class StackedStateMachineSpec extends Specification {
         State state2 = Mock(State) {
             _ * getKey() >> 'key2'
         }
-        StackedStateMachine stateMachine = new StackedStateMachine([state1, state2] as Set<State>, state1)
+        StackedStateMachine stateMachine = new StackedStateMachine([state1, state2] as Set<State>, state1.key)
 
         when:
+        stateMachine.change('key1')
         stateMachine.exitCurrentState()
 
         then:
@@ -28,9 +29,10 @@ class StackedStateMachineSpec extends Specification {
         State state2 = Mock(State) {
             _ * getKey() >> 'key2'
         }
-        StackedStateMachine stateMachine = new StackedStateMachine([state1, state2] as Set<State>, state1)
+        StackedStateMachine stateMachine = new StackedStateMachine([state1, state2] as Set<State>, state1.key)
 
         when:
+        stateMachine.change('key1')
         stateMachine.change('key2')
 
         then:

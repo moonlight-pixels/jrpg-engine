@@ -33,8 +33,10 @@ class StateMachineSpec extends Specification {
 
     void 'calls to update and render propegate to the current state'() {
         setup:
-        State state = Mock(State)
-        StateMachine stateMachine = new StateMachine([state] as Set<State>, state)
+        State state = Mock(State) {
+            _ * getKey() >> 'key'
+        }
+        StateMachine stateMachine = new StateMachine([state] as Set<State>, state.key)
         GraphicsService graphicsService = Mock(GraphicsService)
 
         when:
@@ -42,9 +44,26 @@ class StateMachineSpec extends Specification {
         stateMachine.render(graphicsService)
 
         then:
-        _ * state.getKey() >> 'somekey'
         1 * state.update(100)
         1 * state.render(graphicsService)
+    }
+
+    void 'calls to dispose propegate to all states'() {
+        setup:
+        State state1 = Mock(State) {
+            _ * getKey() >> 'key1'
+        }
+        State state2 = Mock(State) {
+            _ * getKey() >> 'key2'
+        }
+        StateMachine stateMachine = new StateMachine([state1, state2] as Set<State>, state1.key)
+
+        when:
+        stateMachine.dispose()
+
+        then:
+        1 * state1.dispose()
+        1 * state2.dispose()
     }
 
     void 'change throws exception if stateKey is not recognized'() {
@@ -52,7 +71,7 @@ class StateMachineSpec extends Specification {
         State state = Mock(State) {
             _ * getKey() >> 'key'
         }
-        StateMachine stateMachine = new StateMachine([state] as Set<State>, state)
+        StateMachine stateMachine = new StateMachine([state] as Set<State>, state.key)
 
         when:
         stateMachine.change('notAKey')
@@ -66,7 +85,7 @@ class StateMachineSpec extends Specification {
         State state = Mock(State) {
             _ * getKey() >> 'key'
         }
-        StateMachine stateMachine = new StateMachine([state] as Set<State>, state)
+        StateMachine stateMachine = new StateMachine([state] as Set<State>, state.key)
 
         when:
         stateMachine.change('key', null)
@@ -83,10 +102,11 @@ class StateMachineSpec extends Specification {
         State state2 = Mock(State) {
             _ * getKey() >> 'key2'
         }
-        StateMachine stateMachine = new StateMachine([state1, state2] as Set<State>, state1)
+        StateMachine stateMachine = new StateMachine([state1, state2] as Set<State>, state1.key)
         Map<String, Object> params = ['param': 'value']
 
         when:
+        stateMachine.change('key1')
         stateMachine.change('key2', params)
 
         then:
@@ -102,7 +122,7 @@ class StateMachineSpec extends Specification {
         State state2 = Mock(State) {
             _ * getKey() >> 'key2'
         }
-        StateMachine stateMachine = new StateMachine([state1, state2] as Set<State>, state1)
+        StateMachine stateMachine = new StateMachine([state1, state2] as Set<State>, state1.key)
 
         when:
         stateMachine.setCurrentState(state2)
@@ -119,9 +139,10 @@ class StateMachineSpec extends Specification {
         State state2 = Mock(State) {
             _ * getKey() >> 'key2'
         }
-        StateMachine stateMachine = Spy(StateMachine, constructorArgs: [[state1, state2] as Set<State>, state1])
+        StateMachine stateMachine = Spy(StateMachine, constructorArgs: [[state1, state2] as Set<State>, state1.key])
 
         when:
+        stateMachine.change('key1')
         stateMachine.change('key2')
 
         then:

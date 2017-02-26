@@ -2,16 +2,20 @@ package com.github.jaystgelais.jrpg.state;
 
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
+import com.github.jaystgelais.jrpg.input.InputHandler;
+import com.github.jaystgelais.jrpg.input.InputService;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class StateMachine implements Renderable {
+public class StateMachine implements Renderable, InputHandler {
     private Map<String, State> states = new HashMap<>();
+    private final String initialState;
     private State currentState;
 
-    public StateMachine(final Set<State> states, final State initialState) {
+    public StateMachine(final Set<? extends State> states, final String initialState) {
         if (states == null || states.isEmpty()) {
             throw new IllegalArgumentException("states MUST NOT be null and MUST be a non-empty Set.");
         }
@@ -22,10 +26,17 @@ public class StateMachine implements Renderable {
         for (State state : states) {
             this.states.put(state.getKey(), state);
         }
-        currentState = initialState;
+
+        if (!this.states.containsKey(initialState)) {
+            throw new IllegalArgumentException("Unkown state " + initialState);
+        }
+        this.initialState = initialState;
     }
 
     public final State getCurrentState() {
+        if (currentState == null) {
+            change(initialState);
+        }
         return currentState;
     }
 
@@ -34,15 +45,15 @@ public class StateMachine implements Renderable {
     }
 
     public final void update(final long elapsedTime) {
-        currentState.update(elapsedTime);
+        getCurrentState().update(elapsedTime);
     }
 
     public final void render(final GraphicsService graphicsService) {
-        currentState.render(graphicsService);
+        getCurrentState().render(graphicsService);
     }
 
     public final void change(final String stateKey) {
-        change(stateKey, new HashMap<>());
+        change(stateKey, Collections.emptyMap());
     }
 
     public final void change(final String stateKey, final Map<String, Object> params) {
@@ -55,11 +66,16 @@ public class StateMachine implements Renderable {
             );
         }
 
-        currentState.onExit();
-        State previousState = currentState;
-        currentState = states.get(stateKey);
-        currentState.onEnter(params);
-        onChange(previousState, currentState);
+        if (currentState != null) {
+            currentState.onExit();
+            State previousState = currentState;
+            currentState = states.get(stateKey);
+            currentState.onEnter(params);
+            onChange(previousState, currentState);
+        } else {
+            currentState = states.get(stateKey);
+            currentState.onEnter(params);
+        }
     }
 
     protected void onChange(final State oldState, final State newState) { }
@@ -67,5 +83,10 @@ public class StateMachine implements Renderable {
     @Override
     public final void dispose() {
         states.values().forEach(state -> state.dispose());
+    }
+
+    @Override
+    public final void handleInput(final InputService inputService) {
+        getCurrentState().handleInput(inputService);
     }
 }

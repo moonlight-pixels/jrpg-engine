@@ -1,21 +1,22 @@
 package com.github.jaystgelais.jrpg.state;
 
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.input.InputService;
 
 import java.util.Map;
 
-public abstract class GameMode implements State {
-    public static final String STATE_KEY_PREFIX = "gameMode:";
-
-    public abstract String getName();
-
-    @Override
-    public final String getKey() {
-        return STATE_KEY_PREFIX + getName();
-    }
+/**
+ * Created by jgelais on 2/21/17.
+ */
+public abstract class StateAdapter implements State {
 
     @Override
     public void update(final long elapsedTime) {
+
+    }
+
+    @Override
+    public void handleInput(final InputService inputService) {
 
     }
 
@@ -31,6 +32,11 @@ public abstract class GameMode implements State {
 
     @Override
     public void onExit() {
+
+    }
+
+    @Override
+    public void dispose() {
 
     }
 }

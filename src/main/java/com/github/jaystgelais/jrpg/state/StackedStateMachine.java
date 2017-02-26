@@ -7,7 +7,7 @@ import java.util.Stack;
 public final class StackedStateMachine extends StateMachine {
     private Stack<State> stateHistory = new Stack<>();
 
-    public StackedStateMachine(final Set<State> states, final State initialState) {
+    public StackedStateMachine(final Set<? extends State> states, final String initialState) {
         super(states, initialState);
     }
 

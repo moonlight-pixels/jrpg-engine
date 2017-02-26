@@ -19,6 +19,8 @@ public interface GraphicsService extends Disposable {
 
     void init();
 
+    void clearScreen();
+
     void resize(int width, int height);
 
     void drawSprite(Texture texture, float posX, float posY);

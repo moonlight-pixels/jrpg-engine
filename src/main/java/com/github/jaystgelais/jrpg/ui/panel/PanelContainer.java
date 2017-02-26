@@ -8,4 +8,5 @@ public interface PanelContainer {
     float getContainerPositionY();
     float getContainerWidth();
     float getContainerHeight();
+    void close();
 }

@@ -39,6 +39,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
         cfg.useGL30 = false;
         cfg.width = resolutionWidth;
         cfg.height = resolutionHeight;
+        cfg.forceExit = false;
 
         return cfg;
     }
@@ -47,8 +48,12 @@ public final class GraphicsServiceImpl implements GraphicsService {
     public void renderStart() {
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         spriteBatch.begin();
+    }
+
+    @Override
+    public void clearScreen() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     }
 
     @Override
