@@ -9,6 +9,7 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsServiceImpl;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.input.KeyboardInputService;
+import com.github.jaystgelais.jrpg.map.MapMode;
 import com.github.jaystgelais.jrpg.state.StackedStateMachine;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
@@ -33,8 +34,18 @@ public final class Demo {
         return new AssetManager();
     }
 
+//    private static Game initGame() {
+//        return new Game(Collections.singleton(new PanelDemo()), "panelDemo", new GraphicsServiceImpl(initAssetManager()), new KeyboardInputService());
+//    }
+
     private static Game initGame() {
-        return new Game(Collections.singleton(new PanelDemo()), "panelDemo", new GraphicsServiceImpl(initAssetManager()), new KeyboardInputService());
+        GraphicsService graphicsService = new GraphicsServiceImpl(initAssetManager());
+        return new Game(
+                Collections.singleton(new MapMode(
+                        graphicsService.getCamera(),
+                        "data/assets/maps/mapdemo/cave.tmx"
+                )),
+                "mapMode", graphicsService, new KeyboardInputService());
     }
 
     private Demo() { }

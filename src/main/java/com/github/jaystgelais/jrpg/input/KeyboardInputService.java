@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by jgelais on 2/19/17.
  */
 public final class KeyboardInputService extends AbstractInputService {
-    public static final int DEFAULT_INPUT_DELAY_MS = 200;
+    public static final int DEFAULT_INPUT_DELAY_MS = 50;
     public static final int DEFAULT_UP_KEY = Keys.UP;
     public static final int DEFAULT_DOWN_KEY = Keys.DOWN;
     public static final int DEFAULT_LEFT_KEY = Keys.LEFT;

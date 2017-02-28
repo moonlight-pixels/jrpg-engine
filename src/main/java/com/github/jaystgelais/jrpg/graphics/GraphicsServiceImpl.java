@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.jaystgelais.jrpg.graphics.factory.SpriteBatchFactory;
 import com.github.jaystgelais.jrpg.graphics.factory.SpriteBatchFactoryImpl;
 
@@ -28,6 +30,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
     private BitmapFont defaultFont;
     private SpriteBatch spriteBatch;
     private OrthographicCamera camera;
+    private Viewport viewport;
     private int resolutionWidth = DEFAULT_RESOLUTION_WIDTH;
     private int resolutionHeight = DEFAULT_RESOLUTION_HEIGHT;
 
@@ -38,6 +41,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
     GraphicsServiceImpl(final AssetManager assetManager, final SpriteBatchFactory spriteBatchFactory) {
         this.assetManager = assetManager;
         this.spriteBatchFactory = spriteBatchFactory;
+        camera = new OrthographicCamera(resolutionWidth, resolutionHeight);
     }
 
     @Override
@@ -74,8 +78,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
 
     @Override
     public void init() {
-        camera = new OrthographicCamera(resolutionWidth, resolutionHeight);
-        camera.position.set(resolutionWidth / 2f, resolutionHeight / 2f, 0);
+        viewport = new FitViewport(resolutionWidth, resolutionHeight, camera);
         camera.update();
         spriteBatch = spriteBatchFactory.createSpriteBatch();
 
@@ -99,7 +102,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
 
     @Override
     public void resize(final int width, final int height) {
-
+        viewport.update(width, height, true);
     }
 
     @Override
@@ -117,6 +120,11 @@ public final class GraphicsServiceImpl implements GraphicsService {
     @Override
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;
+    }
+
+    @Override
+    public OrthographicCamera getCamera() {
+        return camera;
     }
 
     @Override

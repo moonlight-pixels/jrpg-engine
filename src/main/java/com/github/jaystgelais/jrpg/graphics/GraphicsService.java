@@ -1,6 +1,7 @@
 package com.github.jaystgelais.jrpg.graphics;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -28,6 +29,8 @@ public interface GraphicsService extends Disposable {
     void drawSprite(Pixmap pixmap, float posX, float posY);
 
     SpriteBatch getSpriteBatch();
+
+    OrthographicCamera getCamera();
 
     BitmapFont getDefaultFont();
 

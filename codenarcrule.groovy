@@ -25,6 +25,7 @@ ruleset {
     ruleset('rulesets/security.xml')
     ruleset('rulesets/size.xml')
     ruleset('rulesets/unnecessary.xml') {
+        'UnnecessaryObjectReferences' enabled: false
         'UnnecessaryReturnKeyword' enabled: false
         'UnnecessaryGetter' enabled: false
     }
