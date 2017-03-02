@@ -159,8 +159,15 @@ public final class Actor implements Renderable, InputHandler, Updatable {
     }
 
     private boolean isOpen(final TileCoordinate targetCoordinate) {
-        // TODO check collsion data from map
-        return true;
+        // check that move is inbounds for map
+        if (targetCoordinate.getX() < 0
+                || targetCoordinate.getY() < 0
+                || targetCoordinate.getX() >= map.getMapWidthInTiles()
+                || targetCoordinate.getY() >= map.getMapHeightInTiles()) {
+            return false;
+        }
+
+        return !map.isCollision(targetCoordinate);
     }
 
     private float weightedAverage(final float start, final float finish, final float percentComplete) {

@@ -18,8 +18,7 @@ import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
 import java.util.Map;
 
 public final class MapMode extends GameMode {
-    public static final int MOVEMENT_RATE_PX = 8;
-    public static final int DEFAULT_TIME_TO_TRAVERSE_TILE_MS = 300;
+    private static final int DEFAULT_TIME_TO_TRAVERSE_TILE_MS = 300;
 
     private final AssetManager assetManager;
     private final OrthographicCamera camera;
@@ -74,11 +73,13 @@ public final class MapMode extends GameMode {
 
     @Override
     public void render(final GraphicsService graphicsService) {
-        map.render(graphicsService);
+        map.renderBackground(graphicsService);
 
         graphicsService.renderStart();
         hero.render(graphicsService);
         graphicsService.renderEnd();
+
+        map.renderForeground(graphicsService);
     }
 
     @Override

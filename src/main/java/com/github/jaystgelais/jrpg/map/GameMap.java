@@ -3,11 +3,16 @@ package com.github.jaystgelais.jrpg.map;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
-import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
 
-public final class GameMap implements Renderable {
+public final class GameMap {
+    private static final int[] BACKGROUND_LAYERS = {0};
+    private static final int[] FOREGROUND_LAYERS = {1};
+    private static final String COLLISION_LAYER_NAME = "jrpg:collision";
+
     private final OrthographicCamera camera;
     private final TiledMap map;
     private final TiledMapRenderer mapRenderer;
@@ -28,7 +33,11 @@ public final class GameMap implements Renderable {
     }
 
     public int getMapHeight() {
-        return map.getProperties().get("height", Integer.class) * getTileHeight();
+        return getMapHeightInTiles() * getTileHeight();
+    }
+
+    public Integer getMapHeightInTiles() {
+        return map.getProperties().get("height", Integer.class);
     }
 
     public int getTileHeight() {
@@ -36,7 +45,11 @@ public final class GameMap implements Renderable {
     }
 
     public int getMapWidth() {
-        return map.getProperties().get("width", Integer.class) * getTileWidth();
+        return getMapWidthInTiles() * getTileWidth();
+    }
+
+    public Integer getMapWidthInTiles() {
+        return map.getProperties().get("width", Integer.class);
     }
 
     public int getTileWidth() {
@@ -51,8 +64,17 @@ public final class GameMap implements Renderable {
         return coordinate.getY() * getTileHeight();
     }
 
-    @Override
-    public void render(final GraphicsService graphicsService) {
+    public boolean isCollision(final TileCoordinate coordinate) {
+        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(COLLISION_LAYER_NAME);
+        if (collisionLayer != null) {
+            TiledMapTile tile = collisionLayer.getCell(coordinate.getX(), coordinate.getY()).getTile();
+            return tile.getProperties().containsKey("solid");
+        }
+
+        return false;
+    }
+
+    public void renderBackground(final GraphicsService graphicsService) {
         if (focalPoint != null) {
             float focusX = focalPoint.getPositionX();
             if (focusX < camera.viewportWidth / 2) {
@@ -74,11 +96,10 @@ public final class GameMap implements Renderable {
         }
         camera.update();
         mapRenderer.setView(camera);
-        mapRenderer.render();
+        mapRenderer.render(BACKGROUND_LAYERS);
     }
 
-    @Override
-    public void dispose() {
-        map.dispose();
+    public void renderForeground(final GraphicsService graphicsService) {
+        mapRenderer.render(FOREGROUND_LAYERS);
     }
 }
