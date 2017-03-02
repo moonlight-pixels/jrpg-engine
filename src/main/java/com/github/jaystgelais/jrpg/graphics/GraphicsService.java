@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
@@ -25,6 +26,8 @@ public interface GraphicsService extends Disposable {
     void resize(int width, int height);
 
     void drawSprite(Texture texture, float posX, float posY);
+
+    void drawSprite(TextureRegion textureRegion, float posX, float posY);
 
     void drawSprite(Pixmap pixmap, float posX, float posY);
 

@@ -11,22 +11,33 @@ import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
+import com.github.jaystgelais.jrpg.map.actor.Actor;
+import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
+import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
 
 import java.util.Map;
 
 public final class MapMode extends GameMode {
     public static final int MOVEMENT_RATE_PX = 8;
+    public static final int DEFAULT_TIME_TO_TRAVERSE_TILE_MS = 300;
+
     private final AssetManager assetManager;
     private final OrthographicCamera camera;
     private final String initialMapPath;
-    private TiledMap map;
-    private TiledMapRenderer mapRenderer;
+    private final TileCoordinate initialLocation;
+    private final SpriteSetData heroSpriteSetData;
+    private GameMap map;
+    private Actor hero;
 
-    public MapMode(final OrthographicCamera camera, final String mapPath) {
+    public MapMode(
+            final OrthographicCamera camera, final String mapPath,
+            final TileCoordinate initialLocation, final SpriteSetData heroSpriteSetData) {
         this.camera = camera;
+        this.initialLocation = initialLocation;
         assetManager = new AssetManager();
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         initialMapPath = mapPath;
+        this.heroSpriteSetData = heroSpriteSetData;
     }
 
     @Override
@@ -40,6 +51,11 @@ public final class MapMode extends GameMode {
             loadMap((String) params.get("map"));
         } else {
             loadMap(initialMapPath);
+            ActorSpriteSet heroSpriteSet = new ActorSpriteSet(
+                    heroSpriteSetData, DEFAULT_TIME_TO_TRAVERSE_TILE_MS, assetManager
+            );
+            hero = new Actor(map, heroSpriteSet, initialLocation);
+            map.setFocalPoint(hero);
         }
     }
 
@@ -47,26 +63,26 @@ public final class MapMode extends GameMode {
     public void handleInput(final InputService inputService) {
         if (inputService.isPressed(Inputs.CANCEL)) {
             getGame().exitGame();
-        } else if (inputService.isPressed(Inputs.UP)) {
-            camera.translate(0, MOVEMENT_RATE_PX);
-        } else if (inputService.isPressed(Inputs.DOWN)) {
-            camera.translate(0, -MOVEMENT_RATE_PX);
-        } else if (inputService.isPressed(Inputs.LEFT)) {
-            camera.translate(-MOVEMENT_RATE_PX, 0);
-        } else if (inputService.isPressed(Inputs.RIGHT)) {
-            camera.translate(MOVEMENT_RATE_PX, 0);
         }
+        hero.handleInput(inputService);
+    }
+
+    @Override
+    public void update(final long elapsedTime) {
+        hero.update(elapsedTime);
     }
 
     @Override
     public void render(final GraphicsService graphicsService) {
-        mapRenderer.setView(camera);
-        mapRenderer.render();
+        map.render(graphicsService);
+
+        graphicsService.renderStart();
+        hero.render(graphicsService);
+        graphicsService.renderEnd();
     }
 
     @Override
     public void dispose() {
-        map.dispose();
         assetManager.dispose();
     }
 
@@ -75,12 +91,10 @@ public final class MapMode extends GameMode {
             assetManager.load(mapPath, TiledMap.class);
             assetManager.finishLoading();
         }
-        map = assetManager.get(mapPath);
-        mapRenderer = new OrthogonalTiledMapRenderer(map);
-        camera.position.set(camera.viewportWidth / 2, getMapHeight() - (camera.viewportHeight / 2), 0);
-    }
-
-    private int getMapHeight() {
-        return map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
+        TiledMap tiledMap = assetManager.get(mapPath);
+        TiledMapRenderer mapRenderer = new OrthogonalTiledMapRenderer(
+                tiledMap, getGame().getGraphicsService().getSpriteBatch()
+        );
+        this.map = new GameMap(camera, tiledMap, mapRenderer);
     }
 }

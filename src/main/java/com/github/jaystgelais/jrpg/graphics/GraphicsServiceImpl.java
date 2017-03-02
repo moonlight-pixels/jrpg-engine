@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -58,7 +59,6 @@ public final class GraphicsServiceImpl implements GraphicsService {
 
     @Override
     public void renderStart() {
-        camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
     }
@@ -108,6 +108,11 @@ public final class GraphicsServiceImpl implements GraphicsService {
     @Override
     public void drawSprite(final Texture texture, final float posX, final float posY) {
         spriteBatch.draw(texture, posX, posY);
+    }
+
+    @Override
+    public void drawSprite(final TextureRegion textureRegion, final float posX, final float posY) {
+        spriteBatch.draw(textureRegion, posX, posY);
     }
 
     @Override

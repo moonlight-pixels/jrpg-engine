@@ -46,9 +46,7 @@ public class Game implements ApplicationListener {
         gameModes.handleInput(inputService);
 
         graphicsService.clearScreen();
-        graphicsService.renderStart();
         gameModes.render(graphicsService);
-        graphicsService.renderEnd();
     }
 
     @Override
