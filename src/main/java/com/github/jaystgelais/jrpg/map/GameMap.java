@@ -67,8 +67,10 @@ public final class GameMap {
     public boolean isCollision(final TileCoordinate coordinate) {
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(COLLISION_LAYER_NAME);
         if (collisionLayer != null) {
-            TiledMapTile tile = collisionLayer.getCell(coordinate.getX(), coordinate.getY()).getTile();
-            return tile.getProperties().containsKey("solid");
+            final TiledMapTileLayer.Cell cell = collisionLayer.getCell(coordinate.getX(), coordinate.getY());
+            if (cell != null) {
+                return true;
+            }
         }
 
         return false;

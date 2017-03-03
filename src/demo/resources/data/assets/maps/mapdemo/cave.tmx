@@ -3,14 +3,27 @@
  <tileset firstgid="1" name="cave" tilewidth="16" tileheight="16" tilecount="336" columns="16">
   <image source="cave.png" width="256" height="336"/>
  </tileset>
- <layer name="Floor" width="100" height="100">
+ <tileset firstgid="337" name="collision_graphic" tilewidth="16" tileheight="16" tilecount="4" columns="2">
+  <image source="collision_graphic.png" width="32" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="jrpg:floor" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJztmT2S0zAUgF/BX8PSAGGZWWiAsAVQAMsFgBMAJwD6ZYAeBujDDZKT8jKDZmWtrEiWlLXlr/jmeRwnsS190nvSVRE5UG544gvlpXISuMbEa8pzyGah3FPue+Jr5Y3yNnCNiXdG8CwtsFSeKs888Z3yXvkQuMbExyN4lhbY+rFS/nriR+WT8jlwjYn4UYatH1+Vb8p3ZaOs/0f7na+dz9yIH2XY+vFL+a38kW6ft985fuyHpfNuzbHrhzmHH3VZOO/WHIdc8LXfdSEXLsFSds8NoWiOj4RcuASh/ColPhFy4RLY80eOJ6GIH/GU8iMU8SOeGD9MbYIf9Ynxw9Qm+FGfPj9OlS9SZv4I5cLkxl36/Pih/PScHxJDuTC5cZwfJWMoFyY3Pu+HvT5VM8+KifjRbYsafqRE/Oi2B36Mx4+NlOnnOfUKfpTv5zn1Cn7Uy69WO/DNV/hRZx5Yydl6vEtovkqpHVusJWv54b77vuh+L6V2bLGWrOVHaC3xULqO2N9LqR1brCVr+tG3r35sfc4+y3k/7Pn3ov3Iifgx3I9TKbd+3Jofff3N1HU1/Ci5fjwXP0xdV3P+SK1P5uBHjfXd2HcUU6PE+tuaH6n9cagfKfcU+h/X35b82MjF+NF3T6sB/9uKH3Z7jMUPe8ya4/xR2o8S/XUhaXURftTtr0uZpx/23FnCi5yxqu/e5uTH0Hx/H37Y9zYXP+y1izH5seXYaZM5+GHWLsa63mraZJe/rfhh1wuh9YtYSvrha5OW/Xg1gnuIwazRh+aTnL3e1HhJuaxckbL7xFNpD7MGadeJbszZ602NN5Vbym0pO05OpT1s+vzI2etNjQ+Uh8ojKTtOTrk9xhLxI61uz42h3KWVPGIqfph80d2TsWkhz56KH2vPeZc5+3EoZ33VN3YM6f8xtdTcHQhh577uHm9q3er7Dffc3B0Yitk7SMGer80YeHcEzwIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwD/4BPH/hNg==
   </data>
  </layer>
- <layer name="Foreground" width="100" height="100">
+ <layer name="jrpg:foreground" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt2lEKgzAMANBeY0fYCfa16f1PNf3ToWCrkrC+ByUfogRqNBFLAQAAAAAAAAAAIKP3tD7TGhZxjEwIAOAP6bXyehX9MBBvns2HhvM8twA4wzskH3uST0978jsb18Qjx4D7mRFzekYnwMojOgFW1Ecu6iOXqPrY+o9sGXulx8pn7z4dL7r+Xi1Qp/U7w1YEAAAAAAAAAAAAAAAAAAAAAACAHnwB7iMYIQ==
+  </data>
+ </layer>
+ <layer name="jrpg:collision" width="100" height="100" opacity="0.5">
+  <data encoding="base64" compression="zlib">
+   eJzt2UFOAkEQQFE8ove/jHGlJhqZobv4wHvJ7LCtmi9x0MuFR/H+9nUx4/s9/+265jWarbPqPuqxhh4terTo0aJHix4tK3t4Fr7dxL3S43p6tOjRokeLHi16tEz1OHK9str+tXmm1favzTOttn9tnmm1/WvzTKvtX5tnWm3/2jzTavvX5plW2782z7Td+x/9zHf0s+OzfZac6DH1PfU4d74ef9OjRY8WPVru1WPH85Aet52/+rlVjz3n69E6X499Z5/tceZr9dh7th6ts/Vona1H6+yjv0P02H/2kSZ6zJx9bZNn6bHzWjnnitewRq3HM/1P8oyJ//Weee+/cpNPxd2LM00p7l6caUpx9+JMU4q7F2eacq/dp57rH8299n/le/6f3T+n3gNrFP+uAAAAAAAAAAAAAAAAAAAAAAAAwE8fey1gGQ==
   </data>
  </layer>
 </map>
