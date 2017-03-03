@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,6 +20,8 @@ import java.util.Map;
 
 public final class MapMode extends GameMode {
     private static final int DEFAULT_TIME_TO_TRAVERSE_TILE_MS = 300;
+    public static final int DEBUG_TEXT_X = 10;
+    public static final int DEBUB_TEXT_Y = 20;
 
     private final AssetManager assetManager;
     private final OrthographicCamera camera;
@@ -80,6 +83,18 @@ public final class MapMode extends GameMode {
         graphicsService.renderEnd();
 
         map.renderForeground(graphicsService);
+
+        if (getGame().isDebug()) {
+            graphicsService.renderStart();
+            graphicsService.getDefaultFont().draw(
+                    graphicsService.getSpriteBatch(),
+                    "FPS: " + Gdx.graphics.getFramesPerSecond()
+                            + "   Position [X:" + hero.getLocation().getX() + "  Y:" + hero.getLocation().getY() + "]",
+                    camera.position.x - ((float) graphicsService.getResolutionWidth() / 2) + DEBUG_TEXT_X,
+                    camera.position.y - ((float) graphicsService.getResolutionHeight() / 2) + DEBUB_TEXT_Y
+            );
+            graphicsService.renderEnd();
+        }
     }
 
     @Override

@@ -17,6 +17,7 @@ public class Game implements ApplicationListener {
     private final Clock clock;
     private long lastRenderTimestampMs;
     private long pauseTimeMs;
+    private boolean debug = false;
 
     public Game(final Set<GameMode> gameModes, final String initialGameMode, final GraphicsService graphicsService,
                 final InputService inputService) {
@@ -87,5 +88,13 @@ public class Game implements ApplicationListener {
 
     public final GraphicsService getGraphicsService() {
         return graphicsService;
+    }
+
+    public final boolean isDebug() {
+        return debug;
+    }
+
+    public final void setDebug(final boolean debug) {
+        this.debug = debug;
     }
 }

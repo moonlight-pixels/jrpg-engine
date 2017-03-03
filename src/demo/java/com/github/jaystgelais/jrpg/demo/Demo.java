@@ -32,13 +32,15 @@ public final class Demo {
 
     private static Game initGame() {
         GraphicsService graphicsService = new GraphicsServiceImpl(initAssetManager());
-        return new Game(
+        Game game = new Game(
                 Collections.singleton(new MapMode(
                         graphicsService.getCamera(),
                         "data/assets/maps/mapdemo/cave.tmx",
                         new TileCoordinate(8, 97),
                         new SpriteSetData("data/assets/sprites/mapdemo/warrior.png", 3, 4))),
                 "mapMode", graphicsService, new KeyboardInputService());
+        game.setDebug(true);
+        return game;
     }
 
     private Demo() { }
