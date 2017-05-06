@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
@@ -31,12 +30,17 @@ public final class MapMode extends GameMode {
     private GameMap map;
     private Actor hero;
 
-    public MapMode(
-            final OrthographicCamera camera, final String mapPath,
-            final TileCoordinate initialLocation, final SpriteSetData heroSpriteSetData) {
+    public MapMode(final OrthographicCamera camera, final String mapPath,
+                   final TileCoordinate initialLocation, final SpriteSetData heroSpriteSetData) {
+        this(camera, mapPath, initialLocation, heroSpriteSetData, new AssetManager());
+    }
+
+    MapMode(final OrthographicCamera camera, final String mapPath,
+            final TileCoordinate initialLocation, final SpriteSetData heroSpriteSetData,
+            final AssetManager assetManager) {
         this.camera = camera;
         this.initialLocation = initialLocation;
-        assetManager = new AssetManager();
+        this.assetManager = assetManager;
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         initialMapPath = mapPath;
         this.heroSpriteSetData = heroSpriteSetData;
@@ -109,9 +113,7 @@ public final class MapMode extends GameMode {
             assetManager.finishLoading();
         }
         TiledMap tiledMap = assetManager.get(mapPath);
-        TiledMapRenderer mapRenderer = new OrthogonalTiledMapRenderer(
-                tiledMap, getGame().getGraphicsService().getSpriteBatch()
-        );
+        TiledMapRenderer mapRenderer = getGame().getGraphicsService().getTileMapRenderer(tiledMap);
         this.map = new GameMap(camera, tiledMap, mapRenderer);
     }
 }

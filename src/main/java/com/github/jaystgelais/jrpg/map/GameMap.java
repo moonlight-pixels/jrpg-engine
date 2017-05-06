@@ -8,8 +8,8 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
 
 public final class GameMap {
-    private static final int[] BACKGROUND_LAYERS = {0};
-    private static final int[] FOREGROUND_LAYERS = {1};
+    static final int[] BACKGROUND_LAYERS = {0};
+    static final int[] FOREGROUND_LAYERS = {1};
     public static final String COLLISION_LAYER_NAME = "jrpg:collision";
 
     private final OrthographicCamera camera;

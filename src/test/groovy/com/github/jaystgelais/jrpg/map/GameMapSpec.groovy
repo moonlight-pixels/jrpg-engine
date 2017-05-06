@@ -10,17 +10,15 @@ import com.github.jaystgelais.jrpg.map.actor.Actor
 import spock.lang.Specification
 
 class GameMapSpec extends Specification {
-    private OrthographicCamera mockCamera
     private TiledMap mockMap
     private TiledMapRenderer mockMapRenderer
 
     void setup() {
-        mockCamera = Mock(OrthographicCamera)
         mockMapRenderer = Mock(TiledMapRenderer)
         mockMap = Mock(TiledMap)
     }
 
-    void 'test camera focus'() {
+    void 'test camera focus'(int actorX, int actorY, float cameraX, float cameraY) {
         setup:
         MapProperties mapProperties = new MapProperties()
         mapProperties.put('height', 40)
@@ -30,8 +28,10 @@ class GameMapSpec extends Specification {
         _ * mockMap.getProperties() >> mapProperties
 
         OrthographicCamera testCamera = new OrthographicCamera()
+        testCamera.viewportWidth = 320
+        testCamera.viewportHeight = 240
         GameMap gameMap = new GameMap(testCamera, mockMap, mockMapRenderer)
-        Actor testActor = new Actor(gameMap, null, new TileCoordinate(10, 10))
+        Actor testActor = new Actor(gameMap, null, new TileCoordinate(actorX, actorY))
         gameMap.setFocalPoint(testActor)
 
         when:
@@ -39,13 +39,20 @@ class GameMapSpec extends Specification {
         gameMap.focusCamera()
 
         then:
-        testCamera.position.x == 160
-        testCamera.position.y == 160
+        testCamera.position.x == cameraX
+        testCamera.position.y == cameraY
         testCamera.position.z == 0
+
+        where:
+        actorX | actorY | cameraX | cameraY
+        10     | 10     | 160     | 160
+        1      | 1      | 160     | 120
+        39     | 39     | 480     | 520
     }
 
     void 'Non-null cells in Collision Detecion Layer trigger collision'() {
         setup:
+        OrthographicCamera mockCamera = Mock(OrthographicCamera)
         _ * mockMap.getLayers() >> Mock(MapLayers) {
             _ * get(GameMap.COLLISION_LAYER_NAME) >> Mock(TiledMapTileLayer) {
                 _ * getCell(1, 1) >> Mock(TiledMapTileLayer.Cell)
