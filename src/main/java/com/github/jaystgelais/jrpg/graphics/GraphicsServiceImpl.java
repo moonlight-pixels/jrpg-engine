@@ -21,8 +21,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public final class GraphicsServiceImpl implements GraphicsService {
-    public static final int DEFAULT_RESOLUTION_WIDTH = 480;
-    public static final int DEFAULT_RESOLUTION_HEIGHT = 320;
+    public static final int DEFAULT_RESOLUTION_WIDTH = 384;
+    public static final int DEFAULT_RESOLUTION_HEIGHT = 216;
     public static final float DEFAULT_FONT_TARGET_LINES = 25f;
 
     private final AssetManager assetManager;

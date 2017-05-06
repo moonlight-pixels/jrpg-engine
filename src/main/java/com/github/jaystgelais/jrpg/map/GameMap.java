@@ -10,7 +10,7 @@ import com.github.jaystgelais.jrpg.map.actor.Actor;
 public final class GameMap {
     private static final int[] BACKGROUND_LAYERS = {0};
     private static final int[] FOREGROUND_LAYERS = {1};
-    private static final String COLLISION_LAYER_NAME = "jrpg:collision";
+    public static final String COLLISION_LAYER_NAME = "jrpg:collision";
 
     private final OrthographicCamera camera;
     private final TiledMap map;
@@ -75,7 +75,7 @@ public final class GameMap {
         return false;
     }
 
-    public void renderBackground(final GraphicsService graphicsService) {
+    public void focusCamera() {
         if (focalPoint != null) {
             float focusX = focalPoint.getPositionX();
             if (focusX < camera.viewportWidth / 2) {
@@ -97,6 +97,9 @@ public final class GameMap {
         }
         camera.update();
         mapRenderer.setView(camera);
+    }
+
+    public void renderBackground(final GraphicsService graphicsService) {
         mapRenderer.render(BACKGROUND_LAYERS);
     }
 

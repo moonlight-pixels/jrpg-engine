@@ -76,6 +76,7 @@ public final class MapMode extends GameMode {
 
     @Override
     public void render(final GraphicsService graphicsService) {
+        map.focusCamera();
         map.renderBackground(graphicsService);
 
         graphicsService.renderStart();
