@@ -33,6 +33,8 @@ public final class Actor implements Renderable, InputHandler, Updatable {
         this.facing = Direction.DOWN;
         this.location = location;
         this.destination = location;
+        positionX = map.getAbsoluteX(location);
+        positionY = map.getAbsoluteY(location);
         stateMachine = initStateMachine();
     }
 

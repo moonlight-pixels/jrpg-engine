@@ -8,7 +8,9 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsServiceImpl;
 import com.github.jaystgelais.jrpg.input.KeyboardInputService;
 import com.github.jaystgelais.jrpg.map.MapMode;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
+import com.github.jaystgelais.jrpg.map.actor.Actor;
 import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
+import com.github.jaystgelais.jrpg.map.trigger.MessageTrigger;
 
 import java.util.Collections;
 
@@ -32,12 +34,25 @@ public final class Demo {
 
     private static Game initGame() {
         GraphicsService graphicsService = new GraphicsServiceImpl(initAssetManager());
+        MapMode mapMode = new MapMode(
+                graphicsService.getCamera(),
+                "data/assets/maps/mapdemo/cave.tmx",
+                new TileCoordinate(8, 97),
+                new SpriteSetData("data/assets/sprites/mapdemo/warrior.png", 3, 4));
+        mapMode.addTrigger(new MessageTrigger("Test Message", graphicsService, graphicsService.getResolutionWidth() / 2, graphicsService.getResolutionHeight() / 4) {
+            boolean messageDisplayed = false;
+
+            public boolean isTriggered(Actor hero) {
+                if (messageDisplayed) {
+                    return false;
+                } else {
+                    messageDisplayed = true;
+                    return true;
+                }
+            }
+        });
         Game game = new Game(
-                Collections.singleton(new MapMode(
-                        graphicsService.getCamera(),
-                        "data/assets/maps/mapdemo/cave.tmx",
-                        new TileCoordinate(8, 97),
-                        new SpriteSetData("data/assets/sprites/mapdemo/warrior.png", 3, 4))),
+                Collections.singleton(mapMode),
                 "mapMode", graphicsService, new KeyboardInputService());
         game.setDebug(true);
         return game;
