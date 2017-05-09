@@ -6,7 +6,7 @@ package com.github.jaystgelais.jrpg.ui.panel;
 public final class PanelData {
     public static final int DEFAULT_POSITION_X = 0;
     public static final int DEFAULT_POSITION_Y = 0;
-    public static final long DEFAUL_TRANSITION_TIME_MS = 500;
+    public static final long DEFAUL_TRANSITION_TIME_MS = 250;
 
     private final int width;
     private final int height;
