@@ -26,7 +26,7 @@ under the window, she suddenly spread out her  hand, and made a snatch in the ai
         InputService inputService = Mock(InputService) {
             _ * isPressed(Inputs.OK) >> true
         }
-        Panel panel = new Panel(400, 200,  new PanelPalette())
+        Panel panel = new Panel(new PanelData(400, 200))
         panel.data.setTransitionTimeMs(0)
         panel.setContent(new PanelText(font, text))
 
@@ -50,7 +50,7 @@ under the window, she suddenly spread out her  hand, and made a snatch in the ai
         InputService inputService = Mock(InputService) {
             _ * isPressed(Inputs.OK) >> true
         }
-        Panel panel = new Panel(400, 200,  new PanelPalette())
+        Panel panel = new Panel(new PanelData(400, 200))
         panel.data.setTransitionTimeMs(0)
         panel.setContent(new PanelText(font, text))
 

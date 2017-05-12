@@ -5,7 +5,7 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
-import com.github.jaystgelais.jrpg.ui.panel.PanelPalette;
+import com.github.jaystgelais.jrpg.ui.panel.PanelData;
 import com.github.jaystgelais.jrpg.ui.panel.PanelText;
 
 import java.util.Collections;
@@ -13,6 +13,7 @@ import java.util.Map;
 
 public abstract class MessageTrigger implements Trigger {
     private static final int DEFAULT_PANEL_TOP_MARGIN = 10;
+    private static final int DEFAULT_TRANSITION_TIME_MS = 250;
 
     private final String message;
     private final GraphicsService graphicsService;
@@ -39,11 +40,13 @@ public abstract class MessageTrigger implements Trigger {
 
             @Override
             public void onEnter(final Map<String, Object> params) {
-                panel = new Panel(panelWidth, panelHeight, new PanelPalette());
-
+                panel = new Panel(
+                        new PanelData(panelWidth, panelHeight)
+                                .setPositionX(calculatePanelPositionX())
+                                .setPositionY(calculatePanelPositionY())
+                                .setTransitionTimeMs(DEFAULT_TRANSITION_TIME_MS)
+                );
                 panel.setContent(new PanelText(graphicsService.getDefaultFont(), message));
-                panel.getData().setPositionX(calculatePanelPositionX());
-                panel.getData().setPositionY(calculatePanelPositionY());
             }
 
             @Override

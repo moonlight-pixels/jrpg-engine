@@ -6,7 +6,7 @@ package com.github.jaystgelais.jrpg.ui.panel;
 public final class PanelData {
     public static final int DEFAULT_POSITION_X = 0;
     public static final int DEFAULT_POSITION_Y = 0;
-    public static final long DEFAUL_TRANSITION_TIME_MS = 250;
+    public static final long DEFAUL_TRANSITION_TIME_MS = 0;
 
     private final int width;
     private final int height;
@@ -42,23 +42,26 @@ public final class PanelData {
         return positionX;
     }
 
-    public void setPositionX(final float positionX) {
+    public PanelData setPositionX(final float positionX) {
         this.positionX = positionX;
+        return this;
     }
 
     public float getPositionY() {
         return positionY;
     }
 
-    public void setPositionY(final float positionY) {
+    public PanelData setPositionY(final float positionY) {
         this.positionY = positionY;
+        return this;
     }
 
     public long getTransitionTimeMs() {
         return transitionTimeMs;
     }
 
-    public void setTransitionTimeMs(final long transitionTimeMs) {
+    public PanelData setTransitionTimeMs(final long transitionTimeMs) {
         this.transitionTimeMs = transitionTimeMs;
+        return this;
     }
 }

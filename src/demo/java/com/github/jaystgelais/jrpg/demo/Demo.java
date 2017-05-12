@@ -28,10 +28,6 @@ public final class Demo {
         return new AssetManager();
     }
 
-//    private static Game initGame() {
-//        return new Game(Collections.singleton(new PanelDemo()), "panelDemo", new GraphicsServiceImpl(initAssetManager()), new KeyboardInputService());
-//    }
-
     private static Game initGame() {
         GraphicsService graphicsService = new GraphicsServiceImpl(initAssetManager());
         MapMode mapMode = new MapMode(
@@ -39,7 +35,7 @@ public final class Demo {
                 "data/assets/maps/mapdemo/cave.tmx",
                 new TileCoordinate(8, 97),
                 new SpriteSetData("data/assets/sprites/mapdemo/warrior.png", 3, 4));
-        mapMode.addTrigger(new MessageTrigger("Test Message", graphicsService, graphicsService.getResolutionWidth() / 2, graphicsService.getResolutionHeight() / 4) {
+        mapMode.addTrigger(new MessageTrigger("[GREEN]Test[] Message", graphicsService, graphicsService.getResolutionWidth() / 2, graphicsService.getResolutionHeight() / 4) {
             boolean messageDisplayed = false;
 
             public boolean isTriggered(Actor hero) {

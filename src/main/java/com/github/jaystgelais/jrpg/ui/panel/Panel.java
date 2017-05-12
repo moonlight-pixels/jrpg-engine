@@ -32,9 +32,9 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
     private PanelContent content;
     private boolean active = true;
 
-    public Panel(final int width, final int height, final PanelPalette palette) {
-        this.data = new PanelData(width, height, palette);
-        pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+    public Panel(final PanelData panelData) {
+        this.data = panelData;
+        pixmap = new Pixmap(panelData.getWidth(), panelData.getHeight(), Pixmap.Format.RGBA8888);
         stateMachine = initStateMachine();
     }
 
@@ -239,6 +239,9 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
             @Override
             public void onEnter(final Map<String, Object> params) {
                 timeInTransitionMs = 0L;
+                if (timeInTransitionMs >= data.getTransitionTimeMs()) {
+                    stateMachine.change("display");
+                }
             }
 
             @Override
@@ -283,13 +286,18 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
             @Override
             public void onEnter(final Map<String, Object> params) {
                 timeLeftInTransitionMs = data.getTransitionTimeMs();
+                if (timeLeftInTransitionMs <= 0) {
+                    setActive(false);
+                }
             }
 
             @Override
             public void render(final GraphicsService graphicsService) {
-                float percentRemaining = (float) timeLeftInTransitionMs / (float) data.getTransitionTimeMs();
-                int currentHeight = Math.max(MINIMUM_PANEL_HEIGHT, Math.round(percentRemaining * data.getHeight()));
-                renderPanel(graphicsService, currentHeight, false);
+                if (isActive()) {
+                    float percentRemaining = (float) timeLeftInTransitionMs / (float) data.getTransitionTimeMs();
+                    int currentHeight = Math.max(MINIMUM_PANEL_HEIGHT, Math.round(percentRemaining * data.getHeight()));
+                    renderPanel(graphicsService, currentHeight, false);
+                }
             }
 
             @Override
