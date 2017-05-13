@@ -4,16 +4,13 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import com.github.jaystgelais.jrpg.ui.text.FontSet;
 
-/**
- * Created by jgelais on 2/19/17.
- */
 public interface GraphicsService extends Disposable {
     LwjglApplicationConfiguration getConfiguration();
 
@@ -39,7 +36,7 @@ public interface GraphicsService extends Disposable {
 
     TiledMapRenderer getTileMapRenderer(TiledMap tiledMap);
 
-    BitmapFont getDefaultFont();
+    FontSet getFontSet();
 
     int getResolutionWidth();
 

@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.jaystgelais.jrpg.graphics.factory.SpriteBatchFactory;
 import com.github.jaystgelais.jrpg.graphics.factory.SpriteBatchFactoryImpl;
+import com.github.jaystgelais.jrpg.ui.text.FontSet;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -31,7 +32,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
     private final AssetManager assetManager;
     private final SpriteBatchFactory spriteBatchFactory;
     private final Deque<Disposable> disposables = new ArrayDeque<>();
-    private BitmapFont defaultFont;
+    private FontSet fontSet;
     private SpriteBatch spriteBatch;
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -85,10 +86,6 @@ public final class GraphicsServiceImpl implements GraphicsService {
         camera.update();
         spriteBatch = spriteBatchFactory.createSpriteBatch();
 
-        defaultFont = new BitmapFont();
-        defaultFont.getData().setScale(calculateDefaultFontScale(defaultFont));
-        defaultFont.getData().markupEnabled = true;
-
         Graphics.Monitor monitor = Gdx.graphics.getMonitor();
         Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode(monitor);
         Gdx.graphics.setFullscreenMode(displayMode);
@@ -141,8 +138,11 @@ public final class GraphicsServiceImpl implements GraphicsService {
     }
 
     @Override
-    public BitmapFont getDefaultFont() {
-        return defaultFont;
+    public FontSet getFontSet() {
+        if (fontSet == null) {
+            fontSet = FontSet.newFontSet(this).create();
+        }
+        return fontSet;
     }
 
     @Override

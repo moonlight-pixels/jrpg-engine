@@ -210,7 +210,7 @@ public final class MapMode extends GameMode {
 
         if (getGame().isDebug()) {
             graphicsService.renderStart();
-            graphicsService.getDefaultFont().draw(
+            graphicsService.getFontSet().getNumberFont().draw(
                     graphicsService.getSpriteBatch(),
                     "FPS: " + Gdx.graphics.getFramesPerSecond()
                             + "   Position [X:" + hero.getLocation().getX()
