@@ -6,14 +6,14 @@ import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
 import com.github.jaystgelais.jrpg.ui.panel.PanelData;
-import com.github.jaystgelais.jrpg.ui.panel.PanelText;
+import com.github.jaystgelais.jrpg.ui.text.TextArea;
 
 import java.util.Collections;
 import java.util.Map;
 
 public abstract class MessageTrigger implements Trigger {
     private static final int DEFAULT_PANEL_TOP_MARGIN = 10;
-    private static final int DEFAULT_TRANSITION_TIME_MS = 250;
+    private static final int DEFAULT_TRANSITION_TIME_MS = 400;
 
     private final String message;
     private final GraphicsService graphicsService;
@@ -31,6 +31,7 @@ public abstract class MessageTrigger implements Trigger {
     @Override
     public final StateMachine performAction(final TriggerContext context) {
         return new StateMachine(Collections.singleton(new StateAdapter() {
+            private TextArea content;
             private Panel panel;
 
             @Override
@@ -46,7 +47,8 @@ public abstract class MessageTrigger implements Trigger {
                                 .setPositionY(calculatePanelPositionY())
                                 .setTransitionTimeMs(DEFAULT_TRANSITION_TIME_MS)
                 );
-                panel.setContent(new PanelText(graphicsService.getFontSet().getTextFont(), message));
+                content = new TextArea(panel.getPanelContainer(), graphicsService.getFontSet(), message);
+                panel.getPanelContainer().setContent(content);
             }
 
             @Override
@@ -69,6 +71,9 @@ public abstract class MessageTrigger implements Trigger {
             @Override
             public void update(final long elapsedTime) {
                 panel.update(elapsedTime);
+                if (content.isEmpty()) {
+                    panel.close();
+                }
                 if (!panel.isActive()) {
                     context.done();
                 }
@@ -76,15 +81,19 @@ public abstract class MessageTrigger implements Trigger {
         }), "panelState");
     }
 
-    private float calculatePanelPositionY() {
-        float cameraBottomEdge = graphicsService.getCamera().position.y - (graphicsService.getResolutionHeight() / 2f);
+    private int calculatePanelPositionY() {
+        int cameraBottomEdge = Math.round(
+                graphicsService.getCamera().position.y - (graphicsService.getResolutionHeight() / 2f)
+        );
         int screenPositionY = graphicsService.getResolutionHeight() - panelHeight - DEFAULT_PANEL_TOP_MARGIN;
         return cameraBottomEdge + screenPositionY;
     }
 
-    private float calculatePanelPositionX() {
-        float cameraLeftEdge = graphicsService.getCamera().position.x - (graphicsService.getResolutionWidth() / 2f);
-        float screenPositionX = (graphicsService.getResolutionWidth() - panelWidth) / 2f;
+    private int calculatePanelPositionX() {
+        int cameraLeftEdge = Math.round(
+                graphicsService.getCamera().position.x - (graphicsService.getResolutionWidth() / 2f)
+        );
+        int screenPositionX = Math.round((graphicsService.getResolutionWidth() - panelWidth) / 2f);
         return cameraLeftEdge + screenPositionX;
     }
 }

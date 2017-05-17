@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 
 public final class FontSet {
-    public static final float DEFAULT_FONT_TARGET_LINES = 18f;
+    public static final float DEFAULT_FONT_TARGET_LINES = 22f;
     public static final String DEFAULT_TEXT_FONT_TTF = "assets/jrpg/fonts/Roboto-Regular.ttf";
     public static final String DEFAULT_NUMBER_FONT_TTF = "assets/jrpg/fonts/SilomBol.ttf";
 
@@ -59,7 +59,7 @@ public final class FontSet {
         }
 
         private BitmapFont getDefaultTextFont() {
-            return createFontFromTTF(Gdx.files.internal(DEFAULT_TEXT_FONT_TTF), false);
+            return createFontFromTTF(Gdx.files.internal(DEFAULT_TEXT_FONT_TTF), true);
         }
 
         private BitmapFont getDefaultNumberFont() {

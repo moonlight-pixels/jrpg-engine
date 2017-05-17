@@ -1,8 +1,10 @@
 package com.github.jaystgelais.jrpg.ui;
 
 import com.github.jaystgelais.jrpg.graphics.Renderable;
+import com.github.jaystgelais.jrpg.input.InputHandler;
+import com.github.jaystgelais.jrpg.state.Updatable;
 
-public interface Content extends Renderable {
+public interface Content extends Renderable, Updatable, InputHandler {
     int getWidth();
     int getHeight();
     int getScreenPositionX();

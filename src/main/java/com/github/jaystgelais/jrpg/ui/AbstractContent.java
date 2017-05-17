@@ -10,7 +10,7 @@ public abstract class AbstractContent implements Content {
     private int topMargin = 0;
     private int bottomMargin = 0;
 
-    public AbstractContent(final int screenPositionY, final int screenPositionX, final int height, final int width) {
+    public AbstractContent(final int screenPositionX, final int screenPositionY, final int width, final int height) {
         this.screenPositionY = screenPositionY;
         this.screenPositionX = screenPositionX;
         this.height = height;

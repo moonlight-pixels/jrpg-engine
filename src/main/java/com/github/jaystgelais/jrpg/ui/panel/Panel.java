@@ -3,44 +3,50 @@ package com.github.jaystgelais.jrpg.ui.panel;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
-import com.github.jaystgelais.jrpg.graphics.Renderable;
-import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
-import com.github.jaystgelais.jrpg.state.Updatable;
+import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.Content;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by jgelais on 2/15/17.
- */
-public final class Panel implements Renderable, PanelContainer, InputHandler, Updatable {
+public final class Panel implements Content {
     public static final int BORDER_THICKNESS = 3;
     public static final int CORNER_HEIGHT = 3;
     public static final int CORNER_WIDTH = 3;
-    public static final int CONTENT_OFFSET_X = 8;
-    public static final int CONTENT_OFFSET_Y = 8;
+    public static final int MINIMUM_PANEL_WIDTH = 8;
     public static final int MINIMUM_PANEL_HEIGHT = 8;
+    public static final int PANEL_CONTENT_MARGIN = 6;
 
     private final PanelData data;
     private final Pixmap pixmap;
     private final StateMachine stateMachine;
-    private PanelContent content;
+    private final Container panelContainer;
     private boolean active = true;
 
     public Panel(final PanelData panelData) {
         this.data = panelData;
         pixmap = new Pixmap(panelData.getWidth(), panelData.getHeight(), Pixmap.Format.RGBA8888);
         stateMachine = initStateMachine();
+        panelContainer = new Container(getScreenPositionX(), getScreenPositionY(), getWidth(), getHeight());
+        panelContainer.setRightMargin(PANEL_CONTENT_MARGIN);
+        panelContainer.setLeftMargin(PANEL_CONTENT_MARGIN);
+        panelContainer.setTopMargin(PANEL_CONTENT_MARGIN);
+        panelContainer.setBottomMargin(PANEL_CONTENT_MARGIN);
     }
 
-    public void setContent(final PanelContent content) {
-        this.content = content;
-        this.content.setParent(this);
+    public Container getPanelContainer() {
+        return panelContainer;
+    }
+
+    public void close() {
+        if (!stateMachine.getCurrentState().getKey().equals("closing")) {
+            stateMachine.change("closing");
+        }
     }
 
     @Override
@@ -48,8 +54,7 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
         stateMachine.render(graphicsService);
     }
 
-    private void renderPanel(final GraphicsService graphicsService, final int currentHeight,
-                             final boolean renderContent) {
+    private void renderPanel(final GraphicsService graphicsService, final int currentWidth, final int currentHeight) {
         pixmap.setColor(0, 0, 0, 0);
         pixmap.fill();
 
@@ -57,20 +62,20 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
                 getBottomLeftCorner(), CORNER_WIDTH, CORNER_HEIGHT, 0, 0
         );
         drawTileFromArray(
-                getBottomRightCorner(), CORNER_WIDTH, CORNER_HEIGHT, data.getWidth() - (CORNER_WIDTH + 1), 0
+                getBottomRightCorner(), CORNER_WIDTH, CORNER_HEIGHT, currentWidth - (CORNER_WIDTH + 1), 0
         );
         drawTileFromArray(
                 getTopLeftCorner(), CORNER_WIDTH, CORNER_HEIGHT, 0, currentHeight - (CORNER_HEIGHT + 1)
         );
         drawTileFromArray(
                 getTopRightCorner(), CORNER_WIDTH, CORNER_HEIGHT,
-                data.getWidth() - (CORNER_WIDTH + 1),
+                currentWidth - (CORNER_WIDTH + 1),
                 currentHeight - (CORNER_HEIGHT + 1)
         );
 
         Color[] topBorder = getTopBorder();
         Color[] bottomBorder = getBottomBorder();
-        for (int x = BORDER_THICKNESS; x < data.getWidth() - (BORDER_THICKNESS + 1); x++) {
+        for (int x = BORDER_THICKNESS; x < currentWidth - (BORDER_THICKNESS + 1); x++) {
             drawTileFromArray(topBorder,    1, BORDER_THICKNESS, x, 0);
             drawTileFromArray(bottomBorder, 1, BORDER_THICKNESS, x, currentHeight - (BORDER_THICKNESS + 1));
         }
@@ -79,19 +84,20 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
         Color[] rightBorder = getRightBorder();
         for (int y = BORDER_THICKNESS; y < currentHeight - (BORDER_THICKNESS + 1); y++) {
             drawTileFromArray(leftBorder, BORDER_THICKNESS, 1, 0,         y);
-            drawTileFromArray(rightBorder, BORDER_THICKNESS, 1, data.getWidth() - (BORDER_THICKNESS + 1), y);
+            drawTileFromArray(rightBorder, BORDER_THICKNESS, 1, currentWidth - (BORDER_THICKNESS + 1), y);
         }
 
         pixmap.setColor(data.getPalette().getBgPrimary());
         pixmap.fillRectangle(
                 BORDER_THICKNESS, BORDER_THICKNESS,
-                data.getWidth() - (BORDER_THICKNESS * 2), currentHeight - (BORDER_THICKNESS * 2)
+                currentWidth - (BORDER_THICKNESS * 2), currentHeight - (BORDER_THICKNESS * 2)
         );
 
-        graphicsService.drawSprite(pixmap, data.getPositionX(), data.getPositionY());
-        if (renderContent) {
-            content.render(graphicsService);
-        }
+        graphicsService.drawSprite(
+                pixmap,
+                data.getPositionX() + ((data.getWidth() - currentWidth) / 2),
+                data.getPositionY() - ((data.getHeight() - currentHeight) / 2)
+        );
     }
 
     private void drawTileFromArray(final Color[] tile,
@@ -177,31 +183,6 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
         pixmap.dispose();
     }
 
-    @Override
-    public float getContainerPositionX() {
-        return data.getPositionX() + CONTENT_OFFSET_X;
-    }
-
-    @Override
-    public float getContainerPositionY() {
-        return data.getPositionY() + CONTENT_OFFSET_Y;
-    }
-
-    @Override
-    public float getContainerWidth() {
-        return data.getWidth() - (2 * CONTENT_OFFSET_X);
-    }
-
-    @Override
-    public float getContainerHeight() {
-        return data.getHeight() - (2 * CONTENT_OFFSET_Y);
-    }
-
-    @Override
-    public void close() {
-        stateMachine.change("closing");
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -247,8 +228,9 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
             @Override
             public void render(final GraphicsService graphicsService) {
                 float percentComplete = (float) timeInTransitionMs / (float) data.getTransitionTimeMs();
+                int currentWidth = Math.max(MINIMUM_PANEL_WIDTH, Math.round(percentComplete * data.getWidth()));
                 int currentHeight = Math.max(MINIMUM_PANEL_HEIGHT, Math.round(percentComplete * data.getHeight()));
-                renderPanel(graphicsService, currentHeight, false);
+                renderPanel(graphicsService, currentWidth, currentHeight);
             }
 
             @Override
@@ -267,12 +249,18 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
 
             @Override
             public void render(final GraphicsService graphicsService) {
-                renderPanel(graphicsService, data.getHeight(), true);
+                renderPanel(graphicsService, data.getWidth(), data.getHeight());
+                panelContainer.render(graphicsService);
+            }
+
+            @Override
+            public void update(final long elapsedTime) {
+                panelContainer.update(elapsedTime);
             }
 
             @Override
             public void handleInput(final InputService inputService) {
-                content.handleInput(inputService);
+                panelContainer.handleInput(inputService);
             }
         });
         states.add(new StateAdapter() {
@@ -295,8 +283,9 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
             public void render(final GraphicsService graphicsService) {
                 if (isActive()) {
                     float percentRemaining = (float) timeLeftInTransitionMs / (float) data.getTransitionTimeMs();
+                    int currentWidth = Math.max(MINIMUM_PANEL_WIDTH, Math.round(percentRemaining * data.getWidth()));
                     int currentHeight = Math.max(MINIMUM_PANEL_HEIGHT, Math.round(percentRemaining * data.getHeight()));
-                    renderPanel(graphicsService, currentHeight, false);
+                    renderPanel(graphicsService, currentWidth, currentHeight);
                 }
             }
 
@@ -319,5 +308,86 @@ public final class Panel implements Renderable, PanelContainer, InputHandler, Up
     @Override
     public void update(final long elapsedTime) {
         stateMachine.update(elapsedTime);
+    }
+
+
+    @Override
+    public int getWidth() {
+        return data.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return data.getHeight();
+    }
+
+    @Override
+    public int getScreenPositionX() {
+        return data.getPositionX();
+    }
+
+    @Override
+    public int getScreenPositionY() {
+        return data.getPositionY();
+    }
+
+    @Override
+    public int getLeftMargin() {
+        return 0;
+    }
+
+    @Override
+    public int getRightMargin() {
+        return 0;
+    }
+
+    @Override
+    public int getTopMargin() {
+        return 0;
+    }
+
+    @Override
+    public int getBottomMargin() {
+        return 0;
+    }
+
+    @Override
+    public void setLeftMargin(final int px) {
+
+    }
+
+    @Override
+    public void setRightMargin(final int px) {
+
+    }
+
+    @Override
+    public void setTopMargin(final int px) {
+
+    }
+
+    @Override
+    public void setBottomMargin(final int px) {
+
+    }
+
+    @Override
+    public void setLeftMargin(final float percent) {
+
+    }
+
+    @Override
+    public void setRightMargin(final float percent) {
+
+    }
+
+    @Override
+    public void setTopMargin(final float percent) {
+
+    }
+
+    @Override
+    public void setBottomMargin(final float percent) {
+
     }
 }

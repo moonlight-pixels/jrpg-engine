@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by jgelais on 2/19/17.
  */
-public final class KeyboardInputService extends AbstractInputService {
+public final class KeyboardInputService implements InputService {
     public static final int DEFAULT_INPUT_DELAY_MS = 50;
     public static final int DEFAULT_UP_KEY = Keys.UP;
     public static final int DEFAULT_DOWN_KEY = Keys.DOWN;
@@ -23,25 +23,16 @@ public final class KeyboardInputService extends AbstractInputService {
     private final Map<Inputs, Integer> keyMap;
 
     public KeyboardInputService() {
-        this(getDefaultKeyMap(), DEFAULT_INPUT_DELAY_MS);
-    }
-
-    public KeyboardInputService(final long inputDelayMs) {
-        this(getDefaultKeyMap(), inputDelayMs);
+        this(getDefaultKeyMap());
     }
 
     public KeyboardInputService(final Map<Inputs, Integer> keyMap) {
-        this(keyMap, DEFAULT_INPUT_DELAY_MS);
-    }
-
-    public KeyboardInputService(final Map<Inputs, Integer> keyMap, final long inputDelayMs) {
-        super(inputDelayMs);
         this.keyMap = keyMap;
     }
 
     @Override
-    protected boolean checkForInput(final Inputs inputs) {
-        return Gdx.input.isKeyPressed(keyMap.get(inputs));
+    public boolean isPressed(final Inputs input) {
+        return Gdx.input.isKeyPressed(keyMap.get(input));
     }
 
     private static Map<Inputs, Integer> getDefaultKeyMap() {

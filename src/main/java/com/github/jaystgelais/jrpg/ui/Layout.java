@@ -2,6 +2,7 @@ package com.github.jaystgelais.jrpg.ui;
 
 import com.badlogic.gdx.utils.Disposable;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.input.InputService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +10,8 @@ import java.util.Map;
 public final class Layout extends AbstractContent {
     private final Map<String, Container> children = new HashMap<>();
 
-    public Layout(final int width, final int height, final int screenPositionX, final int screenPositionY) {
-        super(screenPositionY, screenPositionX, height, width);
+    public Layout(final int screenPositionX, final int screenPositionY, final int width, final int height) {
+        super(screenPositionX, screenPositionY, width, height);
     }
 
     @Override
@@ -126,5 +127,15 @@ public final class Layout extends AbstractContent {
     @Override
     public void dispose() {
         children.values().forEach(Disposable::dispose);
+    }
+
+    @Override
+    public void update(final long elapsedTime) {
+        children.values().forEach(container -> container.update(elapsedTime));
+    }
+
+    @Override
+    public void handleInput(final InputService inputService) {
+
     }
 }

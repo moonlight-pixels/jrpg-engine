@@ -21,7 +21,7 @@ class KeyboardInputServiceSpec extends Specification {
         InputService inputService = new KeyboardInputService()
 
         then:
-        inputService.checkForInput(input)
+        inputService.isPressed(input)
 
         cleanup:
         Gdx.input = realInput

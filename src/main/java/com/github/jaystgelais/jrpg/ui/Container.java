@@ -1,12 +1,13 @@
 package com.github.jaystgelais.jrpg.ui;
 
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.input.InputService;
 
 public final class Container extends AbstractContent {
     private Content content;
 
-    public Container(final int screenPositionY, final int screenPositionX, final int height, final int width) {
-        super(screenPositionY, screenPositionX, height, width);
+    public Container(final int screenPositionX, final int screenPositionY, final int width, final int height) {
+        super(screenPositionX, screenPositionY, width, height);
     }
 
     @Override
@@ -24,11 +25,29 @@ public final class Container extends AbstractContent {
 
     @Override
     public void render(final GraphicsService graphicsService) {
-        content.render(graphicsService);
+        if (content != null) {
+            content.render(graphicsService);
+        }
     }
 
     @Override
     public void dispose() {
-        content.dispose();
+        if (content != null) {
+            content.dispose();
+        }
+    }
+
+    @Override
+    public void update(final long elapsedTime) {
+        if (content != null) {
+            content.update(elapsedTime);
+        }
+    }
+
+    @Overrides
+    public void handleInput(final InputService inputService) {
+            if (content != null) {
+                content.handleInput(inputService);
+            }
     }
 }

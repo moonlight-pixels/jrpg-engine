@@ -11,8 +11,8 @@ public final class PanelData {
     private final int width;
     private final int height;
     private final PanelPalette palette;
-    private float positionX = DEFAULT_POSITION_X;
-    private float positionY = DEFAULT_POSITION_Y;
+    private int positionX = DEFAULT_POSITION_X;
+    private int positionY = DEFAULT_POSITION_Y;
     private long transitionTimeMs = DEFAUL_TRANSITION_TIME_MS;
 
     public PanelData(final int width, final int height, final PanelPalette palette) {
@@ -38,20 +38,20 @@ public final class PanelData {
         return palette;
     }
 
-    public float getPositionX() {
+    public int getPositionX() {
         return positionX;
     }
 
-    public PanelData setPositionX(final float positionX) {
+    public PanelData setPositionX(final int positionX) {
         this.positionX = positionX;
         return this;
     }
 
-    public float getPositionY() {
+    public int getPositionY() {
         return positionY;
     }
 
-    public PanelData setPositionY(final float positionY) {
+    public PanelData setPositionY(final int positionY) {
         this.positionY = positionY;
         return this;
     }

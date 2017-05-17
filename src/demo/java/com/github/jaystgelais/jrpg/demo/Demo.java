@@ -30,12 +30,16 @@ public final class Demo {
 
     private static Game initGame() {
         GraphicsService graphicsService = new GraphicsServiceImpl(initAssetManager());
+        graphicsService.setResolutionWidth(480);
+        graphicsService.setResolutionHeight(268);
         MapMode mapMode = new MapMode(
                 graphicsService.getCamera(),
                 "data/assets/maps/mapdemo/cave.tmx",
                 new TileCoordinate(8, 97),
                 new SpriteSetData("data/assets/sprites/mapdemo/warrior.png", 3, 4));
-        mapMode.addTrigger(new MessageTrigger("[GREEN]Test[] Message", graphicsService, graphicsService.getResolutionWidth() / 2, graphicsService.getResolutionHeight() / 4) {
+        mapMode.addTrigger(new MessageTrigger(
+                "Welcome to the JRPG demo. Press [GREEN]ENTER[] to dismiss this text. [GREEN]ARROW KEYS[] will move our hero around the cave. Press [GREEN]ESC[] to exit the demo.",
+                graphicsService, graphicsService.getResolutionWidth() / 2, graphicsService.getResolutionHeight() / 4) {
             boolean messageDisplayed = false;
 
             public boolean isTriggered(Actor hero) {
