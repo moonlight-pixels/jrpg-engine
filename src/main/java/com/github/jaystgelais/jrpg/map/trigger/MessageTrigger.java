@@ -7,6 +7,7 @@ import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
 import com.github.jaystgelais.jrpg.ui.panel.PanelData;
 import com.github.jaystgelais.jrpg.ui.text.TextArea;
+import com.github.jaystgelais.jrpg.ui.text.transition.TypedTextTransition;
 
 import java.util.Collections;
 import java.util.Map;
@@ -47,7 +48,7 @@ public abstract class MessageTrigger implements Trigger {
                                 .setPositionY(calculatePanelPositionY())
                                 .setTransitionTimeMs(DEFAULT_TRANSITION_TIME_MS)
                 );
-                content = new TextArea(panel.getPanelContainer(), graphicsService.getFontSet(), message);
+                content = new TextArea(panel.getPanelContainer(), graphicsService.getFontSet(), message, new TypedTextTransition());
                 panel.getPanelContainer().setContent(content);
             }
 

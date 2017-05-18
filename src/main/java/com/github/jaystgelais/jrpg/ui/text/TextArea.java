@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.ui.text;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Align;
@@ -11,8 +12,11 @@ import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.state.Updatable;
+import com.github.jaystgelais.jrpg.tween.IntegerTween;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
 import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.text.transition.TextTransition;
+import com.github.jaystgelais.jrpg.ui.text.transition.TextTransitionHandler;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,24 +30,34 @@ import java.util.Set;
 public final class TextArea extends AbstractContent implements Updatable, InputHandler {
     public static final long TIME_PER_GLYPH_MS = 50;
 
-    private final BitmapFontCache currentPage;
+    private final TextTransition textTransition;
     private final Queue<GlyphLayout> pages = new LinkedList<>();
     private final StateMachine stateMachine = initStateMachine();
+    private final BitmapFont font;
+    private GlyphLayout currentPage;
+    private GlyphLayout nextPage;
 
-    public TextArea(final Container parent, final FontSet fontSet, final String text) {
-        this(parent, fontSet, Collections.singletonList(text));
+    public TextArea(final Container parent, final FontSet fontSet, final String text,
+                    final TextTransition textTransition) {
+        this(parent, fontSet, Collections.singletonList(text), textTransition);
     }
 
-    public TextArea(final Container parent, final FontSet fontSet, final List<String> rawPages) {
+    public TextArea(final Container parent, final FontSet fontSet, final List<String> rawPages,
+                    final TextTransition textTransition) {
         super(
                 parent.getContentPositionX(), parent.getContentPositionY(),
                 parent.getContentWidth(), parent.getContentHeight()
         );
-        currentPage = new BitmapFontCache(fontSet.getTextFont());
+        font = fontSet.getTextFont();
+        this.textTransition = textTransition;
         for (String rawPage : rawPages) {
             pages.addAll(paginateText(fontSet, rawPage));
         }
         pages.add(new GlyphLayout());
+    }
+
+    public BitmapFont getFont() {
+        return font;
     }
 
     public boolean isEmpty() {
@@ -107,39 +121,34 @@ public final class TextArea extends AbstractContent implements Updatable, InputH
     }
 
     private StateMachine initStateMachine() {
+        final TextArea textArea = this;
+
         Set<State> states = new HashSet<>();
         states.add(new StateAdapter() {
-            private long timeInState;
-            private int glyphCount;
+            private TextTransitionHandler handler;
 
             @Override
             public String getKey() {
-                return "typing";
+                return "transition";
             }
 
             @Override
             public void onEnter(final Map<String, Object> params) {
-                currentPage.clear();
-                GlyphLayout glyphLayout = pages.poll();
-                currentPage.addText(glyphLayout, getContentPositionX(), getContentPositionY() + getHeight());
-                timeInState = 0;
-                glyphCount = 0;
-                for (GlyphLayout.GlyphRun run : glyphLayout.runs) {
-                    glyphCount += run.glyphs.size;
-                }
+                nextPage = pages.remove();
+                handler = textTransition.handleTransition(textArea, currentPage, nextPage);
             }
 
             @Override
             public void update(final long elapsedTime) {
-                timeInState += elapsedTime;
-                if (timeInState / TIME_PER_GLYPH_MS >= glyphCount) {
+                handler.update(elapsedTime);
+                if (handler.isComplete()) {
                     stateMachine.change("waiting");
                 }
             }
 
             @Override
             public void render(final GraphicsService graphicsService) {
-                currentPage.draw(graphicsService.getSpriteBatch(), 0, (int) (timeInState / TIME_PER_GLYPH_MS));
+                handler.render(graphicsService);
             }
 
             @Override
@@ -147,6 +156,12 @@ public final class TextArea extends AbstractContent implements Updatable, InputH
                 if (inputService.isPressed(Inputs.OK)) {
                     stateMachine.change("waiting");
                 }
+            }
+
+            @Override
+            public void onExit() {
+                currentPage = nextPage;
+                nextPage = null;
             }
         });
         states.add(new StateAdapter() {
@@ -158,16 +173,19 @@ public final class TextArea extends AbstractContent implements Updatable, InputH
 
             @Override
             public void render(final GraphicsService graphicsService) {
-                currentPage.draw(graphicsService.getSpriteBatch());
+                font.draw(
+                        graphicsService.getSpriteBatch(), currentPage,
+                        getContentPositionX(), getContentPositionY() + getHeight()
+                );
             }
 
             @Override
             public void handleInput(final InputService inputService) {
                 if (!isEmpty() && inputService.isPressed(Inputs.OK)) {
-                    stateMachine.change("typing");
+                    stateMachine.change("transition");
                 }
             }
         });
-        return new StateMachine(states, "typing");
+        return new StateMachine(states, "transition");
     }
 }
