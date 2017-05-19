@@ -1,10 +1,10 @@
 package com.github.jaystgelais.jrpg.ui.text;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Align;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
@@ -12,7 +12,6 @@ import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.state.Updatable;
-import com.github.jaystgelais.jrpg.tween.IntegerTween;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
 import com.github.jaystgelais.jrpg.ui.Container;
 import com.github.jaystgelais.jrpg.ui.text.transition.TextTransition;
@@ -33,6 +32,7 @@ public final class TextArea extends AbstractContent implements Updatable, InputH
     private final TextTransition textTransition;
     private final Queue<GlyphLayout> pages = new LinkedList<>();
     private final StateMachine stateMachine = initStateMachine();
+    private final DelayedInput okInput = new DelayedInput(Inputs.OK);
     private final BitmapFont font;
     private GlyphLayout currentPage;
     private GlyphLayout nextPage;
@@ -153,7 +153,7 @@ public final class TextArea extends AbstractContent implements Updatable, InputH
 
             @Override
             public void handleInput(final InputService inputService) {
-                if (inputService.isPressed(Inputs.OK)) {
+                if (okInput.isPressed(inputService)) {
                     stateMachine.change("waiting");
                 }
             }
@@ -181,7 +181,7 @@ public final class TextArea extends AbstractContent implements Updatable, InputH
 
             @Override
             public void handleInput(final InputService inputService) {
-                if (!isEmpty() && inputService.isPressed(Inputs.OK)) {
+                if (!isEmpty() && okInput.isPressed(inputService)) {
                     stateMachine.change("transition");
                 }
             }

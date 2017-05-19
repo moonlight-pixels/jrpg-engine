@@ -20,7 +20,8 @@ public final class TypedTextTransition implements TextTransition {
     }
 
     @Override
-    public TextTransitionHandler handleTransition(final TextArea parent, final GlyphLayout oldText, final GlyphLayout newText) {
+    public TextTransitionHandler handleTransition(final TextArea parent, final GlyphLayout oldText,
+                                                  final GlyphLayout newText) {
         return new Handler(parent, newText, timePerGlyphMs);
     }
 

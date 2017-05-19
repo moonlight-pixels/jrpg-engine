@@ -48,7 +48,12 @@ public abstract class MessageTrigger implements Trigger {
                                 .setPositionY(calculatePanelPositionY())
                                 .setTransitionTimeMs(DEFAULT_TRANSITION_TIME_MS)
                 );
-                content = new TextArea(panel.getPanelContainer(), graphicsService.getFontSet(), message, new TypedTextTransition());
+                content = new TextArea(
+                        panel.getPanelContainer(),
+                        graphicsService.getFontSet(),
+                        message,
+                        new TypedTextTransition()
+                );
                 panel.getPanelContainer().setContent(content);
             }
 
