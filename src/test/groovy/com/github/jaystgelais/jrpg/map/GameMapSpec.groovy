@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.github.jaystgelais.jrpg.map.actor.Actor
+import com.github.jaystgelais.jrpg.map.actor.PlayerController
 import spock.lang.Specification
 
 class GameMapSpec extends Specification {
@@ -31,7 +32,7 @@ class GameMapSpec extends Specification {
         testCamera.viewportWidth = 320
         testCamera.viewportHeight = 240
         GameMap gameMap = new GameMap(testCamera, mockMap, mockMapRenderer)
-        Actor testActor = new Actor(gameMap, null, new TileCoordinate(actorX, actorY))
+        Actor testActor = new Actor(gameMap, null, new PlayerController(), new TileCoordinate(actorX, actorY))
         gameMap.setFocalPoint(testActor)
 
         when:

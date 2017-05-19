@@ -13,6 +13,7 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
 import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
+import com.github.jaystgelais.jrpg.map.actor.PlayerController;
 import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerContext;
@@ -39,6 +40,7 @@ public final class MapMode extends GameMode {
     private final TileCoordinate initialLocation;
     private final SpriteSetData heroSpriteSetData;
     private final List<Trigger> triggers;
+    private final PlayerController controller = new PlayerController();
     private GameMap map;
     private Actor hero;
 
@@ -79,7 +81,7 @@ public final class MapMode extends GameMode {
         ActorSpriteSet heroSpriteSet = new ActorSpriteSet(
                 heroSpriteSetData, DEFAULT_TIME_TO_TRAVERSE_TILE_MS, assetManager
         );
-        hero = new Actor(map, heroSpriteSet, initialLocation);
+        hero = new Actor(map, heroSpriteSet, controller, initialLocation);
         map.setFocalPoint(hero);
         map.focusCamera();
     }
@@ -133,8 +135,9 @@ public final class MapMode extends GameMode {
             public void handleInput(final InputService inputService) {
                 if (inputService.isPressed(Inputs.CANCEL)) {
                     getGame().exitGame();
+                } else {
+                    controller.handleInput(inputService);
                 }
-                hero.handleInput(inputService);
             }
 
             @Override

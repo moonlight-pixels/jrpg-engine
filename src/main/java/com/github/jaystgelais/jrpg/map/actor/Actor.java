@@ -4,7 +4,6 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.input.InputService;
-import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.map.GameMap;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
 import com.github.jaystgelais.jrpg.state.State;
@@ -21,15 +20,18 @@ public final class Actor implements Renderable, InputHandler, Updatable {
     private final GameMap map;
     private final ActorSpriteSet spriteSet;
     private final StateMachine stateMachine;
+    private final Controller controller;
     private Direction facing;
     private TileCoordinate location;
     private TileCoordinate destination;
     private float positionX;
     private float positionY;
 
-    public Actor(final GameMap map, final ActorSpriteSet spriteSet, final TileCoordinate location) {
+    public Actor(final GameMap map, final ActorSpriteSet spriteSet,
+                 final Controller controller, final TileCoordinate location) {
         this.map = map;
         this.spriteSet = spriteSet;
+        this.controller = controller;
         this.facing = Direction.DOWN;
         this.location = location;
         this.destination = location;
@@ -50,6 +52,34 @@ public final class Actor implements Renderable, InputHandler, Updatable {
         return facing;
     }
 
+    public void setFacing(final Direction direction) {
+        this.facing = direction;
+    }
+
+    public void walk(final Direction direction) {
+        TileCoordinate target = null;
+        switch (direction) {
+            case UP:
+                target = location.getAbove();
+                break;
+            case DOWN:
+                target = location.getBelow();
+                break;
+            case LEFT:
+                target = location.getLeft();
+                break;
+            case RIGHT:
+                target = location.getRight();
+                break;
+            default:
+        }
+
+        if (target != null && isOpen(target)) {
+            destination = target;
+            stateMachine.change("walking");
+        }
+    }
+
     public TileCoordinate getLocation() {
         return location;
     }
@@ -65,6 +95,8 @@ public final class Actor implements Renderable, InputHandler, Updatable {
     }
 
     private StateMachine initStateMachine() {
+        final Actor actor = this;
+
         Set<State> states = new HashSet<>();
         states.add(new StateAdapter() {
             @Override
@@ -79,25 +111,11 @@ public final class Actor implements Renderable, InputHandler, Updatable {
             }
 
             @Override
-            public void handleInput(final InputService inputService) {
-                TileCoordinate targetCoordinate = null;
-                if (inputService.isPressed(Inputs.UP)) {
-                    facing = Direction.UP;
-                    targetCoordinate = location.getAbove();
-                } else if (inputService.isPressed(Inputs.DOWN)) {
-                    facing = Direction.DOWN;
-                    targetCoordinate = location.getBelow();
-                } else if (inputService.isPressed(Inputs.LEFT)) {
-                    facing = Direction.LEFT;
-                    targetCoordinate = location.getLeft();
-                } else if (inputService.isPressed(Inputs.RIGHT)) {
-                    facing = Direction.RIGHT;
-                    targetCoordinate = location.getRight();
-                }
-
-                if (targetCoordinate != null && isOpen(targetCoordinate)) {
-                    destination = targetCoordinate;
-                    stateMachine.change("walking");
+            public void update(final long elapsedTime) {
+                controller.update(elapsedTime);
+                Action action = controller.nextAction();
+                if (action != null) {
+                    action.perform(actor);
                 }
             }
 
