@@ -1,0 +1,26 @@
+package com.github.jaystgelais.jrpg.map;
+
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+
+public abstract class MapDefinition {
+    private final GraphicsService graphicsService;
+
+    protected MapDefinition(final GraphicsService graphicsService) {
+        this.graphicsService = graphicsService;
+    }
+
+    public abstract GameMap getMap(final AssetManager assetManager);
+
+    protected final GameMap loadMap(final AssetManager assetManager, final String mapPath) {
+        if (!assetManager.isLoaded(mapPath, TiledMap.class)) {
+            assetManager.load(mapPath, TiledMap.class);
+            assetManager.finishLoading();
+        }
+        TiledMap tiledMap = assetManager.get(mapPath);
+        TiledMapRenderer mapRenderer = graphicsService.getTileMapRenderer(tiledMap);
+        return new GameMap(graphicsService.getCamera(), tiledMap, mapRenderer);
+    }
+}

@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
@@ -35,8 +34,7 @@ public final class MapMode extends GameMode {
 
     private final StateMachine stateMachine;
     private final AssetManager assetManager;
-    private final OrthographicCamera camera;
-    private final String initialMapPath;
+    private final MapDefinition initialMap;
     private final TileCoordinate initialLocation;
     private final SpriteSetData heroSpriteSetData;
     private final List<Trigger> triggers;
@@ -44,19 +42,17 @@ public final class MapMode extends GameMode {
     private GameMap map;
     private Actor hero;
 
-    public MapMode(final OrthographicCamera camera, final String mapPath,
-                   final TileCoordinate initialLocation, final SpriteSetData heroSpriteSetData) {
-        this(camera, mapPath, initialLocation, heroSpriteSetData, new AssetManager());
+    public MapMode(final MapDefinition initialMap, final TileCoordinate initialLocation,
+                   final SpriteSetData heroSpriteSetData) {
+        this(initialMap, initialLocation, heroSpriteSetData, new AssetManager());
     }
 
-    MapMode(final OrthographicCamera camera, final String mapPath,
-            final TileCoordinate initialLocation, final SpriteSetData heroSpriteSetData,
-            final AssetManager assetManager) {
-        this.camera = camera;
+    MapMode(final MapDefinition initialMap, final TileCoordinate initialLocation,
+            final SpriteSetData heroSpriteSetData, final AssetManager assetManager) {
+        this.initialMap = initialMap;
         this.initialLocation = initialLocation;
         this.assetManager = assetManager;
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        initialMapPath = mapPath;
         this.heroSpriteSetData = heroSpriteSetData;
         triggers = new LinkedList<>();
         stateMachine = initStateMachine();
@@ -74,9 +70,9 @@ public final class MapMode extends GameMode {
     @Override
     public void onEnter(final Map<String, Object> params) {
         if (params.containsKey("map")) {
-            loadMap((String) params.get("map"));
+            loadMap((MapDefinition) params.get("map"));
         } else {
-            loadMap(initialMapPath);
+            loadMap(initialMap);
         }
         ActorSpriteSet heroSpriteSet = new ActorSpriteSet(
                 heroSpriteSetData, DEFAULT_TIME_TO_TRAVERSE_TILE_MS, assetManager
@@ -113,14 +109,8 @@ public final class MapMode extends GameMode {
         assetManager.dispose();
     }
 
-    private void loadMap(final String mapPath) {
-        if (!assetManager.isLoaded(mapPath, TiledMap.class)) {
-            assetManager.load(mapPath, TiledMap.class);
-            assetManager.finishLoading();
-        }
-        TiledMap tiledMap = assetManager.get(mapPath);
-        TiledMapRenderer mapRenderer = getGame().getGraphicsService().getTileMapRenderer(tiledMap);
-        this.map = new GameMap(camera, tiledMap, mapRenderer);
+    private void loadMap(final MapDefinition mapDefinition) {
+        this.map = mapDefinition.getMap(assetManager);
     }
 
     private StateMachine initStateMachine() {
@@ -135,14 +125,16 @@ public final class MapMode extends GameMode {
             public void handleInput(final InputService inputService) {
                 if (inputService.isPressed(Inputs.CANCEL)) {
                     getGame().exitGame();
-                } else {
+                } else if (hero.isWaiting()) {
                     controller.handleInput(inputService);
                 }
             }
 
             @Override
             public void update(final long elapsedTime) {
-                hero.update(elapsedTime);
+                for (Actor actor : map.getActors()) {
+                    actor.update(elapsedTime);
+                }
             }
 
             @Override
@@ -206,12 +198,15 @@ public final class MapMode extends GameMode {
         map.renderBackground(graphicsService);
 
         graphicsService.renderStart();
-        hero.render(graphicsService);
+        for (Actor actor : map.getActors()) {
+            actor.render(graphicsService);
+        }
         graphicsService.renderEnd();
 
         map.renderForeground(graphicsService);
 
         if (getGame().isDebug()) {
+            OrthographicCamera camera = graphicsService.getCamera();
             graphicsService.renderStart();
             graphicsService.getFontSet().getTextFont().draw(
                     graphicsService.getSpriteBatch(),

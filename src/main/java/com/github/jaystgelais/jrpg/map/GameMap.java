@@ -7,6 +7,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public final class GameMap {
     static final int[] BACKGROUND_LAYERS = {0};
     static final int[] FOREGROUND_LAYERS = {1};
@@ -15,12 +18,14 @@ public final class GameMap {
     private final OrthographicCamera camera;
     private final TiledMap map;
     private final TiledMapRenderer mapRenderer;
+    private final List<Actor> actors;
     private Actor focalPoint;
 
     public GameMap(final OrthographicCamera camera, final TiledMap map, final TiledMapRenderer mapRenderer) {
         this.camera = camera;
         this.map = map;
         this.mapRenderer = mapRenderer;
+        actors = new LinkedList<>();
     }
 
     public Actor getFocalPoint() {
@@ -29,6 +34,13 @@ public final class GameMap {
 
     public void setFocalPoint(final Actor focalPoint) {
         this.focalPoint = focalPoint;
+        if (!actors.contains(focalPoint)) {
+            actors.add(focalPoint);
+        }
+    }
+
+    public void addActor(final Actor actor) {
+        actors.add(actor);
     }
 
     public int getMapHeight() {
@@ -105,5 +117,9 @@ public final class GameMap {
 
     public void renderForeground(final GraphicsService graphicsService) {
         mapRenderer.render(FOREGROUND_LAYERS);
+    }
+
+    public List<Actor> getActors() {
+        return actors;
     }
 }

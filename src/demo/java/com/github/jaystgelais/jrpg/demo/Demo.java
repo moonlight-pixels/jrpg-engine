@@ -33,8 +33,7 @@ public final class Demo {
         graphicsService.setResolutionWidth(480);
         graphicsService.setResolutionHeight(268);
         MapMode mapMode = new MapMode(
-                graphicsService.getCamera(),
-                "data/assets/maps/mapdemo/cave.tmx",
+                new CaveMapDefinition(graphicsService),
                 new TileCoordinate(8, 97),
                 new SpriteSetData("data/assets/sprites/mapdemo/warrior.png", 3, 4));
         mapMode.addTrigger(new MessageTrigger(

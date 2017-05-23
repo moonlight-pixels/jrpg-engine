@@ -203,4 +203,8 @@ public final class Actor implements Renderable, InputHandler, Updatable {
     public void update(final long elapsedTime) {
         stateMachine.update(elapsedTime);
     }
+
+    public boolean isWaiting() {
+        return stateMachine.getCurrentState().getKey().equals("standing");
+    }
 }

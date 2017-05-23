@@ -22,6 +22,7 @@
     <module name="SuppressionFilter">
         <property name="file" value="./config/checkstyle/checkstyle-suppressions.xml"/>
     </module>
+    <module name="SuppressWarningsFilter" />
 
 
     <!-- Checks whether files end with a new line.                        -->
@@ -141,6 +142,7 @@
         <module name="TodoComment"/>
         <module name="UpperEll"/>
 
+        <module name="SuppressWarningsHolder" />
     </module>
 
 </module>
