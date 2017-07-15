@@ -28,22 +28,12 @@ public final class ActorSpriteSet {
                 spriteSheet.getWidth() / spriteSetData.getColumns(),
                 spriteSheet.getHeight() / spriteSetData.getRows()
         );
-        walking.put(Direction.UP, new Animation<TextureRegion>(
-                TimeUtil.convertMsToFloatSeconds(timeToTraverseTileMs) / spriteSetData.getColumns(),
-                tmp[spriteSetData.getUpFacingRowIndex()]
-        ));
-        walking.put(Direction.RIGHT, new Animation<TextureRegion>(
-                TimeUtil.convertMsToFloatSeconds(timeToTraverseTileMs) / spriteSetData.getColumns(),
-                tmp[spriteSetData.getRightFacingRowIndex()]
-        ));
-        walking.put(Direction.DOWN, new Animation<TextureRegion>(
-                TimeUtil.convertMsToFloatSeconds(timeToTraverseTileMs) / spriteSetData.getColumns(),
-                tmp[spriteSetData.getDownFacingRowIndex()]
-        ));
-        walking.put(Direction.LEFT, new Animation<TextureRegion>(
-                TimeUtil.convertMsToFloatSeconds(timeToTraverseTileMs) / spriteSetData.getColumns(),
-                tmp[spriteSetData.getLeftFacingRowIndex()]
-        ));
+        walking.put(Direction.UP, build3CycleWalk(tmp[spriteSetData.getUpFacingRowIndex()], timeToTraverseTileMs));
+        walking.put(
+                Direction.RIGHT, build3CycleWalk(tmp[spriteSetData.getRightFacingRowIndex()], timeToTraverseTileMs)
+        );
+        walking.put(Direction.DOWN, build3CycleWalk(tmp[spriteSetData.getDownFacingRowIndex()], timeToTraverseTileMs));
+        walking.put(Direction.LEFT, build3CycleWalk(tmp[spriteSetData.getLeftFacingRowIndex()], timeToTraverseTileMs));
         standing.put(
                 Direction.UP,
                 tmp[spriteSetData.getUpFacingRowIndex()][spriteSetData.getUpFacingStandingIndex()]
@@ -72,5 +62,18 @@ public final class ActorSpriteSet {
 
     public TextureRegion getStandingImage(final Direction direction) {
         return standing.get(direction);
+    }
+
+    private Animation<TextureRegion> build3CycleWalk(final TextureRegion[] frames, final long timeToTraverseTileMs) {
+        TextureRegion[] animationFrames = {
+                frames[0],
+                frames[1],
+                frames[2],
+                frames[1]
+        };
+        return new Animation<TextureRegion>(
+                TimeUtil.convertMsToFloatSeconds(timeToTraverseTileMs) / animationFrames.length,
+                animationFrames
+        );
     }
 }
