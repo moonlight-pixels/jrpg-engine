@@ -5,19 +5,28 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-public final class GameMap {
+public final class GameMap implements Renderable {
     static final int[] BACKGROUND_LAYERS = {0};
     static final int[] FOREGROUND_LAYERS = {1};
-    public static final String COLLISION_LAYER_NAME = "jrpg:collision";
+    public static final String MAP_LAYER_PROP_MAP_LAYER = "jrpg-map-layer";
+    public static final String MAP_LAYER_PROP_LAYER_TYPE = "jrpg-layer-type";
+    public static final String MAP_LAYER_TYPE_BASE = "base";
+    public static final String MAP_LAYER_TYPE_DECORATION_BACKGRAOUND = "decoration-background";
+    public static final String MAP_LAYER_TYPE_DECORATION_FOREGRAOUND = "decoration-foreground";
+    public static final String MAP_LAYER_TYPE_COLLISION = "collision";
 
     private final OrthographicCamera camera;
     private final TiledMap map;
     private final TiledMapRenderer mapRenderer;
+    private final SortedMap<Integer, MapLayer> mapLayers;
     private final List<Actor> actors;
     private Actor focalPoint;
 
@@ -25,7 +34,37 @@ public final class GameMap {
         this.camera = camera;
         this.map = map;
         this.mapRenderer = mapRenderer;
+        mapLayers = new TreeMap<>();
         actors = new LinkedList<>();
+        buildMapLayers(map);
+    }
+
+    private void buildMapLayers(final TiledMap map) {
+        for (com.badlogic.gdx.maps.MapLayer mapLayer : map.getLayers()) {
+            TiledMapTileLayer tiledMapLayer = (TiledMapTileLayer) mapLayer;
+
+            if (tiledMapLayer.getProperties().containsKey(MAP_LAYER_PROP_MAP_LAYER)) {
+                int mapLayerIndex = tiledMapLayer.getProperties().get(MAP_LAYER_PROP_MAP_LAYER, Integer.class);
+
+                MapLayer gameMapLayer = mapLayers.computeIfAbsent(mapLayerIndex, i -> new MapLayer(i, mapRenderer));
+
+                switch (tiledMapLayer.getProperties().get(MAP_LAYER_PROP_LAYER_TYPE, String.class)) {
+                    case MAP_LAYER_TYPE_BASE:
+                        gameMapLayer.setBaseLayer(tiledMapLayer);
+                        break;
+                    case MAP_LAYER_TYPE_DECORATION_BACKGRAOUND:
+                        gameMapLayer.setDecorationBackgroundLayer(tiledMapLayer);
+                        break;
+                    case MAP_LAYER_TYPE_DECORATION_FOREGRAOUND:
+                        gameMapLayer.setDecorationForegroundLayer(tiledMapLayer);
+                        break;
+                    case MAP_LAYER_TYPE_COLLISION:
+                        gameMapLayer.setCollisionLayer(tiledMapLayer);
+                        break;
+                    default:
+                }
+            }
+        }
     }
 
     public Actor getFocalPoint() {
@@ -75,16 +114,13 @@ public final class GameMap {
         return coordinate.getY() * getTileHeight();
     }
 
-    public boolean isCollision(final TileCoordinate coordinate) {
-        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(COLLISION_LAYER_NAME);
-        if (collisionLayer != null) {
-            final TiledMapTileLayer.Cell cell = collisionLayer.getCell(coordinate.getX(), coordinate.getY());
-            if (cell != null) {
+    public boolean isCollision(final Actor actor, final TileCoordinate coordinate) {
+        for (Actor otherActor : actors) {
+            if (actor != otherActor && otherActor.isOccupying(coordinate)) {
                 return true;
             }
         }
-
-        return false;
+        return mapLayers.get(coordinate.getMapLayer()).isCollision(coordinate);
     }
 
     public void focusCamera() {
@@ -121,5 +157,17 @@ public final class GameMap {
 
     public List<Actor> getActors() {
         return actors;
+    }
+
+    @Override
+    public void render(final GraphicsService graphicsService) {
+        mapLayers.keySet().forEach(mapLayerIndex -> {
+            mapLayers.get(mapLayerIndex).render(graphicsService, actors);
+        });
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

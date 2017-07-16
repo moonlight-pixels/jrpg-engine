@@ -84,6 +84,10 @@ public final class Actor implements Renderable, InputHandler, Updatable {
         return location;
     }
 
+    public boolean isOccupying(final TileCoordinate coordinate) {
+        return coordinate.equals(location) || coordinate.equals(destination);
+    }
+
     @Override
     public void render(final GraphicsService graphicsService) {
         stateMachine.render(graphicsService);
@@ -187,7 +191,7 @@ public final class Actor implements Renderable, InputHandler, Updatable {
             return false;
         }
 
-        return !map.isCollision(targetCoordinate);
+        return !map.isCollision(this, targetCoordinate);
     }
 
     private float weightedAverage(final float start, final float finish, final float percentComplete) {
