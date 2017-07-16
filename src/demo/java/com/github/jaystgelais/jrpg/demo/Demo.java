@@ -36,20 +36,6 @@ public final class Demo {
                 new CaveMapDefinition(graphicsService),
                 new TileCoordinate(8, 97),
                 new SpriteSetData("data/assets/sprites/mapdemo/warrior.png", 3, 4));
-        mapMode.addTrigger(new MessageTrigger(
-                "Welcome to the JRPG demo. Press [GREEN]ENTER[] to dismiss this text. [GREEN]ARROW KEYS[] will move our hero around the cave. Press [GREEN]ESC[] to exit the demo.",
-                graphicsService, graphicsService.getResolutionWidth() / 2, graphicsService.getResolutionHeight() / 4) {
-            boolean messageDisplayed = false;
-
-            public boolean isTriggered(Actor hero) {
-                if (messageDisplayed) {
-                    return false;
-                } else {
-                    messageDisplayed = true;
-                    return true;
-                }
-            }
-        });
         Game game = new Game(
                 Collections.singleton(mapMode),
                 "mapMode", graphicsService, new KeyboardInputService());

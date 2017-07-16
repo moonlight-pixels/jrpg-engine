@@ -10,6 +10,7 @@ import com.github.jaystgelais.jrpg.map.actor.ActorDefinition;
 import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
 import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
 import com.github.jaystgelais.jrpg.map.actor.WanderingNpcController;
+import com.github.jaystgelais.jrpg.map.trigger.MessageTrigger;
 
 public class CaveMapDefinition extends MapDefinition {
     public static final String MAP_PATH = "data/assets/maps/mapdemo/cave.tmx";
@@ -33,6 +34,21 @@ public class CaveMapDefinition extends MapDefinition {
                 return new Actor(map, spriteSet, new WanderingNpcController(), new TileCoordinate(10, 85));
             }
         }.getActor(map));
+
+        map.addTrigger(new MessageTrigger(
+                "Welcome to the JRPG demo. Press [GREEN]ENTER[] to dismiss this text. [GREEN]ARROW KEYS[] will move our hero around the cave. Press [GREEN]ESC[] to exit the demo.",
+                getGraphicsService(), getGraphicsService().getResolutionWidth() / 2, getGraphicsService().getResolutionHeight() / 4) {
+            boolean messageDisplayed = false;
+
+            public boolean isTriggered(Actor hero) {
+                if (messageDisplayed) {
+                    return false;
+                } else {
+                    messageDisplayed = true;
+                    return true;
+                }
+            }
+        });
 
         return map;
     }

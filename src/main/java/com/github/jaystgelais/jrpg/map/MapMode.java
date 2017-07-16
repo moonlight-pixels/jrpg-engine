@@ -58,10 +58,6 @@ public final class MapMode extends GameMode {
         stateMachine = initStateMachine();
     }
 
-    public void addTrigger(final Trigger trigger) {
-        triggers.add(trigger);
-    }
-
     @Override
     public String getKey() {
         return "mapMode";
@@ -195,15 +191,7 @@ public final class MapMode extends GameMode {
     }
 
     private void renderMapAndActors(final GraphicsService graphicsService) {
-        map.renderBackground(graphicsService);
-
-        graphicsService.renderStart();
-        for (Actor actor : map.getActors()) {
-            actor.render(graphicsService);
-        }
-        graphicsService.renderEnd();
-
-        map.renderForeground(graphicsService);
+        map.render(graphicsService);
 
         if (getGame().isDebug()) {
             OrthographicCamera camera = graphicsService.getCamera();

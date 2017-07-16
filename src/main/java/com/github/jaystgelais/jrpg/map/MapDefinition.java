@@ -23,4 +23,8 @@ public abstract class MapDefinition {
         TiledMapRenderer mapRenderer = graphicsService.getTileMapRenderer(tiledMap);
         return new GameMap(graphicsService.getCamera(), tiledMap, mapRenderer);
     }
+
+    protected final GraphicsService getGraphicsService() {
+        return graphicsService;
+    }
 }

@@ -65,11 +65,13 @@ public final class MapLayer {
             mapRenderer.renderTileLayer(decorationBackgroundLayer);
         }
 
+        graphicsService.renderStart();
         actors
             .stream()
             .filter(actor -> actor.getLocation().getMapLayer() == layerIndex)
             .sorted(ACTORS_TO_RENDER_COMPARATOR)
             .forEach(actor -> actor.render(graphicsService));
+        graphicsService.renderEnd();
 
         if (decorationForegroundLayer != null) {
             mapRenderer.renderTileLayer(decorationForegroundLayer);

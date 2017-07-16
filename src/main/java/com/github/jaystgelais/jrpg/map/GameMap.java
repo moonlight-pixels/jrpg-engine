@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
+import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +30,7 @@ public final class GameMap implements Renderable {
     private final SortedMap<Integer, MapLayer> mapLayers;
     private final List<Actor> actors;
     private Actor focalPoint;
+    private final List<Trigger> triggers;
 
     public GameMap(final OrthographicCamera camera, final TiledMap map, final TiledMapRenderer mapRenderer) {
         this.camera = camera;
@@ -36,6 +38,7 @@ public final class GameMap implements Renderable {
         this.mapRenderer = mapRenderer;
         mapLayers = new TreeMap<>();
         actors = new LinkedList<>();
+        triggers = new LinkedList<>();
         buildMapLayers(map);
     }
 
@@ -80,6 +83,10 @@ public final class GameMap implements Renderable {
 
     public void addActor(final Actor actor) {
         actors.add(actor);
+    }
+
+    public void addTrigger(final Trigger trigger) {
+        triggers.add(trigger);
     }
 
     public int getMapHeight() {
