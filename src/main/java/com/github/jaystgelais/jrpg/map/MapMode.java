@@ -22,8 +22,6 @@ import com.github.jaystgelais.jrpg.state.StateMachine;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,7 +35,6 @@ public final class MapMode extends GameMode {
     private final MapDefinition initialMap;
     private final TileCoordinate initialLocation;
     private final SpriteSetData heroSpriteSetData;
-    private final List<Trigger> triggers;
     private final PlayerController controller = new PlayerController();
     private GameMap map;
     private Actor hero;
@@ -54,7 +51,6 @@ public final class MapMode extends GameMode {
         this.assetManager = assetManager;
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         this.heroSpriteSetData = heroSpriteSetData;
-        triggers = new LinkedList<>();
         stateMachine = initStateMachine();
     }
 
@@ -85,7 +81,7 @@ public final class MapMode extends GameMode {
 
     @Override
     public void update(final long elapsedTime) {
-        for (Trigger trigger : triggers) {
+        for (Trigger trigger : map.getTriggers()) {
             if (trigger.isTriggered(hero)) {
                 stateMachine.change("triggerInControl", Collections.singletonMap("trigger", trigger));
                 return;

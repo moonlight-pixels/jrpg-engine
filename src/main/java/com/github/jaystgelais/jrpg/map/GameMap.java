@@ -89,6 +89,10 @@ public final class GameMap implements Renderable {
         triggers.add(trigger);
     }
 
+    public List<Trigger> getTriggers() {
+        return triggers;
+    }
+
     public int getMapHeight() {
         return getMapHeightInTiles() * getTileHeight();
     }
