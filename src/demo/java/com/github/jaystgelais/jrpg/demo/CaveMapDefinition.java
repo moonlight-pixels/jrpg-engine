@@ -10,7 +10,9 @@ import com.github.jaystgelais.jrpg.map.actor.ActorDefinition;
 import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
 import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
 import com.github.jaystgelais.jrpg.map.actor.WanderingNpcController;
-import com.github.jaystgelais.jrpg.map.trigger.MessageTrigger;
+import com.github.jaystgelais.jrpg.map.trigger.MessageTriggerAction;
+import com.github.jaystgelais.jrpg.map.trigger.Trigger;
+import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
 
 public class CaveMapDefinition extends MapDefinition {
     public static final String MAP_PATH = "data/assets/maps/mapdemo/cave.tmx";
@@ -35,9 +37,7 @@ public class CaveMapDefinition extends MapDefinition {
             }
         }.getActor(map));
 
-        map.addTrigger(new MessageTrigger(
-                "Welcome to the JRPG demo. Press [GREEN]ENTER[] to dismiss this text. [GREEN]ARROW KEYS[] will move our hero around the cave. Press [GREEN]ESC[] to exit the demo.",
-                getGraphicsService(), getGraphicsService().getResolutionWidth() / 2, getGraphicsService().getResolutionHeight() / 4) {
+        map.addTrigger(new Trigger() {
             boolean messageDisplayed = false;
 
             public boolean isTriggered(Actor hero) {
@@ -47,6 +47,14 @@ public class CaveMapDefinition extends MapDefinition {
                     messageDisplayed = true;
                     return true;
                 }
+            }
+
+            @Override
+            public TriggerAction getAction() {
+                return new MessageTriggerAction(
+                        "Welcome to the JRPG demo. Press [GREEN]ENTER[] to dismiss this text. [GREEN]ARROW KEYS[] will move our hero around the cave. Press [GREEN]ESC[] to exit the demo.",
+                        getGraphicsService()
+                );
             }
         });
 

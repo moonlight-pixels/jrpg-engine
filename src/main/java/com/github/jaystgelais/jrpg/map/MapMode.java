@@ -15,7 +15,7 @@ import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
 import com.github.jaystgelais.jrpg.map.actor.PlayerController;
 import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
-import com.github.jaystgelais.jrpg.map.trigger.TriggerContext;
+import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
@@ -135,8 +135,7 @@ public final class MapMode extends GameMode {
             }
         });
         states.add(new State() {
-            private StateMachine triggerState;
-            private TriggerContext context;
+            private TriggerAction triggerAction;
 
             @Override
             public String getKey() {
@@ -146,39 +145,37 @@ public final class MapMode extends GameMode {
             @Override
             public void onEnter(final Map<String, Object> params) {
                 Trigger trigger = (Trigger) params.get("trigger");
-                context = new TriggerContext();
-                triggerState = trigger.performAction(context);
+                triggerAction = trigger.getAction();
             }
 
             @Override
             public void onExit() {
-                triggerState.dispose();
-                triggerState = null;
-                context = null;
+                triggerAction.dispose();
+                triggerAction = null;
             }
 
             @Override
             public void render(final GraphicsService graphicsService) {
                 renderMapAndActors(graphicsService);
-                triggerState.render(graphicsService);
+                triggerAction.render(graphicsService);
             }
 
             @Override
             public void dispose() {
-                triggerState.dispose();
+                triggerAction.dispose();
             }
 
             @Override
             public void handleInput(final InputService inputService) {
-                triggerState.handleInput(inputService);
+                triggerAction.handleInput(inputService);
             }
 
             @Override
             public void update(final long elapsedTime) {
-                if (context.isComplete()) {
+                if (triggerAction.isComplete()) {
                     stateMachine.change("playerInControl");
                 } else {
-                    triggerState.update(elapsedTime);
+                    triggerAction.update(elapsedTime);
                 }
             }
         });

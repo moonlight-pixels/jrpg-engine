@@ -8,9 +8,7 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsServiceImpl;
 import com.github.jaystgelais.jrpg.input.KeyboardInputService;
 import com.github.jaystgelais.jrpg.map.MapMode;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
-import com.github.jaystgelais.jrpg.map.actor.Actor;
 import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
-import com.github.jaystgelais.jrpg.map.trigger.MessageTrigger;
 
 import java.util.Collections;
 
