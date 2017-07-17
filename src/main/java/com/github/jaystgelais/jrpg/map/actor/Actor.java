@@ -52,11 +52,23 @@ public final class Actor implements Renderable, InputHandler, Updatable {
         return facing;
     }
 
-    public void setFacing(final Direction direction) {
+    void setFacing(final Direction direction) {
         this.facing = direction;
     }
 
-    public void walk(final Direction direction) {
+    void walk(final Direction direction) {
+        TileCoordinate target = getAdjacentTileCoordinate(direction);
+        if (isOpen(target)) {
+            destination = target;
+            stateMachine.change("walking");
+        }
+    }
+
+    void inspect() {
+        map.fireOnInspectTrigger(getAdjacentTileCoordinate(facing));
+    }
+
+    private TileCoordinate getAdjacentTileCoordinate(final Direction direction) {
         TileCoordinate target = null;
         switch (direction) {
             case UP:
@@ -74,10 +86,7 @@ public final class Actor implements Renderable, InputHandler, Updatable {
             default:
         }
 
-        if (target != null && isOpen(target)) {
-            destination = target;
-            stateMachine.change("walking");
-        }
+        return target;
     }
 
     public TileCoordinate getLocation() {
@@ -112,6 +121,7 @@ public final class Actor implements Renderable, InputHandler, Updatable {
             public void onEnter(final Map<String, Object> params) {
                 positionX = map.getAbsoluteX(location);
                 positionY = map.getAbsoluteY(location);
+                map.fireOnEnterTrigger(location);
             }
 
             @Override
@@ -146,6 +156,7 @@ public final class Actor implements Renderable, InputHandler, Updatable {
 
             @Override
             public void onExit() {
+                map.fireOnExitTrigger(location);
                 location = destination;
                 destination = null;
             }

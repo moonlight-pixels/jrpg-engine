@@ -22,6 +22,8 @@ public final class PlayerController implements Controller, InputHandler {
             nextAction = new MoveAction(Direction.LEFT);
         } else if (inputService.isPressed(Inputs.RIGHT)) {
             nextAction = new MoveAction(Direction.RIGHT);
+        } else if (inputService.isPressed(Inputs.OK)) {
+            nextAction = new InspectAction();
         }
     }
 

@@ -81,12 +81,6 @@ public final class MapMode extends GameMode {
 
     @Override
     public void update(final long elapsedTime) {
-        for (Trigger trigger : map.getTriggers()) {
-            if (trigger.isTriggered(hero)) {
-                stateMachine.change("triggerInControl", Collections.singletonMap("trigger", trigger));
-                return;
-            }
-        }
         stateMachine.update(elapsedTime);
     }
 
@@ -124,6 +118,20 @@ public final class MapMode extends GameMode {
 
             @Override
             public void update(final long elapsedTime) {
+                TriggerAction nextTriggeredAction = map.getNextTriggeredAction();
+                if (nextTriggeredAction != null) {
+                    stateMachine.change("triggerInControl", Collections.singletonMap("action", nextTriggeredAction));
+                    return;
+                }
+                for (Trigger trigger : map.getTriggers()) {
+                    if (trigger.isTriggered(hero)) {
+                        stateMachine.change(
+                                "triggerInControl",
+                                Collections.singletonMap("action", trigger.getAction())
+                        );
+                        return;
+                    }
+                }
                 for (Actor actor : map.getActors()) {
                     actor.update(elapsedTime);
                 }
@@ -144,8 +152,7 @@ public final class MapMode extends GameMode {
 
             @Override
             public void onEnter(final Map<String, Object> params) {
-                Trigger trigger = (Trigger) params.get("trigger");
-                triggerAction = trigger.getAction();
+                triggerAction = (TriggerAction) params.get("action");
             }
 
             @Override

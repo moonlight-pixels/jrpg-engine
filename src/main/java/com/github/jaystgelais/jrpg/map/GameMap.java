@@ -9,11 +9,13 @@ import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
 import com.github.jaystgelais.jrpg.map.trigger.TileTrigger;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
+import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -35,6 +37,7 @@ public final class GameMap implements Renderable {
     private Actor focalPoint;
     private final List<Trigger> triggers;
     private final Map<TileCoordinate, TileTrigger> tileTriggers;
+    private final Queue<TriggerAction> actionQueue;
 
     public GameMap(final OrthographicCamera camera, final TiledMap map, final TiledMapRenderer mapRenderer) {
         this.camera = camera;
@@ -44,6 +47,7 @@ public final class GameMap implements Renderable {
         actors = new LinkedList<>();
         triggers = new LinkedList<>();
         tileTriggers = new HashMap<>();
+        actionQueue = new LinkedList<>();
         buildMapLayers(map);
     }
 
@@ -167,15 +171,29 @@ public final class GameMap implements Renderable {
         mapRenderer.setView(camera);
     }
 
-    public void renderBackground(final GraphicsService graphicsService) {
-        mapRenderer.render(BACKGROUND_LAYERS);
+    public void fireOnExitTrigger(final TileCoordinate coordinate) {
+        if (tileTriggers.containsKey(coordinate) && tileTriggers.get(coordinate).onExit() != null) {
+            actionQueue.add(tileTriggers.get(coordinate).onExit());
+        }
     }
 
-    public void renderForeground(final GraphicsService graphicsService) {
-        mapRenderer.render(FOREGROUND_LAYERS);
+    public void fireOnEnterTrigger(final TileCoordinate coordinate) {
+        if (tileTriggers.containsKey(coordinate) && tileTriggers.get(coordinate).onEnter() != null) {
+            actionQueue.add(tileTriggers.get(coordinate).onEnter());
+        }
     }
 
-    public List<Actor> getActors() {
+    public void fireOnInspectTrigger(final TileCoordinate coordinate) {
+        if (tileTriggers.containsKey(coordinate) && tileTriggers.get(coordinate).onInspect() != null) {
+            actionQueue.add(tileTriggers.get(coordinate).onInspect());
+        }
+    }
+
+    public TriggerAction getNextTriggeredAction() {
+        return actionQueue.poll();
+    }
+
+    List<Actor> getActors() {
         return actors;
     }
 
