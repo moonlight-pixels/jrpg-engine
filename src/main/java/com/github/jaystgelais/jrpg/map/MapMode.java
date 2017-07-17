@@ -61,15 +61,16 @@ public final class MapMode extends GameMode {
 
     @Override
     public void onEnter(final Map<String, Object> params) {
-        if (params.containsKey("map")) {
-            loadMap((MapDefinition) params.get("map"));
-        } else {
-            loadMap(initialMap);
-        }
+        MapDefinition mapDefinition = (MapDefinition) params.computeIfAbsent("map", k -> initialMap);
+        TileCoordinate location = (TileCoordinate) params.computeIfAbsent("location", k -> initialLocation);
+
+        loadMap(mapDefinition);
+
         ActorSpriteSet heroSpriteSet = new ActorSpriteSet(
                 heroSpriteSetData, DEFAULT_TIME_TO_TRAVERSE_TILE_MS, assetManager
         );
-        hero = new Actor(map, heroSpriteSet, controller, initialLocation);
+        hero = new Actor(map, heroSpriteSet, controller, location);
+
         map.setFocalPoint(hero);
         map.focusCamera();
     }
@@ -96,7 +97,7 @@ public final class MapMode extends GameMode {
     }
 
     private void loadMap(final MapDefinition mapDefinition) {
-        this.map = mapDefinition.getMap(assetManager);
+        this.map = mapDefinition.getMap(getGame().getGraphicsService(), assetManager);
     }
 
     private StateMachine initStateMachine() {

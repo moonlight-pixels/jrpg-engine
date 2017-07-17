@@ -15,16 +15,12 @@ import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
 
 public class CaveMapDefinition extends MapDefinition {
-    public static final String MAP_PATH = "data/assets/maps/mapdemo/cave.tmx";
-    public static final String NPC_SPRITE_PATH = "data/assets/sprites/mapdemo/npc.png";
-
-    protected CaveMapDefinition(final GraphicsService graphicsService) {
-        super(graphicsService);
-    }
+    private static final String MAP_PATH = "data/assets/maps/mapdemo/cave.tmx";
+    private static final String NPC_SPRITE_PATH = "data/assets/sprites/mapdemo/npc.png";
 
     @Override
-    public GameMap getMap(final AssetManager assetManager) {
-        GameMap map = loadMap(assetManager, MAP_PATH);
+    public GameMap getMap(final GraphicsService graphicsService, final AssetManager assetManager) {
+        GameMap map = loadMap(graphicsService, assetManager, MAP_PATH);
         map.addActor(new ActorDefinition() {
             @Override
             public Actor getActor(final GameMap map) {
@@ -53,7 +49,7 @@ public class CaveMapDefinition extends MapDefinition {
             public TriggerAction getAction() {
                 return new MessageTriggerAction(
                         "Welcome to the JRPG demo. Press [GREEN]ENTER[] to dismiss this text. [GREEN]ARROW KEYS[] will move our hero around the cave. Press [GREEN]ESC[] to exit the demo.",
-                        getGraphicsService()
+                        graphicsService
                 );
             }
         });

@@ -31,7 +31,7 @@ public final class Demo {
         graphicsService.setResolutionWidth(480);
         graphicsService.setResolutionHeight(268);
         MapMode mapMode = new MapMode(
-                new CaveMapDefinition(graphicsService),
+                new CaveMapDefinition(),
                 new TileCoordinate(8, 97),
                 new SpriteSetData("data/assets/sprites/mapdemo/warrior.png", 3, 4));
         Game game = new Game(
