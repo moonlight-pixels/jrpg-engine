@@ -61,8 +61,8 @@ public final class MapMode extends GameMode {
 
     @Override
     public void onEnter(final Map<String, Object> params) {
-        MapDefinition mapDefinition = (MapDefinition) params.computeIfAbsent("map", k -> initialMap);
-        TileCoordinate location = (TileCoordinate) params.computeIfAbsent("location", k -> initialLocation);
+        MapDefinition mapDefinition = (MapDefinition) params.getOrDefault("map", initialMap);
+        TileCoordinate location = (TileCoordinate) params.getOrDefault("location", initialLocation);
 
         loadMap(mapDefinition);
 
