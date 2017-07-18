@@ -73,6 +73,7 @@ public final class MapMode extends GameMode {
 
         map.setFocalPoint(hero);
         map.focusCamera();
+        stateMachine.change("playerInControl");
     }
 
     @Override
@@ -98,6 +99,10 @@ public final class MapMode extends GameMode {
 
     private void loadMap(final MapDefinition mapDefinition) {
         this.map = mapDefinition.getMap(getGame().getGraphicsService(), assetManager);
+    }
+
+    private MapMode getThis() {
+        return this;
     }
 
     private StateMachine initStateMachine() {
@@ -154,6 +159,7 @@ public final class MapMode extends GameMode {
             @Override
             public void onEnter(final Map<String, Object> params) {
                 triggerAction = (TriggerAction) params.get("action");
+                triggerAction.startAction(getThis());
             }
 
             @Override

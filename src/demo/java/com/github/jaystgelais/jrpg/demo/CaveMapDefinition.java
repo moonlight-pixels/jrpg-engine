@@ -68,7 +68,7 @@ public class CaveMapDefinition extends MapDefinition {
                 return null;
             }
         });
-        map.addTileTrigger(new TileCoordinate(8, 90), new TileTrigger() {
+        map.addTileTrigger(new TileCoordinate(8, 97), new TileTrigger() {
             @Override
             public TriggerAction onEnter() {
                 return new WarpTriggerAction(thisMapDefinition, new TileCoordinate(79, 55));
