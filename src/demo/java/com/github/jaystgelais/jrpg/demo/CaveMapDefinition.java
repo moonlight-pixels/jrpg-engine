@@ -10,9 +10,7 @@ import com.github.jaystgelais.jrpg.map.actor.ActorDefinition;
 import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
 import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
 import com.github.jaystgelais.jrpg.map.actor.WanderingNpcController;
-import com.github.jaystgelais.jrpg.map.trigger.MessageTriggerAction;
-import com.github.jaystgelais.jrpg.map.trigger.Trigger;
-import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
+import com.github.jaystgelais.jrpg.map.trigger.*;
 
 public class CaveMapDefinition extends MapDefinition {
     private static final String MAP_PATH = "data/assets/maps/mapdemo/cave.tmx";
@@ -51,6 +49,39 @@ public class CaveMapDefinition extends MapDefinition {
                         "Welcome to the JRPG demo. Press [GREEN]ENTER[] to dismiss this text. [GREEN]ARROW KEYS[] will move our hero around the cave. Press [GREEN]ESC[] to exit the demo.",
                         graphicsService
                 );
+            }
+        });
+        final MapDefinition thisMapDefinition = this;
+        map.addTileTrigger(new TileCoordinate(79, 55), new TileTrigger() {
+            @Override
+            public TriggerAction onEnter() {
+                return new WarpTriggerAction(thisMapDefinition, new TileCoordinate(8, 97));
+            }
+
+            @Override
+            public TriggerAction onExit() {
+                return null;
+            }
+
+            @Override
+            public TriggerAction onInspect() {
+                return null;
+            }
+        });
+        map.addTileTrigger(new TileCoordinate(8, 90), new TileTrigger() {
+            @Override
+            public TriggerAction onEnter() {
+                return new WarpTriggerAction(thisMapDefinition, new TileCoordinate(79, 55));
+            }
+
+            @Override
+            public TriggerAction onExit() {
+                return null;
+            }
+
+            @Override
+            public TriggerAction onInspect() {
+                return null;
             }
         });
 

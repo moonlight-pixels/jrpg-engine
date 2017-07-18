@@ -121,7 +121,6 @@ public final class Actor implements Renderable, InputHandler, Updatable {
             public void onEnter(final Map<String, Object> params) {
                 positionX = map.getAbsoluteX(location);
                 positionY = map.getAbsoluteY(location);
-                map.fireOnEnterTrigger(location);
             }
 
             @Override
@@ -159,6 +158,7 @@ public final class Actor implements Renderable, InputHandler, Updatable {
                 map.fireOnExitTrigger(location);
                 location = destination;
                 destination = null;
+                map.fireOnEnterTrigger(location);
             }
 
             @Override
