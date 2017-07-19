@@ -1,6 +1,7 @@
 package com.github.jaystgelais.jrpg.demo;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.map.GameMap;
 import com.github.jaystgelais.jrpg.map.MapDefinition;
@@ -32,13 +33,11 @@ public class CaveMapDefinition extends MapDefinition {
         }.getActor(map));
 
         map.addTrigger(new Trigger() {
-            boolean messageDisplayed = false;
-
             public boolean isTriggered(Actor hero) {
-                if (messageDisplayed) {
+                if (GameState.checkFlag("demo.instructions.shown")) {
                     return false;
                 } else {
-                    messageDisplayed = true;
+                    GameState.setFlag("demo.instructions.shown", true);
                     return true;
                 }
             }
