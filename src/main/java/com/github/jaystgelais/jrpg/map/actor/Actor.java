@@ -52,7 +52,7 @@ public final class Actor implements Renderable, InputHandler, Updatable {
         return facing;
     }
 
-    void setFacing(final Direction direction) {
+    public void setFacing(final Direction direction) {
         this.facing = direction;
     }
 

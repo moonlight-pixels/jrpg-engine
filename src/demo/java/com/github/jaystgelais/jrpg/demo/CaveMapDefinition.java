@@ -6,11 +6,7 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.map.GameMap;
 import com.github.jaystgelais.jrpg.map.MapDefinition;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
-import com.github.jaystgelais.jrpg.map.actor.Actor;
-import com.github.jaystgelais.jrpg.map.actor.ActorDefinition;
-import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
-import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
-import com.github.jaystgelais.jrpg.map.actor.WanderingNpcController;
+import com.github.jaystgelais.jrpg.map.actor.*;
 import com.github.jaystgelais.jrpg.map.trigger.*;
 
 public class CaveMapDefinition extends MapDefinition {
@@ -54,7 +50,7 @@ public class CaveMapDefinition extends MapDefinition {
         map.addTileTrigger(new TileCoordinate(79, 55), new TileTrigger() {
             @Override
             public TriggerAction onEnter() {
-                return new WarpTriggerAction(thisMapDefinition, new TileCoordinate(8, 97));
+                return new WarpTriggerAction(thisMapDefinition, new TileCoordinate(8, 97), Direction.DOWN);
             }
 
             @Override
@@ -70,7 +66,7 @@ public class CaveMapDefinition extends MapDefinition {
         map.addTileTrigger(new TileCoordinate(8, 97), new TileTrigger() {
             @Override
             public TriggerAction onEnter() {
-                return new WarpTriggerAction(thisMapDefinition, new TileCoordinate(79, 55));
+                return new WarpTriggerAction(thisMapDefinition, new TileCoordinate(79, 55), Direction.DOWN);
             }
 
             @Override

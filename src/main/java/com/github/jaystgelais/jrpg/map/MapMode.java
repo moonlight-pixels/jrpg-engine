@@ -10,10 +10,7 @@ import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
-import com.github.jaystgelais.jrpg.map.actor.Actor;
-import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
-import com.github.jaystgelais.jrpg.map.actor.PlayerController;
-import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
+import com.github.jaystgelais.jrpg.map.actor.*;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
 import com.github.jaystgelais.jrpg.state.State;
@@ -27,8 +24,9 @@ import java.util.Set;
 
 public final class MapMode extends GameMode {
     private static final int DEFAULT_TIME_TO_TRAVERSE_TILE_MS = 300;
-    public static final int DEBUG_TEXT_X = 10;
-    public static final int DEBUB_TEXT_Y = 20;
+    private static final long DEFAULT_INITIAL_PAUSE_MS = 500;
+    private static final int DEBUG_TEXT_X = 10;
+    private static final int DEBUB_TEXT_Y = 20;
 
     private final StateMachine stateMachine;
     private final AssetManager assetManager;
@@ -70,10 +68,13 @@ public final class MapMode extends GameMode {
                 heroSpriteSetData, DEFAULT_TIME_TO_TRAVERSE_TILE_MS, assetManager
         );
         hero = new Actor(map, heroSpriteSet, controller, location);
+        if (params.containsKey("facing")) {
+            hero.setFacing((Direction) params.get("facing"));
+        }
 
         map.setFocalPoint(hero);
         map.focusCamera();
-        stateMachine.change("playerInControl");
+        stateMachine.change("initialPause");
     }
 
     @Override
@@ -107,6 +108,33 @@ public final class MapMode extends GameMode {
 
     private StateMachine initStateMachine() {
         Set<State> states = new HashSet<>();
+        states.add(new StateAdapter() {
+            private long timeRemainingMs;
+
+            @Override
+            public String getKey() {
+                return "initialPause";
+            }
+
+            @Override
+            public void onEnter(final Map<String, Object> params) {
+                timeRemainingMs = DEFAULT_INITIAL_PAUSE_MS;
+            }
+
+            @Override
+            public void update(final long elapsedTime) {
+                timeRemainingMs -= elapsedTime;
+                if (timeRemainingMs <= 0) {
+                    controller.flushInput();
+                    stateMachine.change("playerInControl");
+                }
+            }
+
+            @Override
+            public void render(final GraphicsService graphicsService) {
+                renderMapAndActors(graphicsService);
+            }
+        });
         states.add(new StateAdapter() {
             @Override
             public String getKey() {
@@ -194,7 +222,7 @@ public final class MapMode extends GameMode {
             }
         });
 
-        return new StateMachine(states, "playerInControl");
+        return new StateMachine(states, "initialPause");
     }
 
     private void renderMapAndActors(final GraphicsService graphicsService) {

@@ -34,4 +34,8 @@ public final class PlayerController implements Controller, InputHandler {
 
         return action;
     }
+
+    public void flushInput() {
+        nextAction = null;
+    }
 }
