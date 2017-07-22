@@ -15,7 +15,8 @@ public final class WarpTriggerAction implements TriggerAction {
     private final TileCoordinate location;
     private final Direction facing;
 
-    public WarpTriggerAction(final MapDefinition map, final TileCoordinate location, Direction facing) {
+    public WarpTriggerAction(final MapDefinition map, final TileCoordinate location,
+                             final Direction facing) {
         this.map = map;
         this.location = location;
         this.facing = facing;

@@ -13,7 +13,7 @@
  </tileset>
  <layer name="jrpg:floor" width="100" height="100">
   <properties>
-   <property name="jrpg-layer-type" value="base"/>
+   <property name="jrpg-layer-type" value="background"/>
    <property name="jrpg-map-layer" type="int" value="0"/>
   </properties>
   <data encoding="base64" compression="zlib">
@@ -22,7 +22,7 @@
  </layer>
  <layer name="jrpg:foreground" width="100" height="100">
   <properties>
-   <property name="jrpg-layer-type" value="decoration-foreground"/>
+   <property name="jrpg-layer-type" value="foreground"/>
    <property name="jrpg-map-layer" type="int" value="0"/>
   </properties>
   <data encoding="base64" compression="zlib">

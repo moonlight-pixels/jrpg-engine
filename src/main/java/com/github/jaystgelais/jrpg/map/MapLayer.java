@@ -7,6 +7,7 @@ import com.github.jaystgelais.jrpg.map.actor.Actor;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 public final class MapLayer {
@@ -14,9 +15,8 @@ public final class MapLayer {
 
     private final int layerIndex;
     private final TiledMapRenderer mapRenderer;
-    private TiledMapTileLayer baseLayer;
-    private TiledMapTileLayer decorationBackgroundLayer;
-    private TiledMapTileLayer decorationForegroundLayer;
+    private final List<TiledMapTileLayer> backgroundLayers = new LinkedList<>();
+    private final List<TiledMapTileLayer> foregroundLayers = new LinkedList<>();
     private TiledMapTileLayer collisionLayer;
 
     public MapLayer(final int layerIndex, final TiledMapRenderer mapRenderer) {
@@ -24,28 +24,12 @@ public final class MapLayer {
         this.mapRenderer = mapRenderer;
     }
 
-    public TiledMapTileLayer getBaseLayer() {
-        return baseLayer;
+    public void addBackgroundLayer(final TiledMapTileLayer tileLayer) {
+        backgroundLayers.add(tileLayer);
     }
 
-    public void setBaseLayer(final TiledMapTileLayer baseLayer) {
-        this.baseLayer = baseLayer;
-    }
-
-    public TiledMapTileLayer getDecorationBackgroundLayer() {
-        return decorationBackgroundLayer;
-    }
-
-    public void setDecorationBackgroundLayer(final TiledMapTileLayer decorationBackgroundLayer) {
-        this.decorationBackgroundLayer = decorationBackgroundLayer;
-    }
-
-    public TiledMapTileLayer getDecorationForegroundLayer() {
-        return decorationForegroundLayer;
-    }
-
-    public void setDecorationForegroundLayer(final TiledMapTileLayer decorationForegroundLayer) {
-        this.decorationForegroundLayer = decorationForegroundLayer;
+    public void addForegroundLayer(final TiledMapTileLayer tileLayer) {
+        foregroundLayers.add(tileLayer);
     }
 
     public TiledMapTileLayer getCollisionLayer() {
@@ -58,13 +42,8 @@ public final class MapLayer {
 
     public void render(final GraphicsService graphicsService, final List<Actor> actors) {
         graphicsService.renderStart();
-        if (baseLayer != null) {
-            mapRenderer.renderTileLayer(baseLayer);
-        }
 
-        if (decorationBackgroundLayer != null) {
-            mapRenderer.renderTileLayer(decorationBackgroundLayer);
-        }
+        backgroundLayers.forEach(mapRenderer::renderTileLayer);
 
         actors
             .stream()
@@ -72,9 +51,8 @@ public final class MapLayer {
             .sorted(ACTORS_TO_RENDER_COMPARATOR)
             .forEach(actor -> actor.render(graphicsService));
 
-        if (decorationForegroundLayer != null) {
-            mapRenderer.renderTileLayer(decorationForegroundLayer);
-        }
+        foregroundLayers.forEach(mapRenderer::renderTileLayer);
+
         graphicsService.renderEnd();
     }
 

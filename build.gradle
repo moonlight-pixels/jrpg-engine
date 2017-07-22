@@ -7,10 +7,13 @@ plugins {
     id 'codenarc'
     id 'jacoco'
     id 'idea'
+    id 'maven-publish'
     id 'com.github.ben-manes.versions' version '0.14.0'
 }
 
 version = '0.1.0'
+group = 'com.github.jaystgelais'
+
 ext {
     gdxVersion = '1.9.6'
 }
@@ -26,6 +29,28 @@ sourceSets {
 configurations {
     demoCompile.extendsFrom compile
     demoRuntime.extendsFrom runtime
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    classifier "sources"
+    extension "jar"
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier "javadoc"
+    extension "jar"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
 }
 
 task demo(type: JavaExec) {

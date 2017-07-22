@@ -24,9 +24,8 @@ public final class GameMap implements Renderable {
     static final int[] FOREGROUND_LAYERS = {1};
     public static final String MAP_LAYER_PROP_MAP_LAYER = "jrpg-map-layer";
     public static final String MAP_LAYER_PROP_LAYER_TYPE = "jrpg-layer-type";
-    public static final String MAP_LAYER_TYPE_BASE = "base";
-    public static final String MAP_LAYER_TYPE_DECORATION_BACKGRAOUND = "decoration-background";
-    public static final String MAP_LAYER_TYPE_DECORATION_FOREGRAOUND = "decoration-foreground";
+    public static final String MAP_LAYER_TYPE_BACKGRAOUND = "background";
+    public static final String MAP_LAYER_TYPE_FOREGRAOUND = "foreground";
     public static final String MAP_LAYER_TYPE_COLLISION = "collision";
 
     private final OrthographicCamera camera;
@@ -61,14 +60,11 @@ public final class GameMap implements Renderable {
                 MapLayer gameMapLayer = mapLayers.computeIfAbsent(mapLayerIndex, i -> new MapLayer(i, mapRenderer));
 
                 switch (tiledMapLayer.getProperties().get(MAP_LAYER_PROP_LAYER_TYPE, String.class)) {
-                    case MAP_LAYER_TYPE_BASE:
-                        gameMapLayer.setBaseLayer(tiledMapLayer);
+                    case MAP_LAYER_TYPE_BACKGRAOUND:
+                        gameMapLayer.addBackgroundLayer(tiledMapLayer);
                         break;
-                    case MAP_LAYER_TYPE_DECORATION_BACKGRAOUND:
-                        gameMapLayer.setDecorationBackgroundLayer(tiledMapLayer);
-                        break;
-                    case MAP_LAYER_TYPE_DECORATION_FOREGRAOUND:
-                        gameMapLayer.setDecorationForegroundLayer(tiledMapLayer);
+                    case MAP_LAYER_TYPE_FOREGRAOUND:
+                        gameMapLayer.addForegroundLayer(tiledMapLayer);
                         break;
                     case MAP_LAYER_TYPE_COLLISION:
                         gameMapLayer.setCollisionLayer(tiledMapLayer);
