@@ -67,9 +67,9 @@ public final class ActorSpriteSet {
     private Animation<TextureRegion> build3CycleWalk(final TextureRegion[] frames, final long timeToTraverseTileMs) {
         TextureRegion[] animationFrames = {
                 frames[0],
-                frames[1],
-                frames[2],
-                frames[1]
+                //frames[1],
+                frames[2]//,
+                //frames[1]
         };
         return new Animation<TextureRegion>(
                 TimeUtil.convertMsToFloatSeconds(timeToTraverseTileMs) / animationFrames.length,

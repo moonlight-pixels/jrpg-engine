@@ -1,10 +1,10 @@
 package com.github.jaystgelais.jrpg.map.actor;
 
 public final class SpriteSetData {
-    private static final int DEFAULT_UP_FACING_ROW_INDEX = 0;
-    private static final int DEFAULT_RIGHT_FACING_ROW_INDEX = 1;
-    private static final int DEFAULT_DOWN_FACING_ROW_INDEX = 2;
-    private static final int DEFAULT_LEFT_FACING_ROW_INDEX = 3;
+    private static final int DEFAULT_UP_FACING_ROW_INDEX = 3;
+    private static final int DEFAULT_RIGHT_FACING_ROW_INDEX = 2;
+    private static final int DEFAULT_DOWN_FACING_ROW_INDEX = 0;
+    private static final int DEFAULT_LEFT_FACING_ROW_INDEX = 1;
     private static final int DEFAULT_STANDING_COLUMN_INDEX = 1;
 
     private final String spriteSheetPath;

@@ -219,6 +219,7 @@ public final class MapMode extends GameMode {
             @Override
             public void update(final long elapsedTime) {
                 if (triggerAction.isComplete()) {
+                    controller.flushInput();
                     stateMachine.change("playerInControl");
                 } else {
                     triggerAction.update(elapsedTime);
