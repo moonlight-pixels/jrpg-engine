@@ -11,10 +11,9 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
-import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
 import com.github.jaystgelais.jrpg.map.actor.Direction;
 import com.github.jaystgelais.jrpg.map.actor.PlayerController;
-import com.github.jaystgelais.jrpg.map.actor.SpriteSetData;
+import com.github.jaystgelais.jrpg.map.actor.SpriteSetDefinition;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
 import com.github.jaystgelais.jrpg.state.State;
@@ -36,23 +35,23 @@ public final class MapMode extends GameMode {
     private final AssetManager assetManager;
     private final MapDefinition initialMap;
     private final TileCoordinate initialLocation;
-    private final SpriteSetData heroSpriteSetData;
+    private final SpriteSetDefinition heroSpriteSet;
     private final PlayerController controller = new PlayerController();
     private GameMap map;
     private Actor hero;
 
     public MapMode(final MapDefinition initialMap, final TileCoordinate initialLocation,
-                   final SpriteSetData heroSpriteSetData) {
-        this(initialMap, initialLocation, heroSpriteSetData, new AssetManager());
+                   final SpriteSetDefinition heroSpriteSet) {
+        this(initialMap, initialLocation, heroSpriteSet, new AssetManager());
     }
 
     MapMode(final MapDefinition initialMap, final TileCoordinate initialLocation,
-            final SpriteSetData heroSpriteSetData, final AssetManager assetManager) {
+            final SpriteSetDefinition heroSpriteSet, final AssetManager assetManager) {
         this.initialMap = initialMap;
         this.initialLocation = initialLocation;
         this.assetManager = assetManager;
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        this.heroSpriteSetData = heroSpriteSetData;
+        this.heroSpriteSet = heroSpriteSet;
         stateMachine = initStateMachine();
     }
 
@@ -68,10 +67,7 @@ public final class MapMode extends GameMode {
 
         loadMap(mapDefinition);
 
-        ActorSpriteSet heroSpriteSet = new ActorSpriteSet(
-                heroSpriteSetData, DEFAULT_TIME_TO_TRAVERSE_TILE_MS, assetManager
-        );
-        hero = new Actor(map, heroSpriteSet, controller, location);
+        hero = new Actor(map, heroSpriteSet.getSpriteSet(assetManager), controller, location);
         if (params.containsKey("facing")) {
             hero.setFacing((Direction) params.get("facing"));
         }

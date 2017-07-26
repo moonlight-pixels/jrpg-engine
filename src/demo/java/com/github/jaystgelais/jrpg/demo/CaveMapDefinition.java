@@ -16,11 +16,11 @@ public class CaveMapDefinition extends MapDefinition {
     @Override
     public GameMap getMap(final GraphicsService graphicsService, final AssetManager assetManager) {
         GameMap map = loadMap(graphicsService, assetManager, MAP_PATH);
-        map.addActor(new ActorDefinition() {
+        map.addActor(new SpriteSetDefinition() {
             @Override
             public Actor getActor(final GameMap map) {
                 SpriteSetData spriteSetData = new SpriteSetData(NPC_SPRITE_PATH, 3, 4);
-                ActorSpriteSet spriteSet = new ActorSpriteSet(
+                SpriteSet spriteSet = new SpriteSet(
                         spriteSetData, 500, assetManager
                 );
 

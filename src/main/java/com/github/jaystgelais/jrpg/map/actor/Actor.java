@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.map.actor;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.input.InputHandler;
@@ -18,7 +19,7 @@ import java.util.Set;
 
 public final class Actor implements Renderable, InputHandler, Updatable {
     private final GameMap map;
-    private final ActorSpriteSet spriteSet;
+    private final SpriteSet spriteSet;
     private final StateMachine stateMachine;
     private final Controller controller;
     private Direction facing;
@@ -27,7 +28,7 @@ public final class Actor implements Renderable, InputHandler, Updatable {
     private float positionX;
     private float positionY;
 
-    public Actor(final GameMap map, final ActorSpriteSet spriteSet,
+    public Actor(final GameMap map, final SpriteSet spriteSet,
                  final Controller controller, final TileCoordinate location) {
         this.map = map;
         this.spriteSet = spriteSet;
@@ -134,9 +135,10 @@ public final class Actor implements Renderable, InputHandler, Updatable {
 
             @Override
             public void render(final GraphicsService graphicsService) {
+                final TextureRegion standingImage = spriteSet.getStandingImage(facing);
                 graphicsService.drawSprite(
-                        spriteSet.getStandingImage(facing),
-                        positionX, positionY
+                        standingImage,
+                        positionX - (standingImage.getRegionWidth() / 2.0f), positionY
                 );
             }
         });
@@ -181,11 +183,12 @@ public final class Actor implements Renderable, InputHandler, Updatable {
 
             @Override
             public void render(final GraphicsService graphicsService) {
+                final TextureRegion walkingFrame = spriteSet.getWalkingAnimation(facing).getKeyFrame(
+                        TimeUtil.convertMsToFloatSeconds(timeInState)
+                );
                 graphicsService.drawSprite(
-                        spriteSet.getWalkingAnimation(facing).getKeyFrame(
-                                TimeUtil.convertMsToFloatSeconds(timeInState)
-                        ),
-                        positionX, positionY
+                        walkingFrame,
+                        positionX - (walkingFrame.getRegionWidth() / 2.0f), positionY
                 );
             }
         });

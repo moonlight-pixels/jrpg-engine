@@ -127,7 +127,7 @@ public final class GameMap implements Renderable {
     }
 
     public float getAbsoluteX(final TileCoordinate coordinate) {
-        return coordinate.getX() * getTileWidth();
+        return coordinate.getX() * getTileWidth() + (getTileWidth() / 2);
     }
 
     public float getAbsoluteY(final TileCoordinate coordinate) {
