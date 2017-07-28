@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import com.github.jaystgelais.jrpg.ui.text.FontDefinition;
 import com.github.jaystgelais.jrpg.ui.text.FontSet;
 
 public interface GraphicsService extends Disposable {
@@ -37,6 +38,10 @@ public interface GraphicsService extends Disposable {
     TiledMapRenderer getTileMapRenderer(TiledMap tiledMap);
 
     FontSet getFontSet();
+
+    FontDefinition getTextFont() ;
+
+    void setTextFont(FontDefinition textFont);
 
     int getResolutionWidth();
 

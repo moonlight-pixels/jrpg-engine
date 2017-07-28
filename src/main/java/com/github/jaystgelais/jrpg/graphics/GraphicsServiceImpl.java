@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.jaystgelais.jrpg.graphics.factory.SpriteBatchFactory;
 import com.github.jaystgelais.jrpg.graphics.factory.SpriteBatchFactoryImpl;
+import com.github.jaystgelais.jrpg.ui.text.FontDefinition;
 import com.github.jaystgelais.jrpg.ui.text.FontSet;
 
 import java.util.ArrayDeque;
@@ -33,6 +34,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
     private final SpriteBatchFactory spriteBatchFactory;
     private final Deque<Disposable> disposables = new ArrayDeque<>();
     private FontSet fontSet;
+    private FontDefinition textFont;
     private SpriteBatch spriteBatch;
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -140,9 +142,21 @@ public final class GraphicsServiceImpl implements GraphicsService {
     @Override
     public FontSet getFontSet() {
         if (fontSet == null) {
-            fontSet = FontSet.newFontSet(this).create();
+            final FontSet.Builder builder = FontSet.newFontSet(this);
+            if (textFont != null) {
+                builder.setTextFont(textFont);
+            }
+            fontSet = builder.create();
         }
         return fontSet;
+    }
+
+    public FontDefinition getTextFont() {
+        return textFont;
+    }
+
+    public void setTextFont(final FontDefinition textFont) {
+        this.textFont = textFont;
     }
 
     @Override

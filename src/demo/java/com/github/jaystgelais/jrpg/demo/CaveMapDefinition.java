@@ -16,17 +16,6 @@ public class CaveMapDefinition extends MapDefinition {
     @Override
     public GameMap getMap(final GraphicsService graphicsService, final AssetManager assetManager) {
         GameMap map = loadMap(graphicsService, assetManager, MAP_PATH);
-        map.addActor(new SpriteSetDefinition() {
-            @Override
-            public Actor getActor(final GameMap map) {
-                SpriteSetData spriteSetData = new SpriteSetData(NPC_SPRITE_PATH, 3, 4);
-                SpriteSet spriteSet = new SpriteSet(
-                        spriteSetData, 500, assetManager
-                );
-
-                return new Actor(map, spriteSet, new WanderingNpcController(), new TileCoordinate(10, 85));
-            }
-        }.getActor(map));
 
         map.addTrigger(new Trigger() {
             public boolean isTriggered(Actor hero) {

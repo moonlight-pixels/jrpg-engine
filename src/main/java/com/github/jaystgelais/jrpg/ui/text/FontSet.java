@@ -46,6 +46,15 @@ public final class FontSet {
             return this;
         }
 
+        public Builder setTextFont(final FontDefinition textFont) {
+            this.textFont = createFontFromTTF(
+                    Gdx.files.internal(textFont.getFontPath()),
+                    textFont.getFontSize(),
+                    textFont.isMono()
+            );
+            return this;
+        }
+
         public Builder setNumberFont(final BitmapFont numberFont) {
             this.numberFont = numberFont;
             return this;
@@ -59,17 +68,17 @@ public final class FontSet {
         }
 
         private BitmapFont getDefaultTextFont() {
-            return createFontFromTTF(Gdx.files.internal(DEFAULT_TEXT_FONT_TTF), true);
+            return createFontFromTTF(Gdx.files.internal(DEFAULT_TEXT_FONT_TTF), calculateFontSize(), true);
         }
 
         private BitmapFont getDefaultNumberFont() {
-            return createFontFromTTF(Gdx.files.internal(DEFAULT_NUMBER_FONT_TTF), true);
+            return createFontFromTTF(Gdx.files.internal(DEFAULT_NUMBER_FONT_TTF), calculateFontSize(), true);
         }
 
-        private BitmapFont createFontFromTTF(final FileHandle ttf, final boolean isMono) {
+        private BitmapFont createFontFromTTF(final FileHandle ttf, final int size, final boolean isMono) {
             FreeTypeFontGenerator generator = new FreeTypeFontGenerator(ttf);
             FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-            parameter.size = calculateFontSize();
+            parameter.size = size;
             parameter.mono = isMono;
             BitmapFont font = generator.generateFont(parameter);
             font.getData().markupEnabled = true;
