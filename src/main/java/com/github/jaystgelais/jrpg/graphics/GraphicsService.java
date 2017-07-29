@@ -39,7 +39,7 @@ public interface GraphicsService extends Disposable {
 
     FontSet getFontSet();
 
-    FontDefinition getTextFont() ;
+    FontDefinition getTextFont();
 
     void setTextFont(FontDefinition textFont);
 

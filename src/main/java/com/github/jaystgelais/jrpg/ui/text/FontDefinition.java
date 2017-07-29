@@ -5,7 +5,7 @@ public final class FontDefinition {
     private final int fontSize;
     private final boolean isMono;
 
-    public FontDefinition(String fontPath, int fontSize, boolean isMono) {
+    public FontDefinition(final String fontPath, final int fontSize, final boolean isMono) {
         this.fontPath = fontPath;
         this.fontSize = fontSize;
         this.isMono = isMono;
