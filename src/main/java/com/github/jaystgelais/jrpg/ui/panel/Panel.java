@@ -53,12 +53,12 @@ public final class Panel implements Content {
 
     private TextureRegion[][] getPanelSprites(final GraphicsService graphicsService) {
         if (panelSprites == null) {
-            if (!graphicsService.getAssetManager().isLoaded("assets/jrpg/panel/simple_panel.png", Texture.class)) {
-                graphicsService.getAssetManager().load("assets/jrpg/panel/simple_panel.png", Texture.class);
+            if (!graphicsService.getAssetManager().isLoaded("assets/jrpg/panel/gradient_panel.png", Texture.class)) {
+                graphicsService.getAssetManager().load("assets/jrpg/panel/gradient_panel.png", Texture.class);
                 graphicsService.getAssetManager().finishLoading();
             }
             panelSprites = TextureRegion.split(
-                    graphicsService.getAssetManager().get("assets/jrpg/panel/simple_panel.png", Texture.class),
+                    graphicsService.getAssetManager().get("assets/jrpg/panel/gradient_panel.png", Texture.class),
                     BORDER_THICKNESS,
                     BORDER_THICKNESS
             );
@@ -76,7 +76,7 @@ public final class Panel implements Content {
         TextureRegion[][] sprites = getPanelSprites(graphicsService);
         SpriteBatch spriteBatch = graphicsService.getSpriteBatch();
 
-        //spriteBatch.begin();
+        sprites[1][1].getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         spriteBatch.draw(sprites[0][0], getLeftX(currentWidth), getTopY(currentHeight));
         spriteBatch.draw(
                 sprites[0][1], getCenterX(currentWidth), getTopY(currentHeight),
@@ -87,9 +87,11 @@ public final class Panel implements Content {
                 sprites[1][0], getLeftX(currentWidth), getCenterY(currentHeight),
                 BORDER_THICKNESS, currentHeight - (2 * BORDER_THICKNESS)
         );
+        spriteBatch.enableBlending();
         spriteBatch.draw(
-                sprites[1][1], getCenterX(currentWidth), getCenterY(currentHeight),
-                currentWidth - (2 * BORDER_THICKNESS), currentHeight - (2 * BORDER_THICKNESS)
+                sprites[1][1].getTexture(), getCenterX(currentWidth), getCenterY(currentHeight),
+                currentWidth - (2 * BORDER_THICKNESS), currentHeight - (2 * BORDER_THICKNESS),
+                0.38f, 0.38f, 0.61f, 0.61f
         );
         spriteBatch.draw(
                 sprites[1][2], getRightX(currentWidth), getCenterY(currentHeight),
