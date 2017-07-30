@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.graphics;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -14,6 +15,8 @@ import com.github.jaystgelais.jrpg.ui.text.FontSet;
 
 public interface GraphicsService extends Disposable {
     LwjglApplicationConfiguration getConfiguration();
+
+    AssetManager getAssetManager();
 
     void renderStart();
 

@@ -11,7 +11,7 @@ public class HeroSpriteSetDefinition extends SpriteSetDefinition {
 
     @Override
     public SpriteSet getSpriteSet(final AssetManager assetManager) {
-        TextureRegion[][] spriteSheet = loadSpriteSheet(SPRITE_SHEET_PATH, assetManager, 26, 36);
+        TextureRegion[][] spriteSheet = loadSpriteSheet(SPRITE_SHEET_PATH, assetManager, 16, 18);
         SpriteSet spriteSet = new SpriteSet(300);
 
         spriteSet.setStandingImage(Direction.DOWN, spriteSheet[0][1]);

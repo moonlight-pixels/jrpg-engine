@@ -2,6 +2,9 @@ package com.github.jaystgelais.jrpg.ui.panel;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.state.State;
@@ -16,8 +19,6 @@ import java.util.Set;
 
 public final class Panel implements Content {
     public static final int BORDER_THICKNESS = 3;
-    public static final int CORNER_HEIGHT = 3;
-    public static final int CORNER_WIDTH = 3;
     public static final int MINIMUM_PANEL_WIDTH = 8;
     public static final int MINIMUM_PANEL_HEIGHT = 8;
     public static final int PANEL_CONTENT_MARGIN = 6;
@@ -26,6 +27,7 @@ public final class Panel implements Content {
     private final Pixmap pixmap;
     private final StateMachine stateMachine;
     private final Container panelContainer;
+    private TextureRegion[][] panelSprites;
     private boolean active = true;
 
     public Panel(final PanelData panelData) {
@@ -49,55 +51,81 @@ public final class Panel implements Content {
         }
     }
 
+    private TextureRegion[][] getPanelSprites(final GraphicsService graphicsService) {
+        if (panelSprites == null) {
+            if (!graphicsService.getAssetManager().isLoaded("assets/jrpg/panel/simple_panel.png", Texture.class)) {
+                graphicsService.getAssetManager().load("assets/jrpg/panel/simple_panel.png", Texture.class);
+                graphicsService.getAssetManager().finishLoading();
+            }
+            panelSprites = TextureRegion.split(
+                    graphicsService.getAssetManager().get("assets/jrpg/panel/simple_panel.png", Texture.class),
+                    BORDER_THICKNESS,
+                    BORDER_THICKNESS
+            );
+        }
+
+        return panelSprites;
+    }
+
     @Override
     public void render(final GraphicsService graphicsService) {
         stateMachine.render(graphicsService);
     }
 
     private void renderPanel(final GraphicsService graphicsService, final int currentWidth, final int currentHeight) {
-        pixmap.setColor(0, 0, 0, 0);
-        pixmap.fill();
+        TextureRegion[][] sprites = getPanelSprites(graphicsService);
+        SpriteBatch spriteBatch = graphicsService.getSpriteBatch();
 
-        drawTileFromArray(
-                getBottomLeftCorner(), CORNER_WIDTH, CORNER_HEIGHT, 0, 0
+        //spriteBatch.begin();
+        spriteBatch.draw(sprites[0][0], getLeftX(currentWidth), getTopY(currentHeight));
+        spriteBatch.draw(
+                sprites[0][1], getCenterX(currentWidth), getTopY(currentHeight),
+                currentWidth - (2 * BORDER_THICKNESS), BORDER_THICKNESS
         );
-        drawTileFromArray(
-                getBottomRightCorner(), CORNER_WIDTH, CORNER_HEIGHT, currentWidth - (CORNER_WIDTH + 1), 0
+        spriteBatch.draw(sprites[0][2], getRightX(currentWidth), getTopY(currentHeight));
+        spriteBatch.draw(
+                sprites[1][0], getLeftX(currentWidth), getCenterY(currentHeight),
+                BORDER_THICKNESS, currentHeight - (2 * BORDER_THICKNESS)
         );
-        drawTileFromArray(
-                getTopLeftCorner(), CORNER_WIDTH, CORNER_HEIGHT, 0, currentHeight - (CORNER_HEIGHT + 1)
+        spriteBatch.draw(
+                sprites[1][1], getCenterX(currentWidth), getCenterY(currentHeight),
+                currentWidth - (2 * BORDER_THICKNESS), currentHeight - (2 * BORDER_THICKNESS)
         );
-        drawTileFromArray(
-                getTopRightCorner(), CORNER_WIDTH, CORNER_HEIGHT,
-                currentWidth - (CORNER_WIDTH + 1),
-                currentHeight - (CORNER_HEIGHT + 1)
+        spriteBatch.draw(
+                sprites[1][2], getRightX(currentWidth), getCenterY(currentHeight),
+                BORDER_THICKNESS, currentHeight - (2 * BORDER_THICKNESS)
         );
+        spriteBatch.draw(sprites[2][0], getLeftX(currentWidth), getBottomY(currentHeight));
+        spriteBatch.draw(
+                sprites[2][1], getCenterX(currentWidth), getBottomY(currentHeight),
+                currentWidth - (2 * BORDER_THICKNESS), BORDER_THICKNESS
+        );
+        spriteBatch.draw(sprites[2][2], getRightX(currentWidth), getBottomY(currentHeight));
+        //spriteBatch.end();
+    }
 
-        Color[] topBorder = getTopBorder();
-        Color[] bottomBorder = getBottomBorder();
-        for (int x = BORDER_THICKNESS; x < currentWidth - (BORDER_THICKNESS + 1); x++) {
-            drawTileFromArray(topBorder,    1, BORDER_THICKNESS, x, 0);
-            drawTileFromArray(bottomBorder, 1, BORDER_THICKNESS, x, currentHeight - (BORDER_THICKNESS + 1));
-        }
+    private float getLeftX(final int currentWidth) {
+        return data.getPositionX() + ((data.getWidth() - currentWidth) / 2);
+    }
 
-        Color[] leftBorder = getLeftBorder();
-        Color[] rightBorder = getRightBorder();
-        for (int y = BORDER_THICKNESS; y < currentHeight - (BORDER_THICKNESS + 1); y++) {
-            drawTileFromArray(leftBorder, BORDER_THICKNESS, 1, 0,         y);
-            drawTileFromArray(rightBorder, BORDER_THICKNESS, 1, currentWidth - (BORDER_THICKNESS + 1), y);
-        }
+    private float getCenterX(final int currentWidth) {
+        return data.getPositionX() + BORDER_THICKNESS + ((data.getWidth() - currentWidth) / 2);
+    }
 
-        pixmap.setColor(data.getPalette().getBgPrimary());
-        pixmap.fillRectangle(
-                BORDER_THICKNESS, BORDER_THICKNESS,
-                currentWidth - (BORDER_THICKNESS * 2), currentHeight - (BORDER_THICKNESS * 2)
-        );
+    private float getRightX(final int currentWidth) {
+        return data.getPositionX() + currentWidth - BORDER_THICKNESS + ((data.getWidth() - currentWidth) / 2);
+    }
 
-        graphicsService.drawSprite(
-                pixmap,
-                data.getPositionX() + ((data.getWidth() - currentWidth) / 2),
-                data.getPositionY() - ((data.getHeight() - currentHeight) / 2)
-        );
+    private float getTopY(final int currentHeight) {
+        return data.getPositionY() + currentHeight - BORDER_THICKNESS + ((data.getHeight() - currentHeight) / 2);
+    }
+
+    private float getCenterY(final int currentHeight) {
+        return data.getPositionY() + BORDER_THICKNESS + ((data.getHeight() - currentHeight) / 2);
+    }
+
+    private float getBottomY(final int currentHeight) {
+        return data.getPositionY() + ((data.getHeight() - currentHeight) / 2);
     }
 
     private void drawTileFromArray(final Color[] tile,

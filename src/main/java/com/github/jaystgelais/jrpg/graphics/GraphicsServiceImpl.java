@@ -64,6 +64,11 @@ public final class GraphicsServiceImpl implements GraphicsService {
     }
 
     @Override
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    @Override
     public void renderStart() {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
