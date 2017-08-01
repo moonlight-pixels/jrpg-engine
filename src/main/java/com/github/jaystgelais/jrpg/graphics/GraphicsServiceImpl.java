@@ -140,6 +140,16 @@ public final class GraphicsServiceImpl implements GraphicsService {
     }
 
     @Override
+    public int getCameraOffsetX() {
+        return Math.round(getCamera().position.x - (getResolutionWidth() / 2f));
+    }
+
+    @Override
+    public int getCameraOffsetY() {
+        return Math.round(getCamera().position.y - (getResolutionHeight() / 2f));
+    }
+
+    @Override
     public TiledMapRenderer getTileMapRenderer(final TiledMap tiledMap) {
         return new OrthogonalTiledMapRenderer(tiledMap, spriteBatch);
     }

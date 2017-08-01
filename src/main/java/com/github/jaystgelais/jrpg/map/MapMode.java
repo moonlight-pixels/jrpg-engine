@@ -143,8 +143,10 @@ public final class MapMode extends GameMode {
 
             @Override
             public void handleInput(final InputService inputService) {
-                if (inputService.isPressed(Inputs.CANCEL)) {
+                if (inputService.isPressed(Inputs.PAUSE)) {
                     getGame().exitGame();
+                } else if (getGame().hasGameMode("menu") && inputService.isPressed(Inputs.MENU)) {
+                    getGame().activateGameMode("menu");
                 } else if (hero.isWaiting()) {
                     controller.handleInput(inputService);
                 }

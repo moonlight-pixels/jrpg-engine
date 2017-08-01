@@ -8,6 +8,7 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.state.StackedStateMachine;
 
 import java.time.Clock;
+import java.util.Map;
 import java.util.Set;
 
 public class Game implements ApplicationListener {
@@ -96,5 +97,21 @@ public class Game implements ApplicationListener {
 
     public final void setDebug(final boolean debug) {
         this.debug = debug;
+    }
+
+    public final void exitCurrentGameMode() {
+        gameModes.exitCurrentState();
+    }
+
+    public final boolean hasGameMode(final String stateKey) {
+        return gameModes.hasState(stateKey);
+    }
+
+    public final void activateGameMode(final String stateKey, final Map<String, Object> params) {
+        gameModes.change(stateKey, params);
+    }
+
+    public final void activateGameMode(final String stateKey) {
+        gameModes.change(stateKey);
     }
 }

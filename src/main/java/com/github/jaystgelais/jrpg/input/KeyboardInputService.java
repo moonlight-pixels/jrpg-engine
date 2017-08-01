@@ -6,9 +6,6 @@ import com.badlogic.gdx.Input.Keys;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by jgelais on 2/19/17.
- */
 public final class KeyboardInputService implements InputService {
     public static final int DEFAULT_INPUT_DELAY_MS = 50;
     public static final int DEFAULT_UP_KEY = Keys.UP;
@@ -16,9 +13,9 @@ public final class KeyboardInputService implements InputService {
     public static final int DEFAULT_LEFT_KEY = Keys.LEFT;
     public static final int DEFAULT_RIGHT_KEY = Keys.RIGHT;
     public static final int DEFAULT_OK_KEY = Keys.ENTER;
-    public static final int DEFAULT_CANCEL_KEY = Keys.ESCAPE;
+    public static final int DEFAULT_CANCEL_KEY = Keys.TAB;
     public static final int DEFAULT_MENU_KEY = Keys.SPACE;
-    public static final int DEFAULT_PAUSE_KEY = Keys.TAB;
+    public static final int DEFAULT_PAUSE_KEY = Keys.ESCAPE;
 
     private final Map<Inputs, Integer> keyMap;
 

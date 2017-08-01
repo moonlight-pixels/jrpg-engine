@@ -13,4 +13,8 @@ public abstract class GameMode extends StateAdapter {
     final void setGame(final Game game) {
         this.game = game;
     }
+
+    protected void exitGameMode() {
+        game.exitCurrentGameMode();
+    }
 }

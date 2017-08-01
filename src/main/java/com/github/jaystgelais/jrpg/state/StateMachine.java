@@ -78,6 +78,10 @@ public class StateMachine implements Renderable, InputHandler {
         }
     }
 
+    public final boolean hasState(final String stateKey) {
+        return states.containsKey(stateKey);
+    }
+
     protected void onChange(final State oldState, final State newState) { }
 
     @Override

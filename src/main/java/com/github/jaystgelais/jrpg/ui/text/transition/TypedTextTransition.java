@@ -26,13 +26,14 @@ public final class TypedTextTransition implements TextTransition {
     }
 
     private static class Handler implements TextTransitionHandler {
-        private final BitmapFontCache fontCache;
+        private final TextArea parent;
+        private final GlyphLayout newText;
         private final long timePerGlyphMs;
         private final IntegerTween glyphCountTween;
 
         Handler(final TextArea parent, final GlyphLayout newText, final long timePerGlyphMs) {
-            fontCache = new BitmapFontCache(parent.getFont());
-            fontCache.addText(newText, parent.getContentPositionX(), parent.getContentPositionY() + parent.getHeight());
+            this.parent = parent;
+            this.newText = newText;
             this.timePerGlyphMs = timePerGlyphMs;
             int glyphCount = 0;
             for (GlyphLayout.GlyphRun run : newText.runs) {
@@ -48,6 +49,12 @@ public final class TypedTextTransition implements TextTransition {
 
         @Override
         public void render(final GraphicsService graphicsService) {
+            final BitmapFontCache fontCache = new BitmapFontCache(parent.getFont());
+            fontCache.addText(
+                    newText,
+                    graphicsService.getCameraOffsetX() + parent.getContentPositionX(),
+                    graphicsService.getCameraOffsetY() + parent.getContentPositionY() + parent.getHeight()
+            );
             fontCache.draw(graphicsService.getSpriteBatch(), 0, glyphCountTween.getValue());
         }
 

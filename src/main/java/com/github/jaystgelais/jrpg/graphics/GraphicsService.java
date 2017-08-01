@@ -38,6 +38,10 @@ public interface GraphicsService extends Disposable {
 
     OrthographicCamera getCamera();
 
+    int getCameraOffsetX();
+
+    int getCameraOffsetY();
+
     TiledMapRenderer getTileMapRenderer(TiledMap tiledMap);
 
     FontSet getFontSet();

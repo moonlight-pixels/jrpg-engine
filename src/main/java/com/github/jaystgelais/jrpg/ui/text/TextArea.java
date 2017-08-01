@@ -175,7 +175,8 @@ public final class TextArea extends AbstractContent implements Updatable, InputH
             public void render(final GraphicsService graphicsService) {
                 font.draw(
                         graphicsService.getSpriteBatch(), currentPage,
-                        getContentPositionX(), getContentPositionY() + getHeight()
+                        graphicsService.getCameraOffsetX() + getContentPositionX(),
+                        graphicsService.getCameraOffsetY() + getContentPositionY() + getHeight()
                 );
             }
 

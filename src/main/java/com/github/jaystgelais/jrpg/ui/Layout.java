@@ -47,8 +47,8 @@ public final class Layout extends AbstractContent {
         if (container == null) {
             throw new IllegalArgumentException("Unknown container: " + containerId);
         }
-        createHorizontalDivisions(container, leftID, rightID, leftWidth);
         children.remove(containerId);
+        createHorizontalDivisions(container, leftID, rightID, leftWidth);
     }
 
     public void splitHorizontal(final String containerId, final String leftID, final String rightID,
@@ -62,8 +62,8 @@ public final class Layout extends AbstractContent {
         if (container == null) {
             throw new IllegalArgumentException("Unknown container: " + containerId);
         }
-        createVerticalDivisions(container, topID, bottomID, topHeight);
         children.remove(containerId);
+        createVerticalDivisions(container, topID, bottomID, topHeight);
     }
 
     public void splitVertical(final String containerId, final String topID, final String bottomID,
@@ -76,19 +76,19 @@ public final class Layout extends AbstractContent {
         children.put(
                 leftID,
                 new Container(
-                        getContentPositionX(),
-                        getContentPositionY(),
+                        parent.getScreenPositionX(),
+                        parent.getScreenPositionY(),
                         leftWidth,
-                        getContentHeight()
+                        parent.getHeight()
                 )
         );
         children.put(
                 rightID,
                 new Container(
-                        getContentPositionX() + leftWidth,
-                        getContentPositionY(),
-                        getContentWidth() - leftWidth,
-                        getContentHeight()
+                        parent.getScreenPositionX() + leftWidth,
+                        parent.getScreenPositionY(),
+                        parent.getWidth() - leftWidth,
+                        parent.getHeight()
                 )
         );
     }
@@ -98,19 +98,19 @@ public final class Layout extends AbstractContent {
         children.put(
                 topID,
                 new Container(
-                        getContentPositionX(),
-                        getContentPositionY() + getContentHeight() - topHeight,
-                        getContentWidth(),
+                        parent.getScreenPositionX(),
+                        parent.getScreenPositionY() + parent.getHeight() - topHeight,
+                        parent.getWidth(),
                         topHeight
                 )
         );
         children.put(
                 bottomID,
                 new Container(
-                        getContentPositionX(),
-                        getContentPositionY(),
-                        getContentWidth(),
-                        getContentHeight() - topHeight
+                        parent.getScreenPositionX(),
+                        parent.getScreenPositionY(),
+                        parent.getWidth(),
+                        parent.getHeight() - topHeight
                 )
         );
     }

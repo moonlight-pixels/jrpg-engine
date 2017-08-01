@@ -75,35 +75,35 @@ public final class Panel implements Content {
     private void renderPanel(final GraphicsService graphicsService, final int currentWidth, final int currentHeight) {
         TextureRegion[][] sprites = getPanelSprites(graphicsService);
         SpriteBatch spriteBatch = graphicsService.getSpriteBatch();
+        int offsetX = graphicsService.getCameraOffsetX();
+        int offsetY = graphicsService.getCameraOffsetY();
 
         sprites[1][1].getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        spriteBatch.draw(sprites[0][0], getLeftX(currentWidth), getTopY(currentHeight));
+        spriteBatch.draw(sprites[0][0], offsetX + getLeftX(currentWidth), offsetY + getTopY(currentHeight));
         spriteBatch.draw(
-                sprites[0][1], getCenterX(currentWidth), getTopY(currentHeight),
+                sprites[0][1], offsetX + getCenterX(currentWidth), offsetY + getTopY(currentHeight),
                 currentWidth - (2 * BORDER_THICKNESS), BORDER_THICKNESS
         );
-        spriteBatch.draw(sprites[0][2], getRightX(currentWidth), getTopY(currentHeight));
+        spriteBatch.draw(sprites[0][2], offsetX + getRightX(currentWidth), offsetY + getTopY(currentHeight));
         spriteBatch.draw(
-                sprites[1][0], getLeftX(currentWidth), getCenterY(currentHeight),
+                sprites[1][0], offsetX + getLeftX(currentWidth), offsetY + getCenterY(currentHeight),
                 BORDER_THICKNESS, currentHeight - (2 * BORDER_THICKNESS)
         );
-        spriteBatch.enableBlending();
         spriteBatch.draw(
-                sprites[1][1].getTexture(), getCenterX(currentWidth), getCenterY(currentHeight),
+                sprites[1][1].getTexture(), offsetX + getCenterX(currentWidth), offsetY + getCenterY(currentHeight),
                 currentWidth - (2 * BORDER_THICKNESS), currentHeight - (2 * BORDER_THICKNESS),
                 0.38f, 0.38f, 0.61f, 0.61f
         );
         spriteBatch.draw(
-                sprites[1][2], getRightX(currentWidth), getCenterY(currentHeight),
+                sprites[1][2], offsetX + getRightX(currentWidth), offsetY + getCenterY(currentHeight),
                 BORDER_THICKNESS, currentHeight - (2 * BORDER_THICKNESS)
         );
-        spriteBatch.draw(sprites[2][0], getLeftX(currentWidth), getBottomY(currentHeight));
+        spriteBatch.draw(sprites[2][0], offsetX + getLeftX(currentWidth), offsetY + getBottomY(currentHeight));
         spriteBatch.draw(
-                sprites[2][1], getCenterX(currentWidth), getBottomY(currentHeight),
+                sprites[2][1], offsetX + getCenterX(currentWidth), offsetY + getBottomY(currentHeight),
                 currentWidth - (2 * BORDER_THICKNESS), BORDER_THICKNESS
         );
-        spriteBatch.draw(sprites[2][2], getRightX(currentWidth), getBottomY(currentHeight));
-        //spriteBatch.end();
+        spriteBatch.draw(sprites[2][2], offsetX + getRightX(currentWidth), offsetY + getBottomY(currentHeight));
     }
 
     private float getLeftX(final int currentWidth) {
@@ -130,84 +130,6 @@ public final class Panel implements Content {
         return data.getPositionY() + ((data.getHeight() - currentHeight) / 2);
     }
 
-    private void drawTileFromArray(final Color[] tile,
-                                   final int width, final int height,
-                                   final int posX, final int posY) {
-        int colorIndex = 0;
-        for (int y = posY; y < posY + height; y++) {
-            for (int x = posX; x < posX + width; x++) {
-                Color color = tile[colorIndex++];
-                if (color != null) {
-                    pixmap.drawPixel(x, y, color.toIntBits());
-                }
-            }
-        }
-    }
-
-    private Color[] getTopLeftCorner() {
-        return new Color[]{
-                getBorderEdgeMediumColor(), getBorderPrimaryColor(),    getBorderEdgeDarkColor(),
-                null,                       getBorderEdgeMediumColor(), getBorderPrimaryColor(),
-                null,                       null,                       getBorderEdgeDarkColor()
-        };
-    }
-
-    private Color[] getTopBorder() {
-        return new Color[]{
-                getBorderEdgeLightColor(),
-                getBorderPrimaryColor(),
-                getBorderEdgeDarkColor()
-        };
-    }
-
-    private Color[] getTopRightCorner() {
-        return new Color[]{
-                getBorderPrimaryColor(),    getBorderEdgeMediumColor(), getBorderEdgeDarkColor(),
-                getBorderEdgeLightColor(),  getBorderEdgeDarkColor(),   null,
-                getBorderEdgeDarkColor(),   null,                       null
-        };
-    }
-
-    private Color[] getLeftBorder() {
-        return new Color[]{
-                getBorderEdgeMediumColor(), getBorderPrimaryColor(), getBorderEdgeDarkColor()
-        };
-    }
-
-    private Color[] getRightBorder() {
-        return new Color[]{
-                getBorderEdgeMediumColor(), getBorderPrimaryColor(), getBorderEdgeDarkColor()
-        };
-    }
-
-    private Color[] getBottomLeftCorner() {
-        return new Color[]{
-                null,                       null,                       getBorderEdgeLightColor(),
-                null,                       getBorderEdgeMediumColor(), getBorderPrimaryColor(),
-                getBorderEdgeMediumColor(), getBorderPrimaryColor(),    getBorderEdgeMediumColor()
-        };
-    }
-
-    private Color[] getBottomBorder() {
-        return new Color[]{
-                getBorderEdgeLightColor(),
-                getBorderPrimaryColor(),
-                getBorderEdgeDarkColor()
-        };
-    }
-
-    private Color[] getBottomRightCorner() {
-        return new Color[]{
-                getBorderEdgeDarkColor(),   null,                       null,
-                getBorderEdgeMediumColor(), getBorderEdgeDarkColor(),   null,
-                getBorderPrimaryColor(),    getBorderEdgeMediumColor(), getBorderEdgeDarkColor()
-        };
-    }
-
-    public PanelData getData() {
-        return data;
-    }
-
     @Override
     public void dispose() {
         pixmap.dispose();
@@ -219,22 +141,6 @@ public final class Panel implements Content {
 
     public void setActive(final boolean active) {
         this.active = active;
-    }
-
-    private Color getBorderEdgeDarkColor() {
-        return data.getPalette().getBorderEdgeDark();
-    }
-
-    private Color getBorderPrimaryColor() {
-        return data.getPalette().getBorderPrimary();
-    }
-
-    private Color getBorderEdgeMediumColor() {
-        return data.getPalette().getBorderEdgeMedium();
-    }
-
-    private Color getBorderEdgeLightColor() {
-        return data.getPalette().getBorderEdgeLight();
     }
 
     private StateMachine initStateMachine() {

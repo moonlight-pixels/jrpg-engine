@@ -134,18 +134,10 @@ public final class MessageTriggerAction implements TriggerAction {
     }
 
     private int calculatePanelPositionY() {
-        int cameraBottomEdge = Math.round(
-                graphicsService.getCamera().position.y - (graphicsService.getResolutionHeight() / 2f)
-        );
-        int screenPositionY = graphicsService.getResolutionHeight() - panelHeight - DEFAULT_PANEL_TOP_MARGIN;
-        return cameraBottomEdge + screenPositionY;
+        return graphicsService.getResolutionHeight() - panelHeight - DEFAULT_PANEL_TOP_MARGIN;
     }
 
     private int calculatePanelPositionX() {
-        int cameraLeftEdge = Math.round(
-                graphicsService.getCamera().position.x - (graphicsService.getResolutionWidth() / 2f)
-        );
-        int screenPositionX = Math.round((graphicsService.getResolutionWidth() - panelWidth) / 2f);
-        return cameraLeftEdge + screenPositionX;
+        return Math.round((graphicsService.getResolutionWidth() - panelWidth) / 2f);
     }
 }
