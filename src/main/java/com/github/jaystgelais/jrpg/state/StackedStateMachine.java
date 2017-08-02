@@ -20,7 +20,6 @@ public final class StackedStateMachine extends StateMachine {
 
         getCurrentState().onExit();
         setCurrentState(stateHistory.pop());
-        getCurrentState().onEnter(new HashMap<>());
     }
 
     @Override

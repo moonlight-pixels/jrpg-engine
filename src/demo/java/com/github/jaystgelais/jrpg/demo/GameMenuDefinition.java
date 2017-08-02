@@ -5,10 +5,8 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.menu.Menu;
 import com.github.jaystgelais.jrpg.menu.MenuDefinition;
-import com.github.jaystgelais.jrpg.ui.Container;
 import com.github.jaystgelais.jrpg.ui.Layout;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
-import com.github.jaystgelais.jrpg.ui.panel.PanelData;
 import com.github.jaystgelais.jrpg.ui.text.Label;
 
 public class GameMenuDefinition extends MenuDefinition {
@@ -22,43 +20,16 @@ public class GameMenuDefinition extends MenuDefinition {
                 layout.splitHorizontal("remainder", "party", "remainder", 0.7f);
                 layout.splitVertical("remainder", "menu", "stats", 0.7f);
 
-                final Container locationContainer = layout.getContainer("location");
-                final Panel locationPanel = new Panel(
-                        new PanelData(locationContainer.getContentWidth(), locationContainer.getContentHeight())
-                                .setPositionX(locationContainer.getContentPositionX())
-                                .setPositionY(locationContainer.getContentPositionY())
-                                .setTransitionTimeMs(0)
-                );
+                final Panel locationPanel = fillContainerWithPanel(layout.getContainer("location"));
                 locationPanel.getPanelContainer().setContent(new Label(
                         locationPanel.getPanelContainer(),
                         graphicsService.getFontSet(),
                         GameState.getLocationDescription()
                 ));
-                locationContainer.setContent(locationPanel);
 
-                final Container partyContainer = layout.getContainer("party");
-                partyContainer.setContent(new Panel(
-                        new PanelData(partyContainer.getContentWidth(), partyContainer.getContentHeight())
-                                .setPositionX(partyContainer.getContentPositionX())
-                                .setPositionY(partyContainer.getContentPositionY())
-                                .setTransitionTimeMs(0)
-                ));
-
-                final Container menuContainer = layout.getContainer("menu");
-                menuContainer.setContent(new Panel(
-                        new PanelData(menuContainer.getContentWidth(), menuContainer.getContentHeight())
-                                .setPositionX(menuContainer.getContentPositionX())
-                                .setPositionY(menuContainer.getContentPositionY())
-                                .setTransitionTimeMs(0)
-                ));
-
-                final Container statsContainer = layout.getContainer("stats");
-                statsContainer.setContent(new Panel(
-                        new PanelData(statsContainer.getContentWidth(), statsContainer.getContentHeight())
-                                .setPositionX(statsContainer.getContentPositionX())
-                                .setPositionY(statsContainer.getContentPositionY())
-                                .setTransitionTimeMs(0)
-                ));
+                fillContainerWithPanel(layout.getContainer("party"));
+                fillContainerWithPanel(layout.getContainer("menu"));
+                fillContainerWithPanel(layout.getContainer("stats"));
 
                 return layout;
             }
