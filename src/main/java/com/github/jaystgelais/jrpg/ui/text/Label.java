@@ -27,7 +27,7 @@ public class Label extends AbstractContent {
                 graphicsService.getSpriteBatch(),
                 text,
                 graphicsService.getCameraOffsetX() + getScreenPositionX(),
-                graphicsService.getCameraOffsetY() + getScreenPositionY() + getHeight(),
+                graphicsService.getCameraOffsetY() + getScreenPositionY() + (getHeight() / 2) + (font.getLineHeight() / 2),
                 getWidth(),
                 Align.center,
                 false

@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.demo;
 
+import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.menu.Menu;
@@ -9,8 +10,6 @@ import com.github.jaystgelais.jrpg.ui.Layout;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
 import com.github.jaystgelais.jrpg.ui.panel.PanelData;
 import com.github.jaystgelais.jrpg.ui.text.Label;
-import com.github.jaystgelais.jrpg.ui.text.TextArea;
-import com.github.jaystgelais.jrpg.ui.text.transition.TypedTextTransition;
 
 public class GameMenuDefinition extends MenuDefinition {
     @Override
@@ -33,7 +32,7 @@ public class GameMenuDefinition extends MenuDefinition {
                 locationPanel.getPanelContainer().setContent(new Label(
                         locationPanel.getPanelContainer(),
                         graphicsService.getFontSet(),
-                        "Cave Demo"
+                        GameState.getLocationDescription()
                 ));
                 locationContainer.setContent(locationPanel);
 

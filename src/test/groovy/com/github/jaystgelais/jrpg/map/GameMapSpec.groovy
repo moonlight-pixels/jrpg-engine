@@ -30,7 +30,7 @@ class GameMapSpec extends Specification {
         OrthographicCamera testCamera = new OrthographicCamera()
         testCamera.viewportWidth = 320
         testCamera.viewportHeight = 240
-        GameMap gameMap = new GameMap(testCamera, mockMap, mockMapRenderer)
+        GameMap gameMap = new GameMap(testCamera, mockMap, mockMapRenderer, parentLocation)
         Actor testActor = new Actor(gameMap, null, new PlayerController(), new TileCoordinate(actorX, actorY))
         gameMap.setFocalPoint(testActor)
 

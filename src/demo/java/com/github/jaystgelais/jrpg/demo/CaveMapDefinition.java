@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.map.GameMap;
+import com.github.jaystgelais.jrpg.map.Location;
 import com.github.jaystgelais.jrpg.map.MapDefinition;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
 import com.github.jaystgelais.jrpg.map.actor.*;
@@ -15,7 +16,12 @@ public class CaveMapDefinition extends MapDefinition {
 
     @Override
     public GameMap getMap(final GraphicsService graphicsService, final AssetManager assetManager) {
-        GameMap map = loadMap(graphicsService, assetManager, MAP_PATH);
+        GameMap map = loadMap(graphicsService, assetManager, MAP_PATH, new Location() {
+            @Override
+            public String getDescription(TileCoordinate tileCoordinate) {
+                return "Cave Demo";
+            }
+        });
 
         map.addTrigger(new Trigger() {
             public boolean isTriggered(Actor hero) {

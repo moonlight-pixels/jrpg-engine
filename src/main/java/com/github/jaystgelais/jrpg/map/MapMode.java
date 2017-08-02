@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.github.jaystgelais.jrpg.GameMode;
+import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
@@ -85,6 +86,7 @@ public final class MapMode extends GameMode {
     @Override
     public void update(final long elapsedTime) {
         stateMachine.update(elapsedTime);
+        GameState.setLocationOnMap(hero.getLocation());
     }
 
     @Override
@@ -100,6 +102,7 @@ public final class MapMode extends GameMode {
 
     private void loadMap(final MapDefinition mapDefinition) {
         this.map = mapDefinition.getMap(getGame().getGraphicsService(), assetManager);
+        GameState.setLocation(map.getParentLocation());
     }
 
     private MapMode getThis() {

@@ -5,21 +5,22 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.map.MapDefinition;
 import com.github.jaystgelais.jrpg.map.MapMode;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
+import com.github.jaystgelais.jrpg.map.WarpTarget;
 import com.github.jaystgelais.jrpg.map.actor.Direction;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public final class WarpTriggerAction implements TriggerAction {
-    private final MapDefinition map;
-    private final TileCoordinate location;
-    private final Direction facing;
+    private final WarpTarget warpTarget;
+
+    public WarpTriggerAction(final WarpTarget warpTarget) {
+        this.warpTarget = warpTarget;
+    }
 
     public WarpTriggerAction(final MapDefinition map, final TileCoordinate location,
                              final Direction facing) {
-        this.map = map;
-        this.location = location;
-        this.facing = facing;
+        this(new WarpTarget(map, location, facing));
     }
 
     @Override
@@ -40,9 +41,9 @@ public final class WarpTriggerAction implements TriggerAction {
     @Override
     public void startAction(final MapMode mapMode) {
         Map<String, Object> params = new HashMap<>();
-        params.put("map", map);
-        params.put("location", location);
-        params.put("facing", facing);
+        params.put("map", warpTarget.getMap());
+        params.put("location", warpTarget.getLocation());
+        params.put("facing", warpTarget.getFacing());
         mapMode.onEnter(params);
     }
 

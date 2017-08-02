@@ -37,11 +37,13 @@ public final class GameMap implements Renderable {
     private final List<Trigger> triggers;
     private final Map<TileCoordinate, TileTrigger> tileTriggers;
     private final Queue<TriggerAction> actionQueue;
+    private final Location parentLocation;
 
-    public GameMap(final OrthographicCamera camera, final TiledMap map, final TiledMapRenderer mapRenderer) {
+    public GameMap(final OrthographicCamera camera, final TiledMap map, final TiledMapRenderer mapRenderer, Location parentLocation) {
         this.camera = camera;
         this.map = map;
         this.mapRenderer = mapRenderer;
+        this.parentLocation = parentLocation;
         mapLayers = new TreeMap<>();
         actors = new LinkedList<>();
         triggers = new LinkedList<>();
@@ -191,6 +193,10 @@ public final class GameMap implements Renderable {
 
     List<Actor> getActors() {
         return actors;
+    }
+
+    public Location getParentLocation() {
+        return parentLocation;
     }
 
     @Override
