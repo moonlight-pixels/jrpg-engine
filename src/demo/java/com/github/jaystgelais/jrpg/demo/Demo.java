@@ -3,6 +3,7 @@ package com.github.jaystgelais.jrpg.demo;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.github.jaystgelais.jrpg.Game;
+import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.GraphicsServiceImpl;
 import com.github.jaystgelais.jrpg.input.KeyboardInputService;
@@ -10,6 +11,7 @@ import com.github.jaystgelais.jrpg.map.MapMode;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
 import com.github.jaystgelais.jrpg.menu.Menu;
 import com.github.jaystgelais.jrpg.menu.MenuMode;
+import com.github.jaystgelais.jrpg.party.Character;
 import com.github.jaystgelais.jrpg.ui.Container;
 import com.github.jaystgelais.jrpg.ui.Layout;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
@@ -37,10 +39,13 @@ public final class Demo {
         GraphicsService graphicsService = new GraphicsServiceImpl(assetManager);
         graphicsService.setResolutionWidth(480);
         graphicsService.setResolutionHeight(268);
+
+        GameState.initParty(1);
+        GameState.getParty().addMember(new Character("Maximus", new HeroSpriteSetDefinition()));
+
         MapMode mapMode = new MapMode(
                 new CaveMapDefinition(),
-                new TileCoordinate(8, 97),
-                new HeroSpriteSetDefinition());
+                new TileCoordinate(8, 97));
         MenuMode menuMode = new MenuMode(new GameMenuDefinition());
         Game game = new Game(
                 Stream.of(mapMode, menuMode).collect(Collectors.toSet()),

@@ -2,6 +2,7 @@ package com.github.jaystgelais.jrpg;
 
 import com.github.jaystgelais.jrpg.map.Location;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
+import com.github.jaystgelais.jrpg.party.Party;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public final class GameState implements Serializable {
     private static final Map<String, Boolean> FLAGS = new HashMap<>();
     private static Location location;
     private static TileCoordinate locationOnMap;
+    private static Party party;
 
     private GameState() { }
 
@@ -46,5 +48,13 @@ public final class GameState implements Serializable {
 
     public static String getLocationDescription() {
         return (location == null) ? "?????" : location.getDescription(locationOnMap);
+    }
+
+    public static void initParty(final int size) {
+        party = new Party(size);
+    }
+
+    public static Party getParty() {
+        return party;
     }
 }

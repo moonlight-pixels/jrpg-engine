@@ -42,18 +42,17 @@ public final class MapMode extends GameMode {
     private GameMap map;
     private Actor hero;
 
-    public MapMode(final MapDefinition initialMap, final TileCoordinate initialLocation,
-                   final SpriteSetDefinition heroSpriteSet) {
-        this(initialMap, initialLocation, heroSpriteSet, new AssetManager());
+    public MapMode(final MapDefinition initialMap, final TileCoordinate initialLocation) {
+        this(initialMap, initialLocation, new AssetManager());
     }
 
     MapMode(final MapDefinition initialMap, final TileCoordinate initialLocation,
-            final SpriteSetDefinition heroSpriteSet, final AssetManager assetManager) {
+            final AssetManager assetManager) {
         this.initialMap = initialMap;
         this.initialLocation = initialLocation;
         this.assetManager = assetManager;
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        this.heroSpriteSet = heroSpriteSet;
+        this.heroSpriteSet = GameState.getParty().getLeader().getSpriteSetDefinition();
         stateMachine = initStateMachine();
     }
 
