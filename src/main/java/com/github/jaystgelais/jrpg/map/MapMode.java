@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.GameState;
+import com.github.jaystgelais.jrpg.audio.MusicService;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
@@ -75,6 +76,10 @@ public final class MapMode extends GameMode {
 
         map.setFocalPoint(hero);
         map.focusCamera();
+
+        if (map.getParentLocation().getBackgroundMusicFilePath() != null) {
+            MusicService.playMusic(Gdx.files.internal(map.getParentLocation().getBackgroundMusicFilePath()));
+        }
         stateMachine.change("initialPause");
     }
 
