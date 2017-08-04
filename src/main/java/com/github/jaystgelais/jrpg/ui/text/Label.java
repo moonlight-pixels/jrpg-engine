@@ -10,14 +10,20 @@ import com.github.jaystgelais.jrpg.ui.Container;
 public final class Label extends AbstractContent {
     private final String text;
     private final BitmapFont font;
+    private final int alignment;
 
-    public Label(final Container parent, final FontSet fontSet, final String text) {
+    public Label(final Container parent, final BitmapFont font, final String text) {
+        this(parent, font, text, Align.center);
+    }
+
+    public Label(final Container parent, final BitmapFont font, final String text, final int alignment) {
         super(
                 parent.getContentPositionX(), parent.getContentPositionY(),
                 parent.getContentWidth(), parent.getContentHeight()
         );
         this.text = text;
-        this.font = fontSet.getTextFont();
+        this.font = font;
+        this.alignment = alignment;
     }
 
     @Override
@@ -26,10 +32,9 @@ public final class Label extends AbstractContent {
                 graphicsService.getSpriteBatch(),
                 text,
                 graphicsService.getCameraOffsetX() + getScreenPositionX(),
-                graphicsService.getCameraOffsetY() + getScreenPositionY()
-                        + (getHeight() / 2) + (font.getLineHeight() / 2),
+                graphicsService.getCameraOffsetY() + getAlignedScreenPositionY(),
                 getWidth(),
-                Align.center,
+                alignment,
                 false
         );
     }
@@ -52,5 +57,24 @@ public final class Label extends AbstractContent {
     @Override
     public void handleInput(final InputService inputService) {
 
+    }
+
+    private float getAlignedScreenPositionY() {
+        switch (alignment) {
+            case Align.topLeft:
+            case Align.top:
+            case Align.topRight:
+                return getScreenPositionY() + getHeight();
+            case Align.left:
+            case Align.center:
+            case Align.right:
+                return getScreenPositionY() + (getHeight() / 2) + (font.getLineHeight() / 2);
+            case Align.bottomLeft:
+            case Align.bottom:
+            case Align.bottomRight:
+                return getScreenPositionY() + font.getLineHeight();
+            default:
+                return 0;
+        }
     }
 }

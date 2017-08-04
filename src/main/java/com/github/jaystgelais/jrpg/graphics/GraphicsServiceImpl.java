@@ -35,6 +35,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
     private final Deque<Disposable> disposables = new ArrayDeque<>();
     private FontSet fontSet;
     private FontDefinition textFont;
+    private FontDefinition numberFont;
     private SpriteBatch spriteBatch;
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -161,6 +162,9 @@ public final class GraphicsServiceImpl implements GraphicsService {
             if (textFont != null) {
                 builder.setTextFont(textFont);
             }
+            if (numberFont != null) {
+                builder.setNumberFont(numberFont);
+            }
             fontSet = builder.create();
         }
         return fontSet;
@@ -172,6 +176,11 @@ public final class GraphicsServiceImpl implements GraphicsService {
 
     public void setTextFont(final FontDefinition textFont) {
         this.textFont = textFont;
+    }
+
+    @Override
+    public void setNumberFont(FontDefinition numberFont) {
+        this.numberFont = numberFont;
     }
 
     @Override

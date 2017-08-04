@@ -50,6 +50,8 @@ public interface GraphicsService extends Disposable {
 
     void setTextFont(FontDefinition textFont);
 
+    void setNumberFont(FontDefinition numberFont);
+
     int getResolutionWidth();
 
     void setResolutionWidth(int resolutionWidth);

@@ -55,8 +55,12 @@ public final class FontSet {
             return this;
         }
 
-        public Builder setNumberFont(final BitmapFont numberFont) {
-            this.numberFont = numberFont;
+        public Builder setNumberFont(final FontDefinition numberFont) {
+            this.numberFont = createFontFromTTF(
+                    Gdx.files.internal(numberFont.getFontPath()),
+                    numberFont.getFontSize(),
+                    numberFont.isMono()
+            );
             return this;
         }
 
