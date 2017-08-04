@@ -24,7 +24,7 @@ public abstract class Menu implements InputHandler, Renderable, Updatable {
     }
 
     @Override
-    public final void handleInput(InputService inputService) {
+    public final void handleInput(final InputService inputService) {
         if (inputService.isPressed(Inputs.CANCEL)) {
             active = false;
         } else {
@@ -36,7 +36,7 @@ public abstract class Menu implements InputHandler, Renderable, Updatable {
     }
 
     @Override
-    public final void render(GraphicsService graphicsService) {
+    public final void render(final GraphicsService graphicsService) {
         if (active) {
             getLayout().render(graphicsService);
         }
@@ -48,7 +48,7 @@ public abstract class Menu implements InputHandler, Renderable, Updatable {
     }
 
     @Override
-    public final void update(long elapsedTime) {
+    public final void update(final long elapsedTime) {
         if (active) {
             getLayout().update(elapsedTime);
         }

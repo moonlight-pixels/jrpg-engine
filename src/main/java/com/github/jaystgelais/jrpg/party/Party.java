@@ -4,11 +4,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Party {
+public final class Party {
     private final int maxSize;
     private final List<Character> members;
 
-    public Party(int maxSize) {
+    public Party(final int maxSize) {
         this.maxSize = maxSize;
         members = new LinkedList<>();
     }

@@ -3,7 +3,6 @@ package com.github.jaystgelais.jrpg.menu;
 import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
-import com.github.jaystgelais.jrpg.ui.Layout;
 
 import java.util.Map;
 import java.util.Stack;
@@ -17,17 +16,17 @@ public final class MenuMode extends GameMode {
     }
 
     @Override
-    public final String getKey() {
+    public String getKey() {
         return "menu";
     }
 
     @Override
-    public void onEnter(Map<String, Object> params) {
+    public void onEnter(final Map<String, Object> params) {
         menus.push(initialMenu.getMenu(getGame().getGraphicsService()));
     }
 
     @Override
-    public void render(GraphicsService graphicsService) {
+    public void render(final GraphicsService graphicsService) {
         if (!menus.isEmpty()) {
             graphicsService.renderStart();
             menus.peek().render(graphicsService);
@@ -36,7 +35,7 @@ public final class MenuMode extends GameMode {
     }
 
     @Override
-    public void update(long elapsedTime) {
+    public void update(final long elapsedTime) {
         if (menus.isEmpty()) {
             exitGameMode();
         } else if (!menus.peek().isActive()) {
@@ -47,7 +46,7 @@ public final class MenuMode extends GameMode {
     }
 
     @Override
-    public void handleInput(InputService inputService) {
+    public void handleInput(final InputService inputService) {
         if (!menus.isEmpty()) {
             menus.peek().handleInput(inputService);
         }

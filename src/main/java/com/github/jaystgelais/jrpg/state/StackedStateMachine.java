@@ -1,6 +1,5 @@
 package com.github.jaystgelais.jrpg.state;
 
-import java.util.HashMap;
 import java.util.Set;
 import java.util.Stack;
 

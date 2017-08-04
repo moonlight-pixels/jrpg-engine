@@ -29,12 +29,12 @@ class KeyboardInputServiceSpec extends Specification {
         where:
         key          | input
         Keys.ENTER   | Inputs.OK
-        Keys.ESCAPE  | Inputs.CANCEL
+        Keys.TAB     | Inputs.CANCEL
         Keys.SPACE   | Inputs.MENU
         Keys.UP      | Inputs.UP
         Keys.DOWN    | Inputs.DOWN
         Keys.LEFT    | Inputs.LEFT
         Keys.RIGHT   | Inputs.RIGHT
-        Keys.TAB     | Inputs.PAUSE
+        Keys.ESCAPE  | Inputs.PAUSE
     }
 }

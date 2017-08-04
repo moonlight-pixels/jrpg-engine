@@ -22,12 +22,16 @@ public final class Character {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Character character = (Character) o;
-        return Objects.equals(name, character.name) &&
-                Objects.equals(spriteSetDefinition, character.spriteSetDefinition);
+        return Objects.equals(name, character.name)
+                && Objects.equals(spriteSetDefinition, character.spriteSetDefinition);
     }
 
     @Override

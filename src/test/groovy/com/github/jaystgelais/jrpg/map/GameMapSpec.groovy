@@ -30,7 +30,12 @@ class GameMapSpec extends Specification {
         OrthographicCamera testCamera = new OrthographicCamera()
         testCamera.viewportWidth = 320
         testCamera.viewportHeight = 240
-        GameMap gameMap = new GameMap(testCamera, mockMap, mockMapRenderer, parentLocation)
+        GameMap gameMap = new GameMap(testCamera, mockMap, mockMapRenderer, new Location() {
+            @Override
+            String getDescription(TileCoordinate tileCoordinate) {
+                return ''
+            }
+        })
         Actor testActor = new Actor(gameMap, null, new PlayerController(), new TileCoordinate(actorX, actorY))
         gameMap.setFocalPoint(testActor)
 
@@ -45,7 +50,7 @@ class GameMapSpec extends Specification {
 
         where:
         actorX | actorY | cameraX | cameraY
-        10     | 10     | 160     | 160
+        10     | 10     | 168     | 160
         1      | 1      | 160     | 120
         39     | 39     | 480     | 520
     }

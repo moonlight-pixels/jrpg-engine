@@ -8,38 +8,38 @@ public abstract class Location {
         this(null, null);
     }
 
-    public Location(WarpTarget exitDestination) {
+    public Location(final WarpTarget exitDestination) {
         this(exitDestination, null);
     }
 
-    public Location(String backgroundMusicFilePath) {
+    public Location(final String backgroundMusicFilePath) {
         this(null, backgroundMusicFilePath);
     }
 
-    public Location(WarpTarget exitDestination, String backgroundMusicFilePath) {
+    public Location(final WarpTarget exitDestination, final String backgroundMusicFilePath) {
         this.exitDestination = exitDestination;
         this.backgroundMusicFilePath = backgroundMusicFilePath;
     }
 
     public abstract String getDescription(TileCoordinate tileCoordinate);
 
-    public WarpTarget getExitDestination() {
+    public final WarpTarget getExitDestination() {
         return exitDestination;
     }
 
-    public void setExitDestination(WarpTarget exitDestination) {
+    public final void setExitDestination(final WarpTarget exitDestination) {
         this.exitDestination = exitDestination;
     }
 
-    public String getBackgroundMusicFilePath() {
+    public final String getBackgroundMusicFilePath() {
         return backgroundMusicFilePath;
     }
 
-    public void setBackgroundMusicFilePath(String backgroundMusicFilePath) {
+    public final void setBackgroundMusicFilePath(final String backgroundMusicFilePath) {
         this.backgroundMusicFilePath = backgroundMusicFilePath;
     }
 
-    public boolean canExit() {
+    public final boolean canExit() {
         return (exitDestination != null);
     }
 }

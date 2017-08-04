@@ -1,6 +1,5 @@
 package com.github.jaystgelais.jrpg.ui.panel;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,10 +17,14 @@ import java.util.Map;
 import java.util.Set;
 
 public final class Panel implements Content {
-    public static final int BORDER_THICKNESS = 3;
-    public static final int MINIMUM_PANEL_WIDTH = 8;
-    public static final int MINIMUM_PANEL_HEIGHT = 8;
-    public static final int PANEL_CONTENT_MARGIN = 6;
+    private static final int BORDER_THICKNESS = 3;
+    private static final int MINIMUM_PANEL_WIDTH = 8;
+    private static final int MINIMUM_PANEL_HEIGHT = 8;
+    private static final int PANEL_CONTENT_MARGIN = 6;
+    public static final float TEXTURE_OFFSET_X1 = 0.38f;
+    public static final float TEXTURE_OFFSET_Y1 = 0.38f;
+    public static final float TEXTURE_OFFSET_X2 = 0.61f;
+    public static final float TEXTURE_OFFSET_Y2 = 0.61f;
 
     private final PanelData data;
     private final Pixmap pixmap;
@@ -92,7 +95,7 @@ public final class Panel implements Content {
         spriteBatch.draw(
                 sprites[1][1].getTexture(), offsetX + getCenterX(currentWidth), offsetY + getCenterY(currentHeight),
                 currentWidth - (2 * BORDER_THICKNESS), currentHeight - (2 * BORDER_THICKNESS),
-                0.38f, 0.38f, 0.61f, 0.61f
+                TEXTURE_OFFSET_X1, TEXTURE_OFFSET_Y1, TEXTURE_OFFSET_X2, TEXTURE_OFFSET_Y2
         );
         spriteBatch.draw(
                 sprites[1][2], offsetX + getRightX(currentWidth), offsetY + getCenterY(currentHeight),

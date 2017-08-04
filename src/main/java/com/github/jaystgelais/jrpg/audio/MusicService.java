@@ -8,6 +8,8 @@ public final class MusicService {
     private static Music currentSong;
     private static FileHandle currentSongFileHandle;
 
+    private MusicService() { }
+
     public static void playMusic(final FileHandle songFileHandle) {
         if (songFileHandle != null && !songFileHandle.equals(currentSongFileHandle)) {
             stopMusic();

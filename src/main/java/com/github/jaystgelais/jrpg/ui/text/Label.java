@@ -4,11 +4,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Align;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
-import com.github.jaystgelais.jrpg.state.Updatable;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
 import com.github.jaystgelais.jrpg.ui.Container;
 
-public class Label extends AbstractContent {
+public final class Label extends AbstractContent {
     private final String text;
     private final BitmapFont font;
 
@@ -22,12 +21,13 @@ public class Label extends AbstractContent {
     }
 
     @Override
-    public void render(GraphicsService graphicsService) {
+    public void render(final GraphicsService graphicsService) {
         font.draw(
                 graphicsService.getSpriteBatch(),
                 text,
                 graphicsService.getCameraOffsetX() + getScreenPositionX(),
-                graphicsService.getCameraOffsetY() + getScreenPositionY() + (getHeight() / 2) + (font.getLineHeight() / 2),
+                graphicsService.getCameraOffsetY() + getScreenPositionY()
+                        + (getHeight() / 2) + (font.getLineHeight() / 2),
                 getWidth(),
                 Align.center,
                 false
@@ -45,12 +45,12 @@ public class Label extends AbstractContent {
     }
 
     @Override
-    public void update(long elapsedTime) {
+    public void update(final long elapsedTime) {
 
     }
 
     @Override
-    public void handleInput(InputService inputService) {
+    public void handleInput(final InputService inputService) {
 
     }
 }

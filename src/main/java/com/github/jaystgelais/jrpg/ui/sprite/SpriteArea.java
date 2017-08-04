@@ -6,7 +6,7 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
 import com.github.jaystgelais.jrpg.ui.Container;
 
-public class SpriteArea extends AbstractContent {
+public final class SpriteArea extends AbstractContent {
     private final TextureRegion sprite;
 
     public SpriteArea(final Container parent, final TextureRegion sprite) {
@@ -18,21 +18,23 @@ public class SpriteArea extends AbstractContent {
     }
 
     @Override
-    public void update(long elapsedTime) {
+    public void update(final long elapsedTime) {
 
     }
 
     @Override
-    public void handleInput(InputService inputService) {
+    public void handleInput(final InputService inputService) {
 
     }
 
     @Override
-    public void render(GraphicsService graphicsService) {
+    public void render(final GraphicsService graphicsService) {
         graphicsService.drawSprite(
                 sprite,
-                graphicsService.getCameraOffsetX() + getScreenPositionX() + (getWidth() / 2.0f) - (sprite.getRegionWidth() / 2.0f),
-                graphicsService.getCameraOffsetY() + getScreenPositionY() + (getHeight() / 2.0f) - (sprite.getRegionHeight() / 2.0f)
+                graphicsService.getCameraOffsetX() + getScreenPositionX()
+                        + (getWidth() / 2.0f) - (sprite.getRegionWidth() / 2.0f),
+                graphicsService.getCameraOffsetY() + getScreenPositionY()
+                        + (getHeight() / 2.0f) - (sprite.getRegionHeight() / 2.0f)
         );
     }
 

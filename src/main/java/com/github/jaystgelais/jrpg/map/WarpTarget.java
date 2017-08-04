@@ -2,7 +2,7 @@ package com.github.jaystgelais.jrpg.map;
 
 import com.github.jaystgelais.jrpg.map.actor.Direction;
 
-public class WarpTarget {
+public final class WarpTarget {
     public static final Direction DEFAULT_FACING_DIRECTION = Direction.DOWN;
 
     private final MapDefinition map;

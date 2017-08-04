@@ -34,7 +34,7 @@ public final class GameState implements Serializable {
         return location;
     }
 
-    public static void setLocation(Location location) {
+    public static void setLocation(final Location location) {
         GameState.location = location;
     }
 
@@ -42,7 +42,7 @@ public final class GameState implements Serializable {
         return locationOnMap;
     }
 
-    public static void setLocationOnMap(TileCoordinate locationOnMap) {
+    public static void setLocationOnMap(final TileCoordinate locationOnMap) {
         GameState.locationOnMap = locationOnMap;
     }
 

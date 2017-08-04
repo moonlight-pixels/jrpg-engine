@@ -39,7 +39,8 @@ public final class GameMap implements Renderable {
     private final Queue<TriggerAction> actionQueue;
     private final Location parentLocation;
 
-    public GameMap(final OrthographicCamera camera, final TiledMap map, final TiledMapRenderer mapRenderer, Location parentLocation) {
+    public GameMap(final OrthographicCamera camera, final TiledMap map,
+                   final TiledMapRenderer mapRenderer, final Location parentLocation) {
         this.camera = camera;
         this.map = map;
         this.mapRenderer = mapRenderer;
