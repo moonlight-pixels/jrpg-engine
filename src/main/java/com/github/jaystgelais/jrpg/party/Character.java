@@ -4,20 +4,26 @@ import com.github.jaystgelais.jrpg.map.actor.SpriteSetDefinition;
 
 import java.util.Objects;
 
-public final class Character {
+public class Character {
     private final String name;
     private final SpriteSetDefinition spriteSetDefinition;
+    private int maxHp;
+    private int currentHp;
+    private int maxMp;
+    private int currentMp;
+    private int level;
+    private int xp;
 
     public Character(final String name, final SpriteSetDefinition spriteSetDefinition) {
         this.name = name;
         this.spriteSetDefinition = spriteSetDefinition;
     }
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    public SpriteSetDefinition getSpriteSetDefinition() {
+    public final SpriteSetDefinition getSpriteSetDefinition() {
         return spriteSetDefinition;
     }
 
@@ -37,5 +43,53 @@ public final class Character {
     @Override
     public int hashCode() {
         return Objects.hash(name, spriteSetDefinition);
+    }
+
+    public final int getMaxHp() {
+        return maxHp;
+    }
+
+    public final void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
+    }
+
+    public final int getCurrentHp() {
+        return currentHp;
+    }
+
+    public final void setCurrentHp(int currentHp) {
+        this.currentHp = currentHp;
+    }
+
+    public final int getMaxMp() {
+        return maxMp;
+    }
+
+    public final void setMaxMp(int maxMp) {
+        this.maxMp = maxMp;
+    }
+
+    public final int getCurrentMp() {
+        return currentMp;
+    }
+
+    public final void setCurrentMp(int currentMp) {
+        this.currentMp = currentMp;
+    }
+
+    public final int getLevel() {
+        return level;
+    }
+
+    public final void setLevel(int level) {
+        this.level = level;
+    }
+
+    public final int getXp() {
+        return xp;
+    }
+
+    public final void setXp(int xp) {
+        this.xp = xp;
     }
 }
