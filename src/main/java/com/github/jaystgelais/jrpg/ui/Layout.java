@@ -53,7 +53,11 @@ public final class Layout extends AbstractContent {
 
     public void splitHorizontal(final String containerId, final String leftID, final String rightID,
                                 final float leftPercent) {
-        splitHorizontal(containerId, leftID, rightID, Math.round(getWidth() * leftPercent));
+        Container container = children.get(containerId);
+        if (container == null) {
+            throw new IllegalArgumentException("Unknown container: " + containerId);
+        }
+        splitHorizontal(containerId, leftID, rightID, Math.round(container.getWidth() * leftPercent));
     }
 
     public void splitVertical(final String containerId, final String topID, final String bottomID,
@@ -68,7 +72,11 @@ public final class Layout extends AbstractContent {
 
     public void splitVertical(final String containerId, final String topID, final String bottomID,
                               final float topPercent) {
-        splitVertical(containerId, topID, bottomID, Math.round(getHeight() * topPercent));
+        Container container = children.get(containerId);
+        if (container == null) {
+            throw new IllegalArgumentException("Unknown container: " + containerId);
+        }
+        splitVertical(containerId, topID, bottomID, Math.round(container.getHeight() * topPercent));
     }
 
     private void createHorizontalDivisions(final Content parent, final String leftID, final String rightID,

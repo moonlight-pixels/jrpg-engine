@@ -1,12 +1,15 @@
 package com.github.jaystgelais.jrpg.map.trigger;
 
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputService;
+import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.map.MapMode;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
 import com.github.jaystgelais.jrpg.ui.panel.PanelData;
+import com.github.jaystgelais.jrpg.ui.text.Label;
 import com.github.jaystgelais.jrpg.ui.text.TextArea;
 import com.github.jaystgelais.jrpg.ui.text.transition.TypedTextTransition;
 
@@ -24,6 +27,7 @@ public final class MessageTriggerAction implements TriggerAction {
     private final int panelWidth;
     private final int panelHeight;
     private final StateMachine stateMachine;
+    private final DelayedInput okInput = new DelayedInput(Inputs.OK);
     private boolean isComplete = false;
 
     public MessageTriggerAction(final String message, final GraphicsService graphicsService) {
@@ -78,7 +82,7 @@ public final class MessageTriggerAction implements TriggerAction {
 
     private StateMachine createStateMachine() {
         return new StateMachine(Collections.singleton(new StateAdapter() {
-            private TextArea content;
+            private Label content;
             private Panel panel;
 
             @Override
@@ -94,11 +98,10 @@ public final class MessageTriggerAction implements TriggerAction {
                                 .setPositionY(calculatePanelPositionY())
                                 .setTransitionTimeMs(DEFAULT_TRANSITION_TIME_MS)
                 );
-                content = new TextArea(
+                content = new Label(
                         panel.getPanelContainer(),
-                        graphicsService.getFontSet(),
-                        message,
-                        new TypedTextTransition()
+                        graphicsService.getFontSet().getTextFont(),
+                        message
                 );
                 panel.getPanelContainer().setContent(content);
             }
@@ -117,15 +120,14 @@ public final class MessageTriggerAction implements TriggerAction {
 
             @Override
             public void handleInput(final InputService inputService) {
-                panel.handleInput(inputService);
+                if (okInput.isPressed(inputService)) {
+                    panel.close();
+                }
             }
 
             @Override
             public void update(final long elapsedTime) {
                 panel.update(elapsedTime);
-                if (content.isEmpty()) {
-                    panel.close();
-                }
                 if (!panel.isActive()) {
                     isComplete = true;
                 }

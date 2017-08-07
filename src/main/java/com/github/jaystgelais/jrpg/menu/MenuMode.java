@@ -1,6 +1,7 @@
 package com.github.jaystgelais.jrpg.menu;
 
 import com.github.jaystgelais.jrpg.GameMode;
+import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 
@@ -36,6 +37,7 @@ public final class MenuMode extends GameMode {
 
     @Override
     public void update(final long elapsedTime) {
+        GameState.incrementTimePLayed(elapsedTime);
         if (menus.isEmpty()) {
             exitGameMode();
         } else if (!menus.peek().isActive()) {

@@ -89,6 +89,7 @@ public final class MapMode extends GameMode {
 
     @Override
     public void update(final long elapsedTime) {
+        GameState.incrementTimePLayed(elapsedTime);
         stateMachine.update(elapsedTime);
         GameState.setLocationOnMap(hero.getLocation());
     }

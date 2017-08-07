@@ -22,11 +22,12 @@ public final class DelayedInput {
         this.input = input;
         this.delayMs = delayMs;
         this.clock = clock;
+        this.lastPressed = clock.millis();
     }
 
     public boolean isPressed(final InputService inputService) {
         long now = clock.millis();
-        if (inputService.isPressed(input) && (lastPressed == null || now - lastPressed > delayMs)) {
+        if (inputService.isPressed(input) && now - lastPressed > delayMs) {
             lastPressed = now;
             return true;
         }
