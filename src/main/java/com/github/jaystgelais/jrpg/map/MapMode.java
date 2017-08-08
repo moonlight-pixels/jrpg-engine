@@ -21,6 +21,7 @@ import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
+import com.github.jaystgelais.jrpg.ui.misc.ProgressBar;
 
 import java.util.Collections;
 import java.util.HashSet;

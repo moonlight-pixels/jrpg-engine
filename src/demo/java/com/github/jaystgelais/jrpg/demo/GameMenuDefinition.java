@@ -23,7 +23,7 @@ public class GameMenuDefinition extends MenuDefinition {
                 final Panel locationPanel = fillContainerWithPanel(layout.getContainer("location"));
                 locationPanel.getPanelContainer().setContent(new Label(
                         locationPanel.getPanelContainer(),
-                        graphicsService.getFontSet(),
+                        graphicsService.getFontSet().getTextFont(),
                         GameState.getLocationDescription()
                 ));
 
