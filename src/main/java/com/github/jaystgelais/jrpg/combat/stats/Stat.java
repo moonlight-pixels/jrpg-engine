@@ -22,7 +22,7 @@ public abstract class Stat {
         this.baseValue = baseValue;
     }
 
-    public final int getModifiedValue() {
+    public final int getValue() {
         AtomicReference<Float> value = new AtomicReference<>((float) baseValue);
 
         modifiers

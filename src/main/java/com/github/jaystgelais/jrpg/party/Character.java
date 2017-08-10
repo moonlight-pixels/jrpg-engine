@@ -1,22 +1,28 @@
 package com.github.jaystgelais.jrpg.party;
 
+import com.github.jaystgelais.jrpg.combat.stats.*;
 import com.github.jaystgelais.jrpg.map.actor.SpriteSetDefinition;
 
-import java.util.Objects;
+import java.util.*;
 
-public class Character {
+public class Character implements StatHolder {
     private final String name;
     private final SpriteSetDefinition spriteSetDefinition;
-    private int maxHp;
+    private final CharacterClass characterClass;
     private int currentHp;
-    private int maxMp;
     private int currentMp;
+    private final Map<Class<? extends Stat>, Stat> stats = new HashMap<>();
     private int level;
     private int xp;
 
-    public Character(final String name, final SpriteSetDefinition spriteSetDefinition) {
+    public Character(final String name, final SpriteSetDefinition spriteSetDefinition,
+                     final CharacterClass characterClass, final Collection<Stat> stats) {
         this.name = name;
         this.spriteSetDefinition = spriteSetDefinition;
+        this.characterClass = characterClass;
+        for (Stat stat : stats) {
+            this.stats.put(stat.getClass(), stat);
+        }
     }
 
     public final String getName() {
@@ -45,36 +51,20 @@ public class Character {
         return Objects.hash(name, spriteSetDefinition);
     }
 
-    public final int getMaxHp() {
-        return maxHp;
-    }
-
-    public final void setMaxHp(int maxHp) {
-        this.maxHp = maxHp;
-    }
-
     public final int getCurrentHp() {
-        return currentHp;
+        return Math.min(currentHp, getStatValue(MaxHP.class));
     }
 
     public final void setCurrentHp(int currentHp) {
-        this.currentHp = currentHp;
-    }
-
-    public final int getMaxMp() {
-        return maxMp;
-    }
-
-    public final void setMaxMp(int maxMp) {
-        this.maxMp = maxMp;
+        this.currentHp = Math.min(currentHp, getStatValue(MaxHP.class));
     }
 
     public final int getCurrentMp() {
-        return currentMp;
+        return Math.min(currentMp, getStatValue(MaxMP.class));
     }
 
     public final void setCurrentMp(int currentMp) {
-        this.currentMp = currentMp;
+        this.currentMp = Math.min(currentMp, getStatValue(MaxMP.class));
     }
 
     public final int getLevel() {
@@ -91,5 +81,18 @@ public class Character {
 
     public final void setXp(int xp) {
         this.xp = xp;
+    }
+
+    @Override
+    public <T extends Stat> Stat getStat(Class<T> statClass) throws MissingStatException {
+        if (!stats.containsKey(statClass)) {
+            throw new MissingStatException(statClass);
+        }
+
+        return stats.get(statClass);
+    }
+
+    public final CharacterClass getCharacterClass() {
+        return characterClass;
     }
 }
