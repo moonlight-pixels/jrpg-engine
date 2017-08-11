@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg;
 
+import com.github.jaystgelais.jrpg.inventory.Inventory;
 import com.github.jaystgelais.jrpg.map.Location;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
 import com.github.jaystgelais.jrpg.party.Party;
@@ -15,6 +16,7 @@ public final class GameState implements Serializable {
     private static Location location;
     private static TileCoordinate locationOnMap;
     private static Party party;
+    private static Inventory inventory;
     private static long timeplayed = 0;
 
     private GameState() { }
@@ -57,6 +59,18 @@ public final class GameState implements Serializable {
 
     public static Party getParty() {
         return party;
+    }
+
+    public static void initInventory(final int maxQuantityPerItem) {
+        inventory = new Inventory(maxQuantityPerItem);
+    }
+
+    public static void initInventory() {
+        inventory = new Inventory();
+    }
+
+    public static Inventory getInventory() {
+        return inventory;
     }
 
     public static long getTimeplayed() {
