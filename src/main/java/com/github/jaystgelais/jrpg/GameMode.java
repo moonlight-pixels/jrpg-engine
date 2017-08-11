@@ -6,7 +6,7 @@ public abstract class GameMode extends StateAdapter {
 
     private Game game;
 
-    protected final Game getGame() {
+    public final Game getGame() {
         return game;
     }
 
@@ -14,7 +14,7 @@ public abstract class GameMode extends StateAdapter {
         this.game = game;
     }
 
-    protected final void exitGameMode() {
+    public final void exitGameMode() {
         game.exitCurrentGameMode();
     }
 }

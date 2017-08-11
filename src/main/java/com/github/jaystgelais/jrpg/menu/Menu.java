@@ -10,6 +10,7 @@ import com.github.jaystgelais.jrpg.ui.Layout;
 
 public abstract class Menu implements InputHandler, Renderable, Updatable {
     private boolean active = true;
+    private MenuAction action;
 
     public Menu() {
 
@@ -21,6 +22,18 @@ public abstract class Menu implements InputHandler, Renderable, Updatable {
 
     public final boolean isActive() {
         return active;
+    }
+
+    public MenuAction getAndClearAction() {
+        MenuAction currentAction = action;
+        action = null;
+        return currentAction;
+    }
+
+    public void setAction(final MenuAction action) {
+        if (this.action == null) {
+            this.action = action;
+        }
     }
 
     @Override

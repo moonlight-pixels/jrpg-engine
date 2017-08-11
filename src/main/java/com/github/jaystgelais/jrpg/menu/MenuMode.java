@@ -43,7 +43,12 @@ public final class MenuMode extends GameMode {
         } else if (!menus.peek().isActive()) {
             menus.pop();
         } else {
-            menus.peek().update(elapsedTime);
+            MenuAction action = menus.peek().getAndClearAction();
+            if (action != null) {
+                action.perform(this);
+            } else {
+                menus.peek().update(elapsedTime);
+            }
         }
     }
 
@@ -52,5 +57,9 @@ public final class MenuMode extends GameMode {
         if (!menus.isEmpty()) {
             menus.peek().handleInput(inputService);
         }
+    }
+
+    void openMenu(final Menu menu) {
+        menus.push(menu);
     }
 }
