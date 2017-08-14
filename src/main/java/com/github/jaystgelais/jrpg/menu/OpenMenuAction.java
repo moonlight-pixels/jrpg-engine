@@ -1,9 +1,9 @@
 package com.github.jaystgelais.jrpg.menu;
 
-public class OpenMenuAction implements MenuAction {
+public final class OpenMenuAction implements MenuAction {
     private final MenuDefinition menuDefinition;
 
-    public OpenMenuAction(MenuDefinition menuDefinition) {
+    public OpenMenuAction(final MenuDefinition menuDefinition) {
         this.menuDefinition = menuDefinition;
     }
 

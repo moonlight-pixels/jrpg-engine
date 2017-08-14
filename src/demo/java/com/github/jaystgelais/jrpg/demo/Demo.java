@@ -12,6 +12,7 @@ import com.github.jaystgelais.jrpg.map.TileCoordinate;
 import com.github.jaystgelais.jrpg.menu.Menu;
 import com.github.jaystgelais.jrpg.menu.MenuMode;
 import com.github.jaystgelais.jrpg.party.Character;
+import com.github.jaystgelais.jrpg.party.CharacterClass;
 import com.github.jaystgelais.jrpg.ui.Container;
 import com.github.jaystgelais.jrpg.ui.Layout;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
@@ -41,7 +42,7 @@ public final class Demo {
         graphicsService.setResolutionHeight(268);
 
         GameState.initParty(1);
-        GameState.getParty().addMember(new Character("Maximus", new HeroSpriteSetDefinition()));
+        GameState.getParty().addMember(new Character("Maximus", new HeroSpriteSetDefinition(), new CharacterClass("warrior")));
 
         MapMode mapMode = new MapMode(
                 new CaveMapDefinition(),

@@ -24,13 +24,13 @@ public abstract class Menu implements InputHandler, Renderable, Updatable {
         return active;
     }
 
-    public MenuAction getAndClearAction() {
+    public final MenuAction getAndClearAction() {
         MenuAction currentAction = action;
         action = null;
         return currentAction;
     }
 
-    public void setAction(final MenuAction action) {
+    public final void setAction(final MenuAction action) {
         if (this.action == null) {
             this.action = action;
         }

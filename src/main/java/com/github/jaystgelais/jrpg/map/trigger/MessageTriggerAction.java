@@ -10,8 +10,6 @@ import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
 import com.github.jaystgelais.jrpg.ui.panel.PanelData;
 import com.github.jaystgelais.jrpg.ui.text.Label;
-import com.github.jaystgelais.jrpg.ui.text.TextArea;
-import com.github.jaystgelais.jrpg.ui.text.transition.TypedTextTransition;
 
 import java.util.Collections;
 import java.util.Map;

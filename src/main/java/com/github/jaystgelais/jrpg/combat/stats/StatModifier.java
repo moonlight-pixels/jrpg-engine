@@ -1,19 +1,19 @@
 package com.github.jaystgelais.jrpg.combat.stats;
 
 public final class StatModifier {
-    public enum ModifierAction {ADD, MULTIPLY};
+    public enum ModifierAction { ADD, MULTIPLY };
 
-    private final String targetStat;
+    private final Class<? extends Stat> targetStat;
     private final ModifierAction action;
     private final float modifier;
 
-    public StatModifier(final String targetStat, final ModifierAction action, final float modifier) {
+    public StatModifier(final Class<? extends Stat> targetStat, final ModifierAction action, final float modifier) {
         this.targetStat = targetStat;
         this.action = action;
         this.modifier = modifier;
     }
 
-    public String getTargetStat() {
+    public Class<? extends Stat> getTargetStat() {
         return targetStat;
     }
 

@@ -179,7 +179,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
     }
 
     @Override
-    public void setNumberFont(FontDefinition numberFont) {
+    public void setNumberFont(final FontDefinition numberFont) {
         this.numberFont = numberFont;
     }
 

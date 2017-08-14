@@ -1,13 +1,13 @@
 package com.github.jaystgelais.jrpg.party;
 
-public class DefaultNextLevelFunction implements NextLevelFunction {
+public final class DefaultNextLevelFunction implements NextLevelFunction {
     private static final int DEFAULT_BASE_XP = 100;
     private static final float DEFAULT_EXPONENT = 1.5f;
 
     private final int baseXP;
     private final float exponent;
 
-    public DefaultNextLevelFunction(int baseXP, float exponent) {
+    public DefaultNextLevelFunction(final int baseXP, final float exponent) {
         this.baseXP = baseXP;
         this.exponent = exponent;
     }
@@ -17,7 +17,7 @@ public class DefaultNextLevelFunction implements NextLevelFunction {
     }
 
     @Override
-    public int getNextLevel(int currentLevel) {
+    public int getNextLevel(final int currentLevel) {
         return (int) Math.round(baseXP * Math.pow(currentLevel, exponent));
     }
 }

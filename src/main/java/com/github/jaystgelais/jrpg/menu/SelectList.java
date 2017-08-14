@@ -11,7 +11,7 @@ import com.github.jaystgelais.jrpg.ui.Container;
 
 import java.util.List;
 
-public class SelectList extends AbstractContent {
+public final class SelectList extends AbstractContent {
 
     public static final int COLUMN_MARGIN = 32;
     public static final int ROW_MARGIN = 10;
@@ -40,12 +40,12 @@ public class SelectList extends AbstractContent {
     }
 
     @Override
-    public void update(long elapsedTime) {
+    public void update(final long elapsedTime) {
 
     }
 
     @Override
-    public void handleInput(InputService inputService) {
+    public void handleInput(final InputService inputService) {
         if (okInput.isPressed(inputService)) {
             items.get(currentSelectionIndex).getAction().perform();
         } else if (rightInput.isPressed(inputService)) {
@@ -74,16 +74,17 @@ public class SelectList extends AbstractContent {
                 )
         );
 
-//        System.out.printf("  Total Rows: %d\n", totalRows);
-//        System.out.printf("  Visible Rows: %d\n", visibleRows);
-//        System.out.printf("  Current Rows: %d\n", currentRow);
-//        System.out.printf("  First Row: %d\n", firstRow);
-
         for (int rowIndex = firstRow; rowIndex < firstRow + Math.min(visibleRows, totalRows); rowIndex++) {
             for (int colIndex = 0; colIndex < columns; colIndex++) {
                 final int itemIndex = (rowIndex * columns) + colIndex;
-                final int labelX = getScreenPositionX() + graphicsService.getCameraOffsetX() + COLUMN_MARGIN + (colIndex * (columnWidth + COLUMN_MARGIN));
-                final int labelY = getScreenPositionY() + graphicsService.getCameraOffsetY() + getHeight() - (rowIndex * rowHeight);
+                final int labelX = getScreenPositionX()
+                        + graphicsService.getCameraOffsetX()
+                        + COLUMN_MARGIN
+                        + (colIndex * (columnWidth + COLUMN_MARGIN));
+                final int labelY = getScreenPositionY()
+                        + graphicsService.getCameraOffsetY()
+                        + getHeight()
+                        - (rowIndex * rowHeight);
                 graphicsService.getFontSet().getTextFont().draw(
                         graphicsService.getSpriteBatch(),
                         items.get(itemIndex).getLabel(),
@@ -95,7 +96,12 @@ public class SelectList extends AbstractContent {
                 );
                 if (itemIndex == currentSelectionIndex) {
                     Texture cursor = getCursorSprite(graphicsService);
-                    graphicsService.drawSprite(cursor, labelX - 32, labelY - 12);
+                    final float lineHeight = graphicsService.getFontSet().getTextFont().getLineHeight();
+                    graphicsService.drawSprite(
+                            cursor,
+                            labelX - cursor.getWidth(),
+                            labelY - lineHeight - ((cursor.getHeight() - lineHeight) / 2)
+                    );
                 }
             }
         }

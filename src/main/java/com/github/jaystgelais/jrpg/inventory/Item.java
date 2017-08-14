@@ -1,6 +1,6 @@
 package com.github.jaystgelais.jrpg.inventory;
 
-public class Item {
+public final class Item {
     private final String id;
     private final String description;
     private final boolean useFromMenu;
@@ -9,7 +9,8 @@ public class Item {
     private final boolean usageConsumesItem;
     private final ItemAction action;
 
-    private Item(String id, String description, boolean useFromMenu, boolean useInBattle, boolean requiresTarget, boolean usageConsumesItem, ItemAction action) {
+    private Item(final String id, final String description, final boolean useFromMenu, final boolean useInBattle,
+                 final boolean requiresTarget, final boolean usageConsumesItem, final ItemAction action) {
         this.id = id;
         this.description = description;
         this.useFromMenu = useFromMenu;
@@ -51,7 +52,7 @@ public class Item {
         return new Builder(id, description);
     }
 
-    public static class Builder {
+    public static final class Builder {
         private final String id;
         private final String description;
         private boolean useFromMenu = true;
@@ -65,27 +66,27 @@ public class Item {
             this.description = description;
         }
 
-        public Builder setCanUseFromMenu(boolean useFromMenu) {
+        public Builder setCanUseFromMenu(final boolean useFromMenu) {
             this.useFromMenu = useFromMenu;
             return this;
         }
 
-        public Builder seCantUseInBattle(boolean useInBattle) {
+        public Builder seCantUseInBattle(final boolean useInBattle) {
             this.useInBattle = useInBattle;
             return this;
         }
 
-        public Builder setRequiresTarget(boolean requiresTarget) {
+        public Builder setRequiresTarget(final boolean requiresTarget) {
             this.requiresTarget = requiresTarget;
             return this;
         }
 
-        public Builder setDoesUsageConsumesItem(boolean usageConsumesItem) {
+        public Builder setDoesUsageConsumesItem(final boolean usageConsumesItem) {
             this.usageConsumesItem = usageConsumesItem;
             return this;
         }
 
-        public Builder setAction(ItemAction action) {
+        public Builder setAction(final ItemAction action) {
             this.action = action;
             return this;
         }

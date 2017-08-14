@@ -77,7 +77,7 @@ public final class GameState implements Serializable {
         return timeplayed;
     }
 
-    public static void incrementTimePLayed(long timeMs) {
+    public static void incrementTimePLayed(final long timeMs) {
         timeplayed += timeMs;
     }
 }

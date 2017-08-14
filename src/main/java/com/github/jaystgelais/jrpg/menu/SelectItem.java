@@ -1,10 +1,10 @@
 package com.github.jaystgelais.jrpg.menu;
 
-public class SelectItem {
+public final class SelectItem {
     private final String label;
     private final SelectListAction action;
 
-    public SelectItem(String label, SelectListAction action) {
+    public SelectItem(final String label, final SelectListAction action) {
         this.label = label;
         this.action = action;
     }

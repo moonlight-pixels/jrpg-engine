@@ -7,7 +7,7 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
 import com.github.jaystgelais.jrpg.ui.Container;
 
-public class ProgressBar extends AbstractContent {
+public final class ProgressBar extends AbstractContent {
     private final int maxValue;
     private int currentValue;
     private Texture background;
@@ -32,8 +32,6 @@ public class ProgressBar extends AbstractContent {
     @Override
     public void render(final GraphicsService graphicsService) {
         SpriteBatch spriteBatch = graphicsService.getSpriteBatch();
-        int offsetX = graphicsService.getCameraOffsetX();
-        int offsetY = graphicsService.getCameraOffsetY();
         float percentFull = (float) currentValue / (float) maxValue;
 
         spriteBatch.draw(
@@ -60,11 +58,17 @@ public class ProgressBar extends AbstractContent {
     }
 
     private int getProgressBarXPoistion(final GraphicsService graphicsService) {
-        return graphicsService.getCameraOffsetX() + getScreenPositionX() + (getWidth() / 2) - (getProgressBarWidth(graphicsService) / 2);
+        return graphicsService.getCameraOffsetX()
+                + getScreenPositionX()
+                + (getWidth() / 2)
+                - (getProgressBarWidth(graphicsService) / 2);
     }
 
     private int getProgressBarYPoistion(final GraphicsService graphicsService) {
-        return graphicsService.getCameraOffsetY() + getScreenPositionY() + (getHeight() / 2) - (getProgressBarHeight(graphicsService) / 2);
+        return graphicsService.getCameraOffsetY()
+                + getScreenPositionY()
+                + (getHeight() / 2)
+                - (getProgressBarHeight(graphicsService) / 2);
     }
 
     private int getProgressBarWidth(final GraphicsService graphicsService) {
@@ -97,7 +101,7 @@ public class ProgressBar extends AbstractContent {
         return foreground;
     }
 
-    private Texture loadTexture(GraphicsService graphicsService, String pathToTexture) {
+    private Texture loadTexture(final GraphicsService graphicsService, final String pathToTexture) {
         if (!graphicsService.getAssetManager().isLoaded(pathToTexture, Texture.class)) {
             graphicsService.getAssetManager().load(pathToTexture, Texture.class);
             graphicsService.getAssetManager().finishLoading();
@@ -107,12 +111,12 @@ public class ProgressBar extends AbstractContent {
     }
 
     @Override
-    public void update(long elapsedTime) {
+    public void update(final long elapsedTime) {
 
     }
 
     @Override
-    public void handleInput(InputService inputService) {
+    public void handleInput(final InputService inputService) {
 
     }
 
