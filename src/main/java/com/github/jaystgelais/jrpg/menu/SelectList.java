@@ -1,6 +1,8 @@
 package com.github.jaystgelais.jrpg.menu;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.utils.Align;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.DelayedInput;
@@ -96,11 +98,11 @@ public final class SelectList extends AbstractContent {
                 );
                 if (itemIndex == currentSelectionIndex) {
                     Texture cursor = getCursorSprite(graphicsService);
-                    final float lineHeight = graphicsService.getFontSet().getTextFont().getLineHeight();
+                    final BitmapFont font = graphicsService.getFontSet().getTextFont();
                     graphicsService.drawSprite(
                             cursor,
                             labelX - cursor.getWidth(),
-                            labelY - lineHeight - ((cursor.getHeight() - lineHeight) / 2)
+                            labelY - (cursor.getHeight() / 2) - ((font.getLineHeight() / 2) - 1)
                     );
                 }
             }
