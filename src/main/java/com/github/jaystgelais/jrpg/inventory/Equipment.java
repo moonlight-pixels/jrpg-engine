@@ -11,15 +11,19 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class Equipment {
+    private final String id;
     private final String name;
+    private final String description;
     private final int sellBackPrice;
     private final Set<StatModifier> statModifiers = new HashSet<>();
     private final Map<Class<? extends Stat>, Stat> stats = new HashMap<>();
 
-    public Equipment(final String name, final int defaultPrice,
-                        final Collection<StatModifier> statModifiers, final Stat... stats) {
+    public Equipment(final String id, final String name, final String description, final int sellBackPrice,
+                     final Collection<StatModifier> statModifiers, final Stat... stats) {
         this.name = name;
-        this.sellBackPrice = defaultPrice;
+        this.sellBackPrice = sellBackPrice;
+        this.id = id;
+        this.description = description;
         this.statModifiers.addAll(statModifiers);
         for (Stat stat : stats) {
             if (!getStatTypes().contains(stat.getClass())) {
@@ -36,6 +40,14 @@ public abstract class Equipment {
                 }
             }
         }
+    }
+
+    public final String getId() {
+        return id;
+    }
+
+    public final String getDescription() {
+        return description;
     }
 
     public abstract EquipmentSlot getEquipmentSlot();

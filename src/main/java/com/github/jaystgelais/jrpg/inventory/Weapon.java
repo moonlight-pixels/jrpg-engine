@@ -12,13 +12,14 @@ import java.util.stream.Stream;
 
 public abstract class Weapon extends Equipment {
 
-    public Weapon(final String name, final int defaultPrice, final Stat... stats) {
-        this(name, defaultPrice, new HashSet<StatModifier>(), stats);
+    public Weapon(final String id, final String name, final String description, final int sellBackPrice,
+                  final Stat... stats) {
+        super(id, name, description, sellBackPrice, new HashSet<>(), stats);
     }
 
-    public Weapon(final String name, final int defaultPrice,
+    public Weapon(final String id, final String name, final String description, final int sellBackPrice,
                   final Collection<StatModifier> statModifiers, final Stat... stats) {
-        super(name, defaultPrice, statModifiers, stats);
+        super(id, name, description, sellBackPrice, statModifiers, stats);
     }
 
     @Override
