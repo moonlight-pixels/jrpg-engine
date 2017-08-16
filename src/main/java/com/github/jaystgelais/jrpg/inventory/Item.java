@@ -2,6 +2,7 @@ package com.github.jaystgelais.jrpg.inventory;
 
 public final class Item {
     private final String id;
+    private final String name;
     private final String description;
     private final boolean useFromMenu;
     private final boolean useInBattle;
@@ -9,9 +10,12 @@ public final class Item {
     private final boolean usageConsumesItem;
     private final ItemAction action;
 
-    private Item(final String id, final String description, final boolean useFromMenu, final boolean useInBattle,
-                 final boolean requiresTarget, final boolean usageConsumesItem, final ItemAction action) {
+    @SuppressWarnings("checkstyle:parameternumber")
+    private Item(final String id, final String name, final String description, final boolean useFromMenu,
+                 final boolean useInBattle, final boolean requiresTarget, final boolean usageConsumesItem,
+                 final ItemAction action) {
         this.id = id;
+        this.name = name;
         this.description = description;
         this.useFromMenu = useFromMenu;
         this.useInBattle = useInBattle;
@@ -22,6 +26,10 @@ public final class Item {
 
     public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getDescription() {
@@ -54,16 +62,22 @@ public final class Item {
 
     public static final class Builder {
         private final String id;
-        private final String description;
+        private final String name;
+        private String description;
         private boolean useFromMenu = true;
         private boolean useInBattle = true;
         private boolean requiresTarget = false;
         private boolean usageConsumesItem = true;
         private ItemAction action;
 
-        private Builder(final String id, final String description) {
+        private Builder(final String id, final String name) {
             this.id = id;
+            this.name = name;
+        }
+
+        public Builder setDescription(final String description) {
             this.description = description;
+            return this;
         }
 
         public Builder setCanUseFromMenu(final boolean useFromMenu) {
@@ -92,7 +106,7 @@ public final class Item {
         }
 
         public Item createItem() {
-            return new Item(id, description, useFromMenu, useInBattle, requiresTarget, usageConsumesItem, action);
+            return new Item(id, name, description, useFromMenu, useInBattle, requiresTarget, usageConsumesItem, action);
         }
     }
 }
