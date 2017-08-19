@@ -78,31 +78,33 @@ public final class SelectList extends AbstractContent {
         for (int rowIndex = firstRow; rowIndex < firstRow + Math.min(visibleRows, totalRows); rowIndex++) {
             for (int colIndex = 0; colIndex < columns; colIndex++) {
                 final int itemIndex = (rowIndex * columns) + colIndex;
-                final int labelX = getScreenPositionX()
-                        + graphicsService.getCameraOffsetX()
-                        + COLUMN_MARGIN
-                        + (colIndex * (columnWidth + COLUMN_MARGIN));
-                final int labelY = getScreenPositionY()
-                        + graphicsService.getCameraOffsetY()
-                        + getHeight()
-                        - (rowIndex * rowHeight);
-                graphicsService.getFontSet().getTextFont().draw(
-                        graphicsService.getSpriteBatch(),
-                        items.get(itemIndex).getLabel(),
-                        labelX,
-                        labelY,
-                        columnWidth,
-                        Align.left,
-                        false
-                );
-                if (itemIndex == currentSelectionIndex) {
-                    Texture cursor = getCursorSprite(graphicsService);
-                    final BitmapFont font = graphicsService.getFontSet().getTextFont();
-                    graphicsService.drawSprite(
-                            cursor,
-                            labelX - cursor.getWidth(),
-                            labelY - (cursor.getHeight() / 2) - (font.getLineHeight() / 2) + 1
+                if (itemIndex < items.size()) {
+                    final int labelX = getScreenPositionX()
+                            + graphicsService.getCameraOffsetX()
+                            + COLUMN_MARGIN
+                            + (colIndex * (columnWidth + COLUMN_MARGIN));
+                    final int labelY = getScreenPositionY()
+                            + graphicsService.getCameraOffsetY()
+                            + getHeight()
+                            - (rowIndex * rowHeight);
+                    graphicsService.getFontSet().getTextFont().draw(
+                            graphicsService.getSpriteBatch(),
+                            items.get(itemIndex).getLabel(),
+                            labelX,
+                            labelY,
+                            columnWidth,
+                            Align.left,
+                            false
                     );
+                    if (itemIndex == currentSelectionIndex) {
+                        Texture cursor = getCursorSprite(graphicsService);
+                        final BitmapFont font = graphicsService.getFontSet().getTextFont();
+                        graphicsService.drawSprite(
+                                cursor,
+                                labelX - cursor.getWidth(),
+                                labelY - (cursor.getHeight() / 2) - (font.getLineHeight() / 2) + 1
+                        );
+                    }
                 }
             }
         }

@@ -3,7 +3,9 @@ package com.github.jaystgelais.jrpg.menu;
 import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputService;
+import com.github.jaystgelais.jrpg.input.Inputs;
 
 import java.util.Map;
 import java.util.Stack;
@@ -11,6 +13,8 @@ import java.util.Stack;
 public final class MenuMode extends GameMode {
     private final Stack<Menu> menus = new Stack<>();
     private final MenuDefinition initialMenu;
+
+    private DelayedInput cancelInput = new DelayedInput(Inputs.CANCEL);
 
     public MenuMode(final MenuDefinition initialMenu) {
         this.initialMenu = initialMenu;
@@ -23,7 +27,9 @@ public final class MenuMode extends GameMode {
 
     @Override
     public void onEnter(final Map<String, Object> params) {
-        menus.push(initialMenu.getMenu(getGame().getGraphicsService()));
+        final Menu menu = initialMenu.getMenu(getGame().getGraphicsService());
+        menu.setCancelInput(cancelInput);
+        menus.push(menu);
     }
 
     @Override
@@ -60,6 +66,7 @@ public final class MenuMode extends GameMode {
     }
 
     void openMenu(final Menu menu) {
+        menu.setCancelInput(cancelInput);
         menus.push(menu);
     }
 }
