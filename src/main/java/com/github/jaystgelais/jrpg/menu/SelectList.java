@@ -18,6 +18,7 @@ public final class SelectList extends AbstractContent {
     public static final int ROW_MARGIN = 10;
 
     private final List<SelectItem> items;
+    private final int visibleRows;
     private final int columns;
     private final DelayedInput okInput = new DelayedInput(Inputs.OK);
     private final DelayedInput downInput = new DelayedInput(Inputs.DOWN);
@@ -27,17 +28,18 @@ public final class SelectList extends AbstractContent {
     private int currentSelectionIndex = 0;
     private Texture cursorSprite;
 
-    public SelectList(final Container parent, final List<SelectItem> items, final int columns) {
+    public SelectList(final Container parent, final List<SelectItem> items, final int visibleRows, final int columns) {
         super(
                 parent.getContentPositionX(), parent.getContentPositionY(),
                 parent.getContentWidth(), parent.getContentHeight()
         );
         this.items = items;
+        this.visibleRows = visibleRows;
         this.columns = columns;
     }
 
-    public SelectList(final Container parent, final List<SelectItem> items) {
-        this(parent, items, 1);
+    public SelectList(final Container parent, final List<SelectItem> items, final int visibleRows) {
+        this(parent, items, visibleRows, 1);
     }
 
     @Override
@@ -65,7 +67,6 @@ public final class SelectList extends AbstractContent {
         int totalRows = ((items.size() - 1) / columns)  + 1;
         int columnWidth = (getWidth() - (COLUMN_MARGIN * (columns + 1))) / columns;
         int rowHeight = (int) graphicsService.getFontSet().getTextFont().getLineHeight() + ROW_MARGIN;
-        int visibleRows = getHeight() / rowHeight;
         int currentRow = currentSelectionIndex / columns;
         int firstRow = Math.max(
                 0,
@@ -86,7 +87,7 @@ public final class SelectList extends AbstractContent {
                     final int labelY = getScreenPositionY()
                             + graphicsService.getCameraOffsetY()
                             + getHeight()
-                            - (rowIndex * rowHeight);
+                            - ((rowIndex - firstRow) * rowHeight);
                     graphicsService.getFontSet().getTextFont().draw(
                             graphicsService.getSpriteBatch(),
                             items.get(itemIndex).getLabel(),
