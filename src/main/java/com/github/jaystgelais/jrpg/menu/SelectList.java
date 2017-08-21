@@ -25,6 +25,7 @@ public final class SelectList extends AbstractContent {
     private final DelayedInput upInput = new DelayedInput(Inputs.UP);
     private int currentSelectionIndex = 0;
     private Texture cursorSprite;
+    private boolean active = true;
 
     public SelectList(final Container parent, final List<SelectItem> items, final int visibleRows, final int columns) {
         super(
@@ -34,6 +35,15 @@ public final class SelectList extends AbstractContent {
         this.items = items;
         this.visibleRows = visibleRows;
         this.columns = columns;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public SelectList setActive(final boolean active) {
+        this.active = active;
+        return this;
     }
 
     public SelectList(final Container parent, final List<SelectItem> items, final int visibleRows) {
@@ -96,7 +106,7 @@ public final class SelectList extends AbstractContent {
                             )
                     ).render(graphicsService);
 
-                    if (itemIndex == currentSelectionIndex) {
+                    if (active && itemIndex == currentSelectionIndex) {
                         Texture cursor = getCursorSprite(graphicsService);
                         graphicsService.drawSprite(
                                 cursor,
