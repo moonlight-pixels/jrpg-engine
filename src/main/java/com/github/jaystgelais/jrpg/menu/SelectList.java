@@ -1,8 +1,6 @@
 package com.github.jaystgelais.jrpg.menu;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.utils.Align;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputService;
@@ -66,7 +64,6 @@ public final class SelectList extends AbstractContent {
     public void render(final GraphicsService graphicsService) {
         int totalRows = ((items.size() - 1) / columns)  + 1;
         int columnWidth = (getWidth() - (COLUMN_MARGIN * (columns + 1))) / columns;
-        int rowHeight = (int) graphicsService.getFontSet().getTextFont().getLineHeight() + ROW_MARGIN;
         int currentRow = currentSelectionIndex / columns;
         int firstRow = Math.max(
                 0,
@@ -75,39 +72,48 @@ public final class SelectList extends AbstractContent {
                         currentRow - (visibleRows / 2)
                 )
         );
+        int currentRowY =  getScreenPositionY() + getHeight();
 
         for (int rowIndex = firstRow; rowIndex < firstRow + Math.min(visibleRows, totalRows); rowIndex++) {
+            int maxItemHeightInRow = 0;
+
             for (int colIndex = 0; colIndex < columns; colIndex++) {
                 final int itemIndex = (rowIndex * columns) + colIndex;
                 if (itemIndex < items.size()) {
-                    final int labelX = getScreenPositionX()
-                            + graphicsService.getCameraOffsetX()
+                    final SelectItemRenderer renderer = items.get(itemIndex).getRenderer();
+                    final int positionX = getScreenPositionX()
                             + COLUMN_MARGIN
                             + (colIndex * (columnWidth + COLUMN_MARGIN));
-                    final int labelY = getScreenPositionY()
-                            + graphicsService.getCameraOffsetY()
-                            + getHeight()
-                            - ((rowIndex - firstRow) * rowHeight);
-                    graphicsService.getFontSet().getTextFont().draw(
-                            graphicsService.getSpriteBatch(),
-                            items.get(itemIndex).getLabel(),
-                            labelX,
-                            labelY,
-                            columnWidth,
-                            Align.left,
-                            false
-                    );
+                    maxItemHeightInRow = Math.max(maxItemHeightInRow, renderer.getItemHeight(graphicsService));
+
+                    renderer.renderItem(
+                            graphicsService,
+                            new Container(
+                                    positionX,
+                                    currentRowY - renderer.getItemHeight(graphicsService),
+                                    columnWidth,
+                                    renderer.getItemHeight(graphicsService)
+                            )
+                    ).render(graphicsService);
+
                     if (itemIndex == currentSelectionIndex) {
                         Texture cursor = getCursorSprite(graphicsService);
-                        final BitmapFont font = graphicsService.getFontSet().getTextFont();
                         graphicsService.drawSprite(
                                 cursor,
-                                labelX - cursor.getWidth(),
-                                labelY - (cursor.getHeight() / 2) - (font.getLineHeight() / 2) + 1
+                                positionX
+                                        + graphicsService.getCameraOffsetX()
+                                        - cursor.getWidth(),
+                                currentRowY
+                                        + graphicsService.getCameraOffsetY()
+                                        - (renderer.getItemHeight(graphicsService) / 2)
+                                        - (cursor.getHeight() / 2)
+                                        + 1
                         );
                     }
                 }
             }
+
+            currentRowY -= maxItemHeightInRow + ROW_MARGIN;
         }
     }
 

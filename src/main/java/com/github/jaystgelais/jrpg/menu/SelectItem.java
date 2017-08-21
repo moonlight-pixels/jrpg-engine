@@ -1,16 +1,20 @@
 package com.github.jaystgelais.jrpg.menu;
 
 public final class SelectItem {
-    private final String label;
+    private final SelectItemRenderer renderer;
     private final SelectListAction action;
 
-    public SelectItem(final String label, final SelectListAction action) {
-        this.label = label;
+    public SelectItem(final SelectItemRenderer renderer, final SelectListAction action) {
+        this.renderer = renderer;
         this.action = action;
     }
 
-    public String getLabel() {
-        return label;
+    public SelectItem(final String label, final SelectListAction action) {
+        this(new TextSelectItemRenderer(label), action);
+    }
+
+    public SelectItemRenderer getRenderer() {
+        return renderer;
     }
 
     public SelectListAction getAction() {
