@@ -35,6 +35,11 @@ public final class SelectList extends AbstractContent {
         this.items = items;
         this.visibleRows = visibleRows;
         this.columns = columns;
+        items.get(currentSelectionIndex).performOnCursorAction();
+    }
+
+    public SelectList(final Container parent, final List<SelectItem> items, final int visibleRows) {
+        this(parent, items, visibleRows, 1);
     }
 
     public boolean isActive() {
@@ -46,10 +51,6 @@ public final class SelectList extends AbstractContent {
         return this;
     }
 
-    public SelectList(final Container parent, final List<SelectItem> items, final int visibleRows) {
-        this(parent, items, visibleRows, 1);
-    }
-
     @Override
     public void update(final long elapsedTime) {
 
@@ -58,15 +59,19 @@ public final class SelectList extends AbstractContent {
     @Override
     public void handleInput(final InputService inputService) {
         if (okInput.isPressed(inputService)) {
-            items.get(currentSelectionIndex).getAction().perform();
+            items.get(currentSelectionIndex).performAction();
         } else if (rightInput.isPressed(inputService)) {
             currentSelectionIndex = Math.min(currentSelectionIndex + 1, items.size() - 1);
+            items.get(currentSelectionIndex).performOnCursorAction();
         } else if (downInput.isPressed(inputService)) {
             currentSelectionIndex = Math.min(currentSelectionIndex + columns, items.size() - 1);
+            items.get(currentSelectionIndex).performOnCursorAction();
         } else if (leftInput.isPressed(inputService)) {
             currentSelectionIndex = Math.max(currentSelectionIndex - 1, 0);
+            items.get(currentSelectionIndex).performOnCursorAction();
         } else if (upInput.isPressed(inputService)) {
             currentSelectionIndex = Math.max(currentSelectionIndex - columns, 0);
+            items.get(currentSelectionIndex).performOnCursorAction();
         }
     }
 
