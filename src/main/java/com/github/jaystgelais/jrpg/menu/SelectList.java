@@ -18,7 +18,7 @@ public final class SelectList extends AbstractContent {
     private final List<SelectItem> items;
     private final int visibleRows;
     private final int columns;
-    private final DelayedInput okInput = new DelayedInput(Inputs.OK);
+    private DelayedInput okInput = new DelayedInput(Inputs.OK);
     private final DelayedInput downInput = new DelayedInput(Inputs.DOWN);
     private final DelayedInput leftInput = new DelayedInput(Inputs.LEFT);
     private final DelayedInput rightInput = new DelayedInput(Inputs.RIGHT);
@@ -140,6 +140,14 @@ public final class SelectList extends AbstractContent {
     @Override
     public void dispose() {
 
+    }
+
+    public DelayedInput getOkInput() {
+        return okInput;
+    }
+
+    public void setOkInput(final DelayedInput okInput) {
+        this.okInput = okInput;
     }
 
     private Texture getCursorSprite(final GraphicsService graphicsService) {

@@ -9,6 +9,7 @@ public final class OpenMenuAction implements MenuAction {
 
     @Override
     public void perform(final MenuMode mode) {
-        mode.openMenu(menuDefinition.getMenu(mode.getGame().getGraphicsService()));
+        final Menu menu = menuDefinition.getMenu(mode.getGame().getGraphicsService());
+        mode.openMenu(menu);
     }
 }

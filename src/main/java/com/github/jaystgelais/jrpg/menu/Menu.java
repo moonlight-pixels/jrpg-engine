@@ -2,7 +2,6 @@ package com.github.jaystgelais.jrpg.menu;
 
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
-import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
@@ -12,8 +11,6 @@ import com.github.jaystgelais.jrpg.ui.Layout;
 public abstract class Menu implements InputHandler, Renderable, Updatable {
     private boolean active = true;
     private MenuAction action;
-
-    private DelayedInput cancelInput = new DelayedInput(Inputs.CANCEL);
 
     public Menu() {
 
@@ -41,7 +38,7 @@ public abstract class Menu implements InputHandler, Renderable, Updatable {
 
     @Override
     public final void handleInput(final InputService inputService) {
-        if (cancelInput.isPressed(inputService)) {
+        if (inputService.isPressed(Inputs.CANCEL)) {
             active = false;
         } else {
             InputHandler inputHandler = getActiveInputHandler();
@@ -68,14 +65,5 @@ public abstract class Menu implements InputHandler, Renderable, Updatable {
         if (active) {
             getLayout().update(elapsedTime);
         }
-    }
-
-    public final DelayedInput getCancelInput() {
-        return cancelInput;
-    }
-
-    public final Menu setCancelInput(final DelayedInput cancelInput) {
-        this.cancelInput = cancelInput;
-        return this;
     }
 }
