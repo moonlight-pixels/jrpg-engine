@@ -3,16 +3,16 @@ package com.github.jaystgelais.jrpg.demo;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.jaystgelais.jrpg.map.actor.Direction;
-import com.github.jaystgelais.jrpg.map.actor.SpriteSet;
-import com.github.jaystgelais.jrpg.map.actor.SpriteSetDefinition;
+import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
+import com.github.jaystgelais.jrpg.map.animation.SpriteSetDefinition;
 
 public class HeroSpriteSetDefinition extends SpriteSetDefinition {
     private static final String SPRITE_SHEET_PATH = "data/assets/sprites/mapdemo/warrior.png";
 
     @Override
-    public SpriteSet getSpriteSet(final AssetManager assetManager) {
+    public ActorSpriteSet getSpriteSet(final AssetManager assetManager) {
         TextureRegion[][] spriteSheet = loadSpriteSheet(SPRITE_SHEET_PATH, assetManager, 16, 18);
-        SpriteSet spriteSet = new SpriteSet(300);
+        ActorSpriteSet spriteSet = new ActorSpriteSet(300);
 
         spriteSet.setStandingImage(Direction.DOWN, spriteSheet[0][1]);
         spriteSet.setWalkinAnimation(Direction.DOWN, new TextureRegion[] {

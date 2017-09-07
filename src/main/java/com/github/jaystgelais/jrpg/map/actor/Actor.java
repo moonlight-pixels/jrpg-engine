@@ -19,7 +19,7 @@ import java.util.Set;
 
 public final class Actor implements Renderable, InputHandler, Updatable {
     private final GameMap map;
-    private final SpriteSet spriteSet;
+    private final ActorSpriteSet spriteSet;
     private final StateMachine stateMachine;
     private final Controller controller;
     private Direction facing;
@@ -28,7 +28,7 @@ public final class Actor implements Renderable, InputHandler, Updatable {
     private float positionX;
     private float positionY;
 
-    public Actor(final GameMap map, final SpriteSet spriteSet,
+    public Actor(final GameMap map, final ActorSpriteSet spriteSet,
                  final Controller controller, final TileCoordinate location) {
         this.map = map;
         this.spriteSet = spriteSet;

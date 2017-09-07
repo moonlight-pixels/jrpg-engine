@@ -5,14 +5,15 @@ import com.github.jaystgelais.jrpg.combat.stats.MaxMP;
 import com.github.jaystgelais.jrpg.combat.stats.MissingStatException;
 import com.github.jaystgelais.jrpg.combat.stats.Stat;
 import com.github.jaystgelais.jrpg.combat.stats.StatHolder;
-import com.github.jaystgelais.jrpg.map.actor.SpriteSetDefinition;
+import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
+import com.github.jaystgelais.jrpg.map.animation.SpriteSetDefinition;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Character implements StatHolder {
     private final String name;
-    private final SpriteSetDefinition spriteSetDefinition;
+    private final SpriteSetDefinition<ActorSpriteSet> spriteSetDefinition;
     private final CharacterClass characterClass;
     private int currentHp;
     private int currentMp;
@@ -20,7 +21,7 @@ public class Character implements StatHolder {
     private int level;
     private int xp;
 
-    public Character(final String name, final SpriteSetDefinition spriteSetDefinition,
+    public Character(final String name, final SpriteSetDefinition<ActorSpriteSet> spriteSetDefinition,
                      final CharacterClass characterClass, final Stat... stats) {
         this.name = name;
         this.spriteSetDefinition = spriteSetDefinition;
@@ -34,7 +35,7 @@ public class Character implements StatHolder {
         return name;
     }
 
-    public final SpriteSetDefinition getSpriteSetDefinition() {
+    public final SpriteSetDefinition<ActorSpriteSet> getSpriteSetDefinition() {
         return spriteSetDefinition;
     }
 
