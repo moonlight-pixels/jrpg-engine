@@ -32,7 +32,7 @@ public final class GameMap implements Renderable {
     private final TiledMap map;
     private final TiledMapRenderer mapRenderer;
     private final SortedMap<Integer, MapLayer> mapLayers;
-    private final List<Actor> actors;
+    private final List<Entity> entities;
     private Actor focalPoint;
     private final List<Trigger> triggers;
     private final Map<TileCoordinate, TileTrigger> tileTriggers;
@@ -46,7 +46,7 @@ public final class GameMap implements Renderable {
         this.mapRenderer = mapRenderer;
         this.parentLocation = parentLocation;
         mapLayers = new TreeMap<>();
-        actors = new LinkedList<>();
+        entities = new LinkedList<>();
         triggers = new LinkedList<>();
         tileTriggers = new HashMap<>();
         actionQueue = new LinkedList<>();
@@ -84,13 +84,13 @@ public final class GameMap implements Renderable {
 
     public void setFocalPoint(final Actor focalPoint) {
         this.focalPoint = focalPoint;
-        if (!actors.contains(focalPoint)) {
-            actors.add(focalPoint);
+        if (!entities.contains(focalPoint)) {
+            entities.add(focalPoint);
         }
     }
 
     public void addActor(final Actor actor) {
-        actors.add(actor);
+        entities.add(actor);
     }
 
     public void addTrigger(final Trigger trigger) {
@@ -138,8 +138,8 @@ public final class GameMap implements Renderable {
     }
 
     public boolean isCollision(final Actor actor, final TileCoordinate coordinate) {
-        for (Actor otherActor : actors) {
-            if (actor != otherActor && otherActor.isOccupying(coordinate)) {
+        for (Entity entity : entities) {
+            if (actor != entity && entity.isOccupying(coordinate)) {
                 return true;
             }
         }
@@ -192,8 +192,8 @@ public final class GameMap implements Renderable {
         return actionQueue.poll();
     }
 
-    List<Actor> getActors() {
-        return actors;
+    List<Entity> getEntities() {
+        return entities;
     }
 
     public Location getParentLocation() {
@@ -203,7 +203,7 @@ public final class GameMap implements Renderable {
     @Override
     public void render(final GraphicsService graphicsService) {
         mapLayers.keySet().forEach(mapLayerIndex -> {
-            mapLayers.get(mapLayerIndex).render(graphicsService, actors);
+            mapLayers.get(mapLayerIndex).render(graphicsService, entities);
         });
     }
 

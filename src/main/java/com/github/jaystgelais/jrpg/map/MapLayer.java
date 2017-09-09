@@ -3,7 +3,6 @@ package com.github.jaystgelais.jrpg.map;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
-import com.github.jaystgelais.jrpg.map.actor.Actor;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -11,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public final class MapLayer {
-    private static final ActorsToRenderComparator ACTORS_TO_RENDER_COMPARATOR = new ActorsToRenderComparator();
+    private static final EntitiesToRenderComparator ENTITIES_TO_RENDER_COMPARATOR = new EntitiesToRenderComparator();
 
     private final int layerIndex;
     private final TiledMapRenderer mapRenderer;
@@ -40,16 +39,16 @@ public final class MapLayer {
         this.collisionLayer = collisionLayer;
     }
 
-    public void render(final GraphicsService graphicsService, final List<Actor> actors) {
+    public void render(final GraphicsService graphicsService, final List<Entity> entities) {
         graphicsService.renderStart();
 
         backgroundLayers.forEach(mapRenderer::renderTileLayer);
 
-        actors
+        entities
             .stream()
-            .filter(actor -> actor.getLocation().getMapLayer() == layerIndex)
-            .sorted(ACTORS_TO_RENDER_COMPARATOR)
-            .forEach(actor -> actor.render(graphicsService));
+            .filter(entity -> entity.getLocation().getMapLayer() == layerIndex)
+            .sorted(ENTITIES_TO_RENDER_COMPARATOR)
+            .forEach(entity -> entity.render(graphicsService));
 
         foregroundLayers.forEach(mapRenderer::renderTileLayer);
 
@@ -67,11 +66,11 @@ public final class MapLayer {
         return false;
     }
 
-    private static class ActorsToRenderComparator implements Comparator<Actor>, Serializable {
+    private static class EntitiesToRenderComparator implements Comparator<Entity>, Serializable {
         private static final long serialVersionUID = 8367751493774593999L;
 
         @Override
-        public int compare(final Actor left, final Actor right) {
+        public int compare(final Entity left, final Entity right) {
             // sort in descending order by Y position
             return Float.compare(right.getPositionY(), left.getPositionY());
         }

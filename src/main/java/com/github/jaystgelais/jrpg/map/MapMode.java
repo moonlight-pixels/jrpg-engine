@@ -141,7 +141,7 @@ public final class MapMode extends GameMode {
 
             @Override
             public void render(final GraphicsService graphicsService) {
-                renderMapAndActors(graphicsService);
+                renderMapAndEntities(graphicsService);
             }
         });
         states.add(new StateAdapter() {
@@ -177,14 +177,14 @@ public final class MapMode extends GameMode {
                         return;
                     }
                 }
-                for (Actor actor : map.getActors()) {
-                    actor.update(elapsedTime);
+                for (Entity entity : map.getEntities()) {
+                    entity.update(elapsedTime);
                 }
             }
 
             @Override
             public void render(final GraphicsService graphicsService) {
-                renderMapAndActors(graphicsService);
+                renderMapAndEntities(graphicsService);
             }
         });
         states.add(new State() {
@@ -209,7 +209,7 @@ public final class MapMode extends GameMode {
 
             @Override
             public void render(final GraphicsService graphicsService) {
-                renderMapAndActors(graphicsService);
+                renderMapAndEntities(graphicsService);
                 triggerAction.render(graphicsService);
             }
 
@@ -237,7 +237,7 @@ public final class MapMode extends GameMode {
         return new StateMachine(states, "initialPause");
     }
 
-    private void renderMapAndActors(final GraphicsService graphicsService) {
+    private void renderMapAndEntities(final GraphicsService graphicsService) {
         map.render(graphicsService);
 
         if (getGame().isDebug()) {

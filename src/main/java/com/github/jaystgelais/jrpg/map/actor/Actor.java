@@ -2,22 +2,21 @@ package com.github.jaystgelais.jrpg.map.actor;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
-import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.input.InputService;
+import com.github.jaystgelais.jrpg.map.Entity;
 import com.github.jaystgelais.jrpg.map.GameMap;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
-import com.github.jaystgelais.jrpg.state.Updatable;
 import com.github.jaystgelais.jrpg.util.TimeUtil;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public final class Actor implements Renderable, InputHandler, Updatable {
+public final class Actor implements Entity, InputHandler {
     private final GameMap map;
     private final ActorSpriteSet spriteSet;
     private final StateMachine stateMachine;
