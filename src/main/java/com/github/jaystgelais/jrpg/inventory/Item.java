@@ -1,6 +1,6 @@
 package com.github.jaystgelais.jrpg.inventory;
 
-public final class Item {
+public final class Item implements InventoryContent {
     private final String id;
     private final String name;
     private final String description;
@@ -28,6 +28,7 @@ public final class Item {
         return id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -60,6 +61,11 @@ public final class Item {
         return new Builder(id, description);
     }
 
+    @Override
+    public void addToInventory(final Inventory inventory, final int quantity) {
+        inventory.adjustQuantity(this, quantity);
+    }
+
     public static final class Builder {
         private final String id;
         private final String name;
@@ -85,7 +91,7 @@ public final class Item {
             return this;
         }
 
-        public Builder seCantUseInBattle(final boolean useInBattle) {
+        public Builder setCantUseInBattle(final boolean useInBattle) {
             this.useInBattle = useInBattle;
             return this;
         }

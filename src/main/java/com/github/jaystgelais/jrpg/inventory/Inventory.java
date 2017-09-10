@@ -11,6 +11,7 @@ public final class Inventory {
     public static final int DEFAULT_MAX_QUANTITY_PER_ITEM = 99;
 
     private final Map<Item, Integer> items = new HashMap<>();
+    private final Map<Equipment, Integer> equipment = new HashMap<>();
     private final int maxQuantityPerItem;
 
     public Inventory(final int maxQuantityPerItem) {
@@ -43,11 +44,32 @@ public final class Inventory {
         return true;
     }
 
+    public boolean adjustQuantity(final Equipment equipment, final int change) {
+        final int newQuantity = getQuantity(equipment) + change;
+        if (newQuantity < 0 || newQuantity > maxQuantityPerItem) {
+            return false;
+        } else if (newQuantity == 0) {
+            this.equipment.remove(equipment);
+        } else {
+            this.equipment.put(equipment, newQuantity);
+        }
+
+        return true;
+    }
+
     public int getQuantity(final Item item) {
         return items.containsKey(item) ? items.get(item) : 0;
     }
 
+    public int getQuantity(final Equipment equipment) {
+        return this.equipment.containsKey(equipment) ? this.equipment.get(equipment) : 0;
+    }
+
     public Collection<Item> getItems() {
         return Collections.unmodifiableCollection(items.keySet());
+    }
+
+    public Collection<Equipment> getEquipment() {
+        return Collections.unmodifiableCollection(equipment.keySet());
     }
 }

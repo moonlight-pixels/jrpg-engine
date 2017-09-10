@@ -170,21 +170,25 @@ public final class GameMap implements Renderable {
         mapRenderer.setView(camera);
     }
 
+    public void queueAction(final TriggerAction action) {
+        actionQueue.add(action);
+    }
+
     public void fireOnExitTrigger(final TileCoordinate coordinate) {
         if (tileTriggers.containsKey(coordinate) && tileTriggers.get(coordinate).onExit() != null) {
-            actionQueue.add(tileTriggers.get(coordinate).onExit());
+            queueAction(tileTriggers.get(coordinate).onExit());
         }
     }
 
     public void fireOnEnterTrigger(final TileCoordinate coordinate) {
         if (tileTriggers.containsKey(coordinate) && tileTriggers.get(coordinate).onEnter() != null) {
-            actionQueue.add(tileTriggers.get(coordinate).onEnter());
+            queueAction(tileTriggers.get(coordinate).onEnter());
         }
     }
 
     public void fireOnInspectTrigger(final TileCoordinate coordinate) {
         if (tileTriggers.containsKey(coordinate) && tileTriggers.get(coordinate).onInspect() != null) {
-            actionQueue.add(tileTriggers.get(coordinate).onInspect());
+            queueAction(tileTriggers.get(coordinate).onInspect());
         }
     }
 

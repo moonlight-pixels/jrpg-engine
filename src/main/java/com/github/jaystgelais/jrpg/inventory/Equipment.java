@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Equipment {
+public abstract class Equipment implements InventoryContent {
     private final String id;
     private final String name;
     private final String description;
@@ -56,11 +56,17 @@ public abstract class Equipment {
 
     public abstract boolean canEquip(CharacterClass characterClass);
 
+    @Override
     public final String getName() {
         return name;
     }
 
     public final int getSellBackPrice() {
         return sellBackPrice;
+    }
+
+    @Override
+    public final void addToInventory(final Inventory inventory, final int quantity) {
+        inventory.adjustQuantity(this, quantity);
     }
 }
