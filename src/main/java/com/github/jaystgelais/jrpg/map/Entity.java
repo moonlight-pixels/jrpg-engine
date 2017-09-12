@@ -7,6 +7,8 @@ public interface Entity extends Renderable, Updatable {
 
     boolean isOccupying(final TileCoordinate coordinate);
 
+    void interactWith();
+
     TileCoordinate getLocation();
 
     float getPositionX();

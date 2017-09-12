@@ -42,11 +42,16 @@ public final class TreasureChest implements Entity {
         stateMachine = initStateMachine();
     }
 
-    public void open() {
+    public void interactWith() {
         if (!isOpen()) {
+            GameState.setFlag(getStateFlag(), true);
             stateMachine.change("opening");
             contents.addToInventory(GameState.getInventory(), 1);
         }
+    }
+
+    private String getStateFlag() {
+        return String.format("treasurechest:%s:opened", id);
     }
 
     @Override
@@ -106,7 +111,7 @@ public final class TreasureChest implements Entity {
 
             @Override
             public String getKey() {
-                return "openeing";
+                return "opening";
             }
 
             @Override
@@ -158,6 +163,6 @@ public final class TreasureChest implements Entity {
     }
 
     private boolean isOpen() {
-        return GameState.checkFlag(String.format("treasurechest:%s:opened", id), false);
+        return GameState.checkFlag(getStateFlag(), false);
     }
 }

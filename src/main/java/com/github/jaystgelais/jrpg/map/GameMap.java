@@ -89,8 +89,18 @@ public final class GameMap implements Renderable {
         }
     }
 
-    public void addActor(final Actor actor) {
-        entities.add(actor);
+    public void addEntity(final Entity entity) {
+        entities.add(entity);
+    }
+
+    public Entity getEntity(final TileCoordinate location) {
+        for (Entity entity : entities) {
+            if (entity.getLocation().equals(location)) {
+                return entity;
+            }
+        }
+
+        return null;
     }
 
     public void addTrigger(final Trigger trigger) {

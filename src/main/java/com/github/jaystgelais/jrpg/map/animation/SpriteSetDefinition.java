@@ -18,9 +18,10 @@ public abstract class SpriteSetDefinition<T extends SpriteSet> {
         return TextureRegion.split(assetManager.get(spriteSheetPath, Texture.class), frameWidth, frameHeight);
     }
 
-    private Animation<TextureRegion> buildAnimation(final TextureRegion[] frames, final long timeToTraverseTileMs) {
+    protected final Animation<TextureRegion> buildAnimation(final long totalAnimationTimeMs,
+                                                            final TextureRegion ...frames) {
         return new Animation<TextureRegion>(
-                TimeUtil.convertMsToFloatSeconds(timeToTraverseTileMs) / frames.length,
+                TimeUtil.convertMsToFloatSeconds(totalAnimationTimeMs) / frames.length,
                 frames
         );
     }

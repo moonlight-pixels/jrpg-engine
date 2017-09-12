@@ -65,7 +65,12 @@ public final class Actor implements Entity, InputHandler {
     }
 
     void inspect() {
-        map.fireOnInspectTrigger(getAdjacentTileCoordinate(facing));
+        Entity targetEntiry = map.getEntity(getAdjacentTileCoordinate(facing));
+        if (targetEntiry != null) {
+            targetEntiry.interactWith();
+        } else {
+            map.fireOnInspectTrigger(getAdjacentTileCoordinate(facing));
+        }
     }
 
     private TileCoordinate getAdjacentTileCoordinate(final Direction direction) {
@@ -95,6 +100,11 @@ public final class Actor implements Entity, InputHandler {
 
     public boolean isOccupying(final TileCoordinate coordinate) {
         return coordinate.equals(location) || coordinate.equals(destination);
+    }
+
+    @Override
+    public void interactWith() {
+
     }
 
     @Override
