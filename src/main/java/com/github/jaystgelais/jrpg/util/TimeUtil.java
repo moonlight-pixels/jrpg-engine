@@ -9,6 +9,10 @@ public final class TimeUtil {
         return (float) timeMs / MS_IN_SECOND;
     }
 
+    public static long convertFloatSecondsToLongMs(final float seconds) {
+        return (long) (seconds * MS_IN_SECOND);
+    }
+
     public static float calculatePercentComplete(final long currentTimeMs, final long totalTimeMs) {
         return (float) currentTimeMs / (float) totalTimeMs;
     }

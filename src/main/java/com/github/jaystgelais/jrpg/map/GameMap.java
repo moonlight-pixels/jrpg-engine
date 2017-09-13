@@ -7,9 +7,12 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
+import com.github.jaystgelais.jrpg.map.animation.TileAnimation;
+import com.github.jaystgelais.jrpg.map.animation.TileAnimationDefinition;
 import com.github.jaystgelais.jrpg.map.trigger.TileTrigger;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
+import com.github.jaystgelais.jrpg.state.Updatable;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,9 +22,7 @@ import java.util.Queue;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public final class GameMap implements Renderable {
-    static final int[] BACKGROUND_LAYERS = {0};
-    static final int[] FOREGROUND_LAYERS = {1};
+public final class GameMap implements Renderable, Updatable {
     public static final String MAP_LAYER_PROP_MAP_LAYER = "jrpg-map-layer";
     public static final String MAP_LAYER_PROP_LAYER_TYPE = "jrpg-layer-type";
     public static final String MAP_LAYER_TYPE_BACKGRAOUND = "background";
@@ -37,6 +38,7 @@ public final class GameMap implements Renderable {
     private final List<Trigger> triggers;
     private final Map<TileCoordinate, TileTrigger> tileTriggers;
     private final Queue<TriggerAction> actionQueue;
+    private final List<TileAnimation> animations;
     private final Location parentLocation;
 
     public GameMap(final OrthographicCamera camera, final TiledMap map,
@@ -50,6 +52,7 @@ public final class GameMap implements Renderable {
         triggers = new LinkedList<>();
         tileTriggers = new HashMap<>();
         actionQueue = new LinkedList<>();
+        animations = new LinkedList<>();
         buildMapLayers(map);
     }
 
@@ -109,6 +112,10 @@ public final class GameMap implements Renderable {
 
     public void addTileTrigger(final TileCoordinate coordinate, final TileTrigger tileTrigger) {
         tileTriggers.put(coordinate, tileTrigger);
+    }
+
+    public void addAnimation(final TileAnimationDefinition animationDefinition) {
+        animations.add(new TileAnimation(animationDefinition, map));
     }
 
     public List<Trigger> getTriggers() {
@@ -224,5 +231,10 @@ public final class GameMap implements Renderable {
     @Override
     public void dispose() {
 
+    }
+
+    @Override
+    public void update(final long elapsedTime) {
+        animations.forEach(animation -> animation.update(elapsedTime));
     }
 }
