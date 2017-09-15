@@ -39,11 +39,13 @@ public final class TileAnimation implements Updatable {
             for (int x = 0; x < tiledMapLayer.getWidth(); x++) {
                 for (int y = 0; y < tiledMapLayer.getHeight(); y++) {
                     final TiledMapTileLayer.Cell cell = tiledMapLayer.getCell(x, y);
-                    TiledMapTile tile = cell.getTile();
-                    final MapProperties tileProperties = tile.getProperties();
-                    if (tileProperties.containsKey(JRPG_TILE_ANIMATION_ID)
-                            && tileProperties.get(JRPG_TILE_ANIMATION_ID).equals(id)) {
-                        cell.setTile(currentTile);
+                    if (cell != null) {
+                        TiledMapTile tile = cell.getTile();
+                        final MapProperties tileProperties = tile.getProperties();
+                        if (tileProperties.containsKey(JRPG_TILE_ANIMATION_ID)
+                                && tileProperties.get(JRPG_TILE_ANIMATION_ID).equals(id)) {
+                            cell.setTile(currentTile);
+                        }
                     }
                 }
             }
