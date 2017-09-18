@@ -40,8 +40,6 @@ public final class MapLayer {
     }
 
     public void render(final GraphicsService graphicsService, final List<Entity> entities) {
-        graphicsService.renderStart();
-
         backgroundLayers.forEach(mapRenderer::renderTileLayer);
 
         entities
@@ -51,8 +49,6 @@ public final class MapLayer {
             .forEach(entity -> entity.render(graphicsService));
 
         foregroundLayers.forEach(mapRenderer::renderTileLayer);
-
-        graphicsService.renderEnd();
     }
 
     public boolean isCollision(final TileCoordinate coordinate) {

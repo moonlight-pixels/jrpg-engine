@@ -202,4 +202,24 @@ public final class GraphicsServiceImpl implements GraphicsService {
     public void setResolutionHeight(final int resolutionHeight) {
         this.resolutionHeight = resolutionHeight;
     }
+
+    @Override
+    public int getdisplayXfromMapX(final int mapX) {
+        return mapX - getCameraOffsetX();
+    }
+
+    @Override
+    public int getdisplayYfromMapY(final int mapY) {
+        return mapY - getCameraOffsetY();
+    }
+
+    @Override
+    public int getPhysicalXFromResolutionX(final int resolutionX) {
+        return Math.round(resolutionX * ((float) Gdx.graphics.getWidth() / (float) resolutionWidth));
+    }
+
+    @Override
+    public int getPhysicalYFromResolutionY(final int resolutionY) {
+        return Math.round(resolutionY * ((float) Gdx.graphics.getHeight() / (float) resolutionHeight));
+    }
 }

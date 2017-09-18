@@ -104,6 +104,7 @@ public final class MapMode extends GameMode {
 
     @Override
     public void dispose() {
+        map.dispose();
         assetManager.dispose();
     }
 

@@ -4,11 +4,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.utils.Disposable;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
 import com.github.jaystgelais.jrpg.map.animation.TileAnimation;
 import com.github.jaystgelais.jrpg.map.animation.TileAnimationDefinition;
+import com.github.jaystgelais.jrpg.map.fx.MapEffect;
 import com.github.jaystgelais.jrpg.map.trigger.TileTrigger;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
@@ -39,7 +41,9 @@ public final class GameMap implements Renderable, Updatable {
     private final Map<TileCoordinate, TileTrigger> tileTriggers;
     private final Queue<TriggerAction> actionQueue;
     private final List<TileAnimation> animations;
+    private final List<MapEffect> mapEffects;
     private final Location parentLocation;
+    private boolean areEffectsInitialized = false;
 
     public GameMap(final OrthographicCamera camera, final TiledMap map,
                    final TiledMapRenderer mapRenderer, final Location parentLocation) {
@@ -53,6 +57,7 @@ public final class GameMap implements Renderable, Updatable {
         tileTriggers = new HashMap<>();
         actionQueue = new LinkedList<>();
         animations = new LinkedList<>();
+        mapEffects = new LinkedList<>();
         buildMapLayers(map);
     }
 
@@ -94,6 +99,10 @@ public final class GameMap implements Renderable, Updatable {
 
     public void addEntity(final Entity entity) {
         entities.add(entity);
+    }
+
+    public void addMapEffect(final MapEffect mapEffect) {
+        mapEffects.add(mapEffect);
     }
 
     public Entity getEntity(final TileCoordinate location) {
@@ -223,14 +232,28 @@ public final class GameMap implements Renderable, Updatable {
 
     @Override
     public void render(final GraphicsService graphicsService) {
+        if (!areEffectsInitialized) {
+            mapEffects.forEach(mapEffect -> mapEffect.init(graphicsService, this));
+            areEffectsInitialized = true;
+        }
+        mapEffects.forEach(mapEffect -> mapEffect.preRender(graphicsService));
+
+        graphicsService.renderStart();
+        mapEffects.forEach(mapEffect -> mapEffect.preMapRender(graphicsService));
+
         mapLayers.keySet().forEach(mapLayerIndex -> {
             mapLayers.get(mapLayerIndex).render(graphicsService, entities);
         });
+
+        mapEffects.forEach(mapEffect -> mapEffect.postMapRender(graphicsService));
+        graphicsService.renderEnd();
+
+        mapEffects.forEach(mapEffect -> mapEffect.postRender(graphicsService));
     }
 
     @Override
     public void dispose() {
-
+        mapEffects.forEach(Disposable::dispose);
     }
 
     @Override

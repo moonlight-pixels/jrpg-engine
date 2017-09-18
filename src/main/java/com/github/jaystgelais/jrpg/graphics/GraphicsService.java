@@ -59,4 +59,12 @@ public interface GraphicsService extends Disposable {
     int getResolutionHeight();
 
     void setResolutionHeight(int resolutionHeight);
+
+    int getdisplayXfromMapX(int mapX);
+
+    int getdisplayYfromMapY(int mapY);
+
+    int getPhysicalXFromResolutionX(int resolutionX);
+
+    int getPhysicalYFromResolutionY(int resolutionY);
 }
