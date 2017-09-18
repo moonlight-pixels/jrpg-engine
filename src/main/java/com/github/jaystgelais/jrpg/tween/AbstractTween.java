@@ -5,16 +5,16 @@ public abstract class AbstractTween<T> implements Tween<T> {
     private final T start;
     private final T end;
     private final long totalTweenTimeMs;
-    private final boolean isOscillating;
+    private final boolean isRepeating;
     private long timeInTween = 0L;
 
     public AbstractTween(final TweenFunction tweenFunction, final T start, final T end, final long totalTweenTimeMs,
-                         final boolean isOscillating) {
+                         final boolean isRepeating) {
         this.tweenFunction = tweenFunction;
         this.start = start;
         this.end = end;
         this.totalTweenTimeMs = totalTweenTimeMs;
-        this.isOscillating = isOscillating;
+        this.isRepeating = isRepeating;
     }
 
     public AbstractTween(final TweenFunction tweenFunction, final T start, final T end, final long totalTweenTimeMs) {
@@ -24,7 +24,7 @@ public abstract class AbstractTween<T> implements Tween<T> {
     @Override
     public final void update(final long elapsedTime) {
         timeInTween += elapsedTime;
-        if (isOscillating) {
+        if (isRepeating) {
             timeInTween = timeInTween % totalTweenTimeMs;
         }
     }
@@ -36,7 +36,7 @@ public abstract class AbstractTween<T> implements Tween<T> {
 
     @Override
     public final boolean isComplete() {
-        return !isOscillating || timeInTween >= totalTweenTimeMs;
+        return !isRepeating || timeInTween >= totalTweenTimeMs;
     }
 
     protected abstract T getValue(float percentComplete, T start, T end);

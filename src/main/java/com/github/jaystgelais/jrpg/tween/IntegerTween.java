@@ -12,13 +12,13 @@ public final class IntegerTween extends AbstractTween<Integer> {
     }
 
     public IntegerTween(final Integer start, final Integer end, final long totalTweenTimeMs,
-                        final boolean isOscillating) {
-        this(new ConstantVelocityTweenFunction(), start, end, totalTweenTimeMs, isOscillating);
+                        final boolean isRepeating) {
+        this(new ConstantVelocityTweenFunction(), start, end, totalTweenTimeMs, isRepeating);
     }
 
     public IntegerTween(final TweenFunction tweenFunction, final Integer start, final Integer end,
-                        final long totalTweenTimeMs, final boolean isOscillating) {
-        super(tweenFunction, start, end, totalTweenTimeMs, isOscillating);
+                        final long totalTweenTimeMs, final boolean isRepeating) {
+        super(tweenFunction, start, end, totalTweenTimeMs, isRepeating);
     }
 
     @Override

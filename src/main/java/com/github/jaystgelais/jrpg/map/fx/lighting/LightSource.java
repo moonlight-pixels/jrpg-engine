@@ -1,10 +1,8 @@
 package com.github.jaystgelais.jrpg.map.fx.lighting;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.state.Updatable;
@@ -13,8 +11,10 @@ import com.github.jaystgelais.jrpg.tween.SineTweenFunction;
 import com.github.jaystgelais.jrpg.tween.Tween;
 
 public final class LightSource implements Updatable, Renderable {
+    private static final String LIGHT_TEXTURE = "assets/jrpg/fx/lighting/light.png";
     private static final long OSCILLATING_CYCLE_TIME_MS = 1200;
-    public static final String LIGHT_TEXTURE = "assets/jrpg/fx/lighting/light.png";
+    private static final float OSCILLATING_VARIANCE = 0.1f;
+    public static final float OSCILLATING_RANDOM_VARIANCE = 0.04f;
 
     private final int centerX;
     private final int centerY;
@@ -28,7 +28,11 @@ public final class LightSource implements Updatable, Renderable {
         this.diameter = diameter;
         this.isOscillating = isOscillating;
         this.diameterTween = new IntegerTween(
-                new SineTweenFunction(), Math.round(diameter * 0.9f), diameter, OSCILLATING_CYCLE_TIME_MS, true
+                new SineTweenFunction(),
+                Math.round(diameter - (diameter * OSCILLATING_VARIANCE)),
+                diameter,
+                OSCILLATING_CYCLE_TIME_MS,
+                true
         );
         diameterTween.update(MathUtils.random(0L, OSCILLATING_CYCLE_TIME_MS));
     }
@@ -60,7 +64,7 @@ public final class LightSource implements Updatable, Renderable {
 
     private int getAdjustedDiameter() {
         if (isOscillating) {
-            return diameterTween.getValue() + Math.round(diameter * 0.04f* MathUtils.random());
+            return diameterTween.getValue() + Math.round(diameter * OSCILLATING_RANDOM_VARIANCE * MathUtils.random());
         }
 
         return diameter;
