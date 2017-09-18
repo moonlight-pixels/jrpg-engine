@@ -3,28 +3,34 @@ package com.github.jaystgelais.jrpg.map.fx.lighting;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.state.Updatable;
+import com.github.jaystgelais.jrpg.tween.IntegerTween;
+import com.github.jaystgelais.jrpg.tween.SineTweenFunction;
+import com.github.jaystgelais.jrpg.tween.Tween;
 
 public final class LightSource implements Updatable, Renderable {
-    private static final long OSCILLATING_CYCLE_TIME_MS = 200L;
-    private static final float PI2 = 3.1415926535897932384626433832795f * 2.0f;
-    private static final float OSCILLATING_VARIANCE = 0.2f;
+    private static final long OSCILLATING_CYCLE_TIME_MS = 1200;
     public static final String LIGHT_TEXTURE = "assets/jrpg/fx/lighting/light.png";
 
     private final int centerX;
     private final int centerY;
     private final int diameter;
     private final boolean isOscillating;
-    private long timeInCycleMs = 0L;
+    private final Tween<Integer> diameterTween;
 
     public LightSource(final int centerX, final int centerY, final int diameter, final boolean isOscillating) {
         this.centerX = centerX;
         this.centerY = centerY;
         this.diameter = diameter;
         this.isOscillating = isOscillating;
+        this.diameterTween = new IntegerTween(
+                new SineTweenFunction(), Math.round(diameter * 0.9f), diameter, OSCILLATING_CYCLE_TIME_MS, true
+        );
+        diameterTween.update(MathUtils.random(0L, OSCILLATING_CYCLE_TIME_MS));
     }
 
     public LightSource(final int centerX, final int centerY, final int diameter) {
@@ -34,10 +40,6 @@ public final class LightSource implements Updatable, Renderable {
     @Override
     public void render(final GraphicsService graphicsService) {
         final int currentDiameter = getAdjustedDiameter();
-        final OrthographicCamera camera = graphicsService.getCamera();
-        Vector3 screenCoords = camera.project(
-                new Vector3(centerX, centerY, 0), 0, 0, camera.viewportWidth, camera.viewportHeight
-        );
         graphicsService.getSpriteBatch().draw(
                 getLightTexture(graphicsService.getAssetManager()),
                 Math.round(centerX - (currentDiameter / 2.0f)),
@@ -53,16 +55,12 @@ public final class LightSource implements Updatable, Renderable {
 
     @Override
     public void update(final long elapsedTime) {
-        timeInCycleMs = (timeInCycleMs + elapsedTime) % OSCILLATING_CYCLE_TIME_MS;
+        diameterTween.update(elapsedTime);
     }
 
     private int getAdjustedDiameter() {
         if (isOscillating) {
-            float zAngle = ((float) timeInCycleMs / (float) OSCILLATING_CYCLE_TIME_MS) * PI2;
-            return Math.round(
-                    (diameter * (1.0f - OSCILLATING_VARIANCE))
-                            + ((diameter * OSCILLATING_VARIANCE) * (float) Math.sin(zAngle))
-            );
+            return diameterTween.getValue() + Math.round(diameter * 0.04f* MathUtils.random());
         }
 
         return diameter;

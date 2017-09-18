@@ -108,4 +108,9 @@ public final class LightingEffect implements MapEffect {
             frameBuffer.dispose();
         }
     }
+
+    @Override
+    public void update(final long elapsedTime) {
+        lightSources.forEach(lightSource -> lightSource.update(elapsedTime));
+    }
 }

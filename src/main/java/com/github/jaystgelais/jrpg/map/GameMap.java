@@ -259,5 +259,6 @@ public final class GameMap implements Renderable, Updatable {
     @Override
     public void update(final long elapsedTime) {
         animations.forEach(animation -> animation.update(elapsedTime));
+        mapEffects.forEach(effect -> effect.update(elapsedTime));
     }
 }
