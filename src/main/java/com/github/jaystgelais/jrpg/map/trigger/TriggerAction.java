@@ -8,4 +8,7 @@ import com.github.jaystgelais.jrpg.state.Updatable;
 public interface TriggerAction extends Renderable, Updatable, InputHandler {
     void startAction(MapMode mapMode);
     boolean isComplete();
+    default boolean flushInputOnComplete() {
+        return true;
+    }
 }

@@ -6,6 +6,7 @@ import com.github.jaystgelais.jrpg.map.GameMap;
 import com.github.jaystgelais.jrpg.state.Updatable;
 
 public interface MapEffect extends Disposable, Updatable {
+    String getId();
     void init(GraphicsService graphicsService, GameMap map);
     void preRender(GraphicsService graphicsService);
     void preMapRender(GraphicsService graphicsService);

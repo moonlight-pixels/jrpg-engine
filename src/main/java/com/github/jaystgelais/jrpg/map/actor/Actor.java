@@ -98,6 +98,10 @@ public final class Actor implements Entity, InputHandler {
         return location;
     }
 
+    public void setLocation(final TileCoordinate location) {
+        this.location = location;
+    }
+
     public boolean isOccupying(final TileCoordinate coordinate) {
         return coordinate.equals(location) || coordinate.equals(destination);
     }

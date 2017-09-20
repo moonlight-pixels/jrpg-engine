@@ -41,6 +41,11 @@ public final class LightingEffect implements MapEffect {
     }
 
     @Override
+    public String getId() {
+        return "jrpg-lighting";
+    }
+
+    @Override
     public void init(final GraphicsService graphicsService, final GameMap map) {
         lightingShader.begin();
         lightingShader.setUniformf(

@@ -108,6 +108,10 @@ public final class MapMode extends GameMode {
         assetManager.dispose();
     }
 
+    public Actor getHero() {
+        return hero;
+    }
+
     private void loadMap(final MapDefinition mapDefinition) {
         this.map = mapDefinition.getMap(getGame().getGraphicsService(), assetManager);
         GameState.setLocation(map.getParentLocation());
@@ -228,7 +232,9 @@ public final class MapMode extends GameMode {
             @Override
             public void update(final long elapsedTime) {
                 if (triggerAction.isComplete()) {
-                    controller.flushInput();
+                    if (triggerAction.flushInputOnComplete()) {
+                        controller.flushInput();
+                    }
                     stateMachine.change("playerInControl");
                 } else {
                     triggerAction.update(elapsedTime);
