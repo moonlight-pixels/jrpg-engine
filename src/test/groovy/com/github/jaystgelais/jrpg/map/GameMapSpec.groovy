@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer
 import com.github.jaystgelais.jrpg.map.actor.Actor
+import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet
 import com.github.jaystgelais.jrpg.map.actor.PlayerController
 import spock.lang.Specification
 
@@ -36,7 +37,10 @@ class GameMapSpec extends Specification {
                 return ''
             }
         })
-        Actor testActor = new Actor(gameMap, null, new PlayerController(), new TileCoordinate(actorX, actorY))
+        ActorSpriteSet mockActorSpriteSet = new ActorSpriteSet(300L, 16, 16)
+        Actor testActor = new Actor(
+                gameMap, mockActorSpriteSet, new PlayerController(), new TileCoordinate(actorX, actorY)
+        )
         gameMap.setFocalPoint(testActor)
 
         when:

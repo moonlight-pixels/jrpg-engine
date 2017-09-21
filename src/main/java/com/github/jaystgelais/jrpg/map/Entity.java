@@ -11,7 +11,11 @@ public interface Entity extends Renderable, Updatable {
 
     TileCoordinate getLocation();
 
-    float getPositionX();
+    int getHeight();
 
-    float getPositionY();
+    int getWidth();
+
+    int getPositionX();
+
+    int getPositionY();
 }

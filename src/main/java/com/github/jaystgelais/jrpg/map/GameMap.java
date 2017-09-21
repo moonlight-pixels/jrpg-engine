@@ -155,11 +155,11 @@ public final class GameMap implements Renderable, Updatable {
         return map.getProperties().get("tilewidth", Integer.class);
     }
 
-    public float getAbsoluteX(final TileCoordinate coordinate) {
+    public int getAbsoluteX(final TileCoordinate coordinate) {
         return coordinate.getX() * getTileWidth() + (getTileWidth() / 2);
     }
 
-    public float getAbsoluteY(final TileCoordinate coordinate) {
+    public int getAbsoluteY(final TileCoordinate coordinate) {
         return coordinate.getY() * getTileHeight();
     }
 

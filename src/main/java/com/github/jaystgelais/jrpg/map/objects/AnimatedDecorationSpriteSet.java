@@ -8,6 +8,7 @@ public final class AnimatedDecorationSpriteSet extends SpriteSet {
     private final Animation<TextureRegion> animation;
 
     public AnimatedDecorationSpriteSet(final Animation<TextureRegion> animation) {
+        super(animation.getKeyFrames()[0].getRegionHeight(), animation.getKeyFrames()[0].getRegionWidth());
         this.animation = animation;
     }
 

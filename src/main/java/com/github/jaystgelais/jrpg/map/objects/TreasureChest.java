@@ -25,8 +25,10 @@ public final class TreasureChest implements Entity {
     private final InventoryContent contents;
     private final GraphicsService graphicsService;
     private final StateMachine stateMachine;
-    private final float positionX;
-    private final float positionY;
+    private final int positionX;
+    private final int positionY;
+    private final int height;
+    private final int width;
 
     public TreasureChest(final String id, final GameMap map, final TileCoordinate location,
                          final TreasureChestSpriteSet spriteSet, final InventoryContent contents,
@@ -39,6 +41,8 @@ public final class TreasureChest implements Entity {
         this.graphicsService = graphicsService;
         positionX = map.getAbsoluteX(location);
         positionY = map.getAbsoluteY(location);
+        height = spriteSet.getSpriteHeight();
+        width = spriteSet.getSpriteWidth();
         stateMachine = initStateMachine();
     }
 
@@ -75,12 +79,22 @@ public final class TreasureChest implements Entity {
     }
 
     @Override
-    public float getPositionX() {
+    public int getHeight() {
+        return height;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public int getPositionX() {
         return positionX;
     }
 
     @Override
-    public float getPositionY() {
+    public int getPositionY() {
         return positionY;
     }
 

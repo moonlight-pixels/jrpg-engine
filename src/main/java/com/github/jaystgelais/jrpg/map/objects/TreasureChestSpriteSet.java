@@ -11,6 +11,7 @@ public final class TreasureChestSpriteSet extends SpriteSet {
 
     public TreasureChestSpriteSet(final TextureRegion closedImage, final TextureRegion openImage,
                                   final Animation<TextureRegion> openingAnimation) {
+        super(closedImage.getRegionHeight(), closedImage.getRegionWidth());
         this.closedImage = closedImage;
         this.openImage = openImage;
         this.openingAnimation = openingAnimation;

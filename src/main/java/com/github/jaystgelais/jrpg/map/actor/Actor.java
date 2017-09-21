@@ -21,11 +21,13 @@ public final class Actor implements Entity, InputHandler {
     private final ActorSpriteSet spriteSet;
     private final StateMachine stateMachine;
     private final Controller controller;
+    private final int height;
+    private final int width;
     private Direction facing;
     private TileCoordinate location;
     private TileCoordinate destination;
-    private float positionX;
-    private float positionY;
+    private int positionX;
+    private int positionY;
 
     public Actor(final GameMap map, final ActorSpriteSet spriteSet,
                  final Controller controller, final TileCoordinate location) {
@@ -37,15 +39,27 @@ public final class Actor implements Entity, InputHandler {
         this.destination = location;
         positionX = map.getAbsoluteX(location);
         positionY = map.getAbsoluteY(location);
+        height = spriteSet.getSpriteHeight();
+        width = spriteSet.getSpriteWidth();
         stateMachine = initStateMachine();
     }
 
-    public float getPositionX() {
+    public int getPositionX() {
         return positionX;
     }
 
-    public float getPositionY() {
+    public int getPositionY() {
         return positionY;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
     }
 
     public Direction getFacing() {
@@ -221,8 +235,8 @@ public final class Actor implements Entity, InputHandler {
         return !map.isCollision(this, targetCoordinate);
     }
 
-    private float weightedAverage(final float start, final float finish, final float percentComplete) {
-        return start + ((finish - start) * percentComplete);
+    private int weightedAverage(final int start, final int finish, final float percentComplete) {
+        return Math.round(start + ((finish - start) * percentComplete));
     }
 
     @Override

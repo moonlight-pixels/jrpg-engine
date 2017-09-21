@@ -10,8 +10,10 @@ import com.github.jaystgelais.jrpg.util.TimeUtil;
 public final class AnimatedDecoration implements Entity {
     private final TileCoordinate location;
     private final AnimatedDecorationSpriteSet spriteSet;
-    private final float positionX;
-    private final float positionY;
+    private final int positionX;
+    private final int positionY;
+    private final int height;
+    private final int width;
     private long animationTime = 0L;
 
     public AnimatedDecoration(final GameMap map, final TileCoordinate location,
@@ -20,6 +22,8 @@ public final class AnimatedDecoration implements Entity {
         this.spriteSet = spriteSet;
         positionX = map.getAbsoluteX(location);
         positionY = map.getAbsoluteY(location);
+        height = spriteSet.getSpriteHeight();
+        width = spriteSet.getSpriteWidth();
     }
 
     @Override
@@ -55,13 +59,23 @@ public final class AnimatedDecoration implements Entity {
     }
 
     @Override
-    public float getPositionX() {
+    public int getPositionX() {
         return positionX;
     }
 
     @Override
-    public float getPositionY() {
+    public int getPositionY() {
         return positionY;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
     }
 
     @Override

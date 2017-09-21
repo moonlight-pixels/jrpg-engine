@@ -12,7 +12,8 @@ public final class ActorSpriteSet extends SpriteSet {
     private final Map<Direction, Animation<TextureRegion>> walking = new HashMap<>();
     private final Map<Direction, TextureRegion> standing = new HashMap<>();
 
-    public ActorSpriteSet(final long timeToTraverseTileMs) {
+    public ActorSpriteSet(final long timeToTraverseTileMs, final int spriteHeight, final int spriteWidth) {
+        super(spriteHeight, spriteWidth);
         this.timeToTraverseTileMs = timeToTraverseTileMs;
     }
 

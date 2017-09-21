@@ -12,7 +12,7 @@ public class HeroSpriteSetDefinition extends SpriteSetDefinition {
     @Override
     public ActorSpriteSet getSpriteSet(final AssetManager assetManager) {
         TextureRegion[][] spriteSheet = loadSpriteSheet(SPRITE_SHEET_PATH, assetManager, 16, 18);
-        ActorSpriteSet spriteSet = new ActorSpriteSet(300);
+        ActorSpriteSet spriteSet = new ActorSpriteSet(300, 16, 18);
 
         spriteSet.setStandingImage(Direction.DOWN, spriteSheet[0][1]);
         spriteSet.setWalkinAnimation(Direction.DOWN, new TextureRegion[] {
