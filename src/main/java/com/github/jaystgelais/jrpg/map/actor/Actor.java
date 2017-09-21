@@ -28,6 +28,7 @@ public final class Actor implements Entity, InputHandler {
     private TileCoordinate destination;
     private int positionX;
     private int positionY;
+    private boolean isHero;
 
     public Actor(final GameMap map, final ActorSpriteSet spriteSet,
                  final Controller controller, final TileCoordinate location) {
@@ -60,6 +61,14 @@ public final class Actor implements Entity, InputHandler {
     @Override
     public int getWidth() {
         return width;
+    }
+
+    public boolean isHero() {
+        return isHero;
+    }
+
+    public void setIsHero(final boolean isHero) {
+        this.isHero = isHero;
     }
 
     public Direction getFacing() {

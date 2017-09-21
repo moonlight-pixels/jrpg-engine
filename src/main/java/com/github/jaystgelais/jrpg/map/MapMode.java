@@ -70,6 +70,7 @@ public final class MapMode extends GameMode {
         loadMap(mapDefinition);
 
         hero = new Actor(map, heroSpriteSet.getSpriteSet(assetManager), controller, location);
+        hero.setIsHero(true);
         if (params.containsKey("facing")) {
             hero.setFacing((Direction) params.get("facing"));
         }
