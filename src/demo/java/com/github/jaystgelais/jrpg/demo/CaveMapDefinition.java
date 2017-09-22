@@ -42,38 +42,8 @@ public class CaveMapDefinition extends MapDefinition {
             }
         });
         final MapDefinition thisMapDefinition = this;
-        map.addTileTrigger(new TileCoordinate(79, 55), new TileTrigger() {
-            @Override
-            public TriggerAction onEnter() {
-                return new WarpTriggerAction(thisMapDefinition, new TileCoordinate(8, 97), Direction.DOWN);
-            }
-
-            @Override
-            public TriggerAction onExit() {
-                return null;
-            }
-
-            @Override
-            public TriggerAction onInspect() {
-                return null;
-            }
-        });
-        map.addTileTrigger(new TileCoordinate(8, 97), new TileTrigger() {
-            @Override
-            public TriggerAction onEnter() {
-                return new WarpTriggerAction(thisMapDefinition, new TileCoordinate(79, 55), Direction.DOWN);
-            }
-
-            @Override
-            public TriggerAction onExit() {
-                return null;
-            }
-
-            @Override
-            public TriggerAction onInspect() {
-                return null;
-            }
-        });
+        map.addTileTrigger(new TileCoordinate(79, 55), new WarpTileTrigger(thisMapDefinition, new TileCoordinate(8, 97), Direction.DOWN));
+        map.addTileTrigger(new TileCoordinate(8, 97), new WarpTileTrigger(thisMapDefinition, new TileCoordinate(79, 55), Direction.DOWN));
 
         return map;
     }

@@ -200,21 +200,21 @@ public final class GameMap implements Renderable, Updatable {
         actionQueue.add(action);
     }
 
-    public void fireOnExitTrigger(final TileCoordinate coordinate) {
-        if (tileTriggers.containsKey(coordinate) && tileTriggers.get(coordinate).onExit() != null) {
-            queueAction(tileTriggers.get(coordinate).onExit());
+    public void fireOnExitTrigger(final TileCoordinate coordinate, final Actor actor) {
+        if (tileTriggers.containsKey(coordinate)) {
+            tileTriggers.get(coordinate).onExit(this, actor);
         }
     }
 
-    public void fireOnEnterTrigger(final TileCoordinate coordinate) {
-        if (tileTriggers.containsKey(coordinate) && tileTriggers.get(coordinate).onEnter() != null) {
-            queueAction(tileTriggers.get(coordinate).onEnter());
+    public void fireOnEnterTrigger(final TileCoordinate coordinate, final Actor actor) {
+        if (tileTriggers.containsKey(coordinate)) {
+            tileTriggers.get(coordinate).onEnter(this, actor);
         }
     }
 
     public void fireOnInspectTrigger(final TileCoordinate coordinate) {
-        if (tileTriggers.containsKey(coordinate) && tileTriggers.get(coordinate).onInspect() != null) {
-            queueAction(tileTriggers.get(coordinate).onInspect());
+        if (tileTriggers.containsKey(coordinate)) {
+            tileTriggers.get(coordinate).onInspect(this);
         }
     }
 

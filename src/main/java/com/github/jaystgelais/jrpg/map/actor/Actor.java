@@ -193,10 +193,10 @@ public final class Actor implements Entity, InputHandler {
 
             @Override
             public void onExit() {
-                map.fireOnExitTrigger(location);
+                map.fireOnExitTrigger(location, actor);
                 location = destination;
                 destination = null;
-                map.fireOnEnterTrigger(location);
+                map.fireOnEnterTrigger(location, actor);
             }
 
             @Override
