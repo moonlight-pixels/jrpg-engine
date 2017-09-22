@@ -3,8 +3,11 @@ package com.github.jaystgelais.jrpg;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.github.jaystgelais.jrpg.devtools.ScreenShotUtil;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputService;
+import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.state.StackedStateMachine;
 
 import java.time.Clock;
@@ -19,6 +22,8 @@ public class Game implements ApplicationListener {
     private long lastRenderTimestampMs;
     private long pauseTimeMs;
     private boolean debug = false;
+
+    private final DelayedInput screenShotInput = new DelayedInput(Inputs.SCREENSHOT);
 
     public Game(final Set<GameMode> gameModes, final String initialGameMode, final GraphicsService graphicsService,
                 final InputService inputService) {
@@ -45,6 +50,10 @@ public class Game implements ApplicationListener {
     public final void render() {
         long timeElapsed = updateRenderTimeAndGetTimeElapsed();
         gameModes.update(timeElapsed);
+
+        if (isDebug()) {
+            handleDebugInput(inputService);
+        }
         gameModes.handleInput(inputService);
 
         graphicsService.clearScreen();
@@ -113,5 +122,11 @@ public class Game implements ApplicationListener {
 
     public final void activateGameMode(final String stateKey) {
         gameModes.change(stateKey);
+    }
+
+    private void handleDebugInput(final InputService inputService) {
+        if (screenShotInput.isPressed(inputService)) {
+            ScreenShotUtil.takeScreenShot();
+        }
     }
 }

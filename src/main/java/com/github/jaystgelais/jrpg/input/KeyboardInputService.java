@@ -16,6 +16,7 @@ public final class KeyboardInputService implements InputService {
     public static final int DEFAULT_CANCEL_KEY = Keys.TAB;
     public static final int DEFAULT_MENU_KEY = Keys.SPACE;
     public static final int DEFAULT_PAUSE_KEY = Keys.ESCAPE;
+    public static final int DEFAULT_SCREENSHOT_KEY = Keys.NUM_1;
 
     private final Map<Inputs, Integer> keyMap;
 
@@ -34,14 +35,15 @@ public final class KeyboardInputService implements InputService {
 
     private static Map<Inputs, Integer> getDefaultKeyMap() {
         Map<Inputs, Integer> keyMap = new HashMap<>();
-        keyMap.put(Inputs.UP,     DEFAULT_UP_KEY);
-        keyMap.put(Inputs.DOWN,   DEFAULT_DOWN_KEY);
-        keyMap.put(Inputs.LEFT,   DEFAULT_LEFT_KEY);
-        keyMap.put(Inputs.RIGHT,  DEFAULT_RIGHT_KEY);
-        keyMap.put(Inputs.OK,     DEFAULT_OK_KEY);
-        keyMap.put(Inputs.CANCEL, DEFAULT_CANCEL_KEY);
-        keyMap.put(Inputs.MENU,   DEFAULT_MENU_KEY);
-        keyMap.put(Inputs.PAUSE,  DEFAULT_PAUSE_KEY);
+        keyMap.put(Inputs.UP,         DEFAULT_UP_KEY);
+        keyMap.put(Inputs.DOWN,       DEFAULT_DOWN_KEY);
+        keyMap.put(Inputs.LEFT,       DEFAULT_LEFT_KEY);
+        keyMap.put(Inputs.RIGHT,      DEFAULT_RIGHT_KEY);
+        keyMap.put(Inputs.OK,         DEFAULT_OK_KEY);
+        keyMap.put(Inputs.CANCEL,     DEFAULT_CANCEL_KEY);
+        keyMap.put(Inputs.MENU,       DEFAULT_MENU_KEY);
+        keyMap.put(Inputs.PAUSE,      DEFAULT_PAUSE_KEY);
+        keyMap.put(Inputs.SCREENSHOT, DEFAULT_SCREENSHOT_KEY);
 
         return keyMap;
     }
