@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class Game implements ApplicationListener {
+    private static Game instance;
+
     private final StackedStateMachine gameModes;
     private final GraphicsService graphicsService;
     private final InputService inputService;
@@ -42,8 +44,22 @@ public class Game implements ApplicationListener {
         lastRenderTimestampMs = this.clock.millis();
     }
 
+    public static Game getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException(
+                    "A Game instance must be constructed and started before the global instance is available."
+            );
+        }
+        return instance;
+    }
+
+    private static void registerInstance(final Game game) {
+        instance = game;
+    }
+
     public final void start() {
         new LwjglApplication(this, graphicsService.getConfiguration());
+        registerInstance(this);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.map.trigger;
 
+import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputService;
@@ -37,6 +38,10 @@ public final class MessageTriggerAction implements TriggerAction {
         );
     }
 
+    public MessageTriggerAction(final String message) {
+        this(message, Game.getInstance().getGraphicsService());
+    }
+
     public MessageTriggerAction(final String message, final GraphicsService graphicsService,
                                    final int panelWidth, final int panelHeight) {
         this.message = message;
@@ -44,6 +49,10 @@ public final class MessageTriggerAction implements TriggerAction {
         this.panelWidth = panelWidth;
         this.panelHeight = panelHeight;
         stateMachine = createStateMachine();
+    }
+
+    public MessageTriggerAction(final String message, final int panelWidth, final int panelHeight) {
+        this(message, Game.getInstance().getGraphicsService(), panelWidth, panelHeight);
     }
 
 

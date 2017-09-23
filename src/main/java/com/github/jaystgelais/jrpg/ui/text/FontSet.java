@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 
 public final class FontSet {
@@ -17,6 +18,10 @@ public final class FontSet {
 
     public static Builder newFontSet(final GraphicsService graphicsService) {
         return new Builder(graphicsService);
+    }
+
+    public static Builder newFontSet() {
+        return newFontSet(Game.getInstance().getGraphicsService());
     }
 
     private FontSet(final BitmapFont textFont, final BitmapFont numberFont) {

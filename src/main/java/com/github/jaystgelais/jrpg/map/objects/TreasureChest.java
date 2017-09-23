@@ -1,6 +1,7 @@
 package com.github.jaystgelais.jrpg.map.objects;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.inventory.InventoryContent;
@@ -44,6 +45,11 @@ public final class TreasureChest implements Entity {
         height = spriteSet.getSpriteHeight();
         width = spriteSet.getSpriteWidth();
         stateMachine = initStateMachine();
+    }
+
+    public TreasureChest(final String id, final GameMap map, final TileCoordinate location,
+                         final TreasureChestSpriteSet spriteSet, final InventoryContent contents) {
+        this(id, map, location, spriteSet, contents, Game.getInstance().getGraphicsService());
     }
 
     public void interactWith() {
