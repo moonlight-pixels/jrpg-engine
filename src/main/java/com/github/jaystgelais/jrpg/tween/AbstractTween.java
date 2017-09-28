@@ -36,7 +36,7 @@ public abstract class AbstractTween<T> implements Tween<T> {
 
     @Override
     public final boolean isComplete() {
-        return !isRepeating || timeInTween >= totalTweenTimeMs;
+        return !isRepeating && timeInTween >= totalTweenTimeMs;
     }
 
     protected abstract T getValue(float percentComplete, T start, T end);
