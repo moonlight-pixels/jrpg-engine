@@ -163,7 +163,7 @@ public final class MapMode extends GameMode {
                     getGame().exitGame();
                 } else if (getGame().hasGameMode("menu") && inputService.isPressed(Inputs.MENU)) {
                     getGame().activateGameMode("menu");
-                } else if (hero.isWaiting()) {
+                } else {
                     controller.handleInput(inputService);
                 }
             }

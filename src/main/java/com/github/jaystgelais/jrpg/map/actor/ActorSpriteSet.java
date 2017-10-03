@@ -26,7 +26,7 @@ public final class ActorSpriteSet extends SpriteSet {
     }
 
     public void setWalkinAnimation(final Direction direction, final TextureRegion[] frames) {
-        walking.put(direction, buildAnimation(frames, timeToTraverseTileMs));
+        walking.put(direction, buildAnimation(frames, timeToTraverseTileMs * 2));
     }
 
     public TextureRegion getStandingImage(final Direction direction) {

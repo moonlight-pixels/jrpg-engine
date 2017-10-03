@@ -1,9 +1,12 @@
 package com.github.jaystgelais.jrpg.map;
 
+import com.badlogic.gdx.ai.pfa.Connection;
+import com.badlogic.gdx.ai.pfa.Graph;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
@@ -24,7 +27,7 @@ import java.util.Queue;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public final class GameMap implements Renderable, Updatable {
+public final class GameMap implements Renderable, Updatable, Graph<TileCoordinate> {
     public static final String MAP_LAYER_PROP_MAP_LAYER = "jrpg-map-layer";
     public static final String MAP_LAYER_PROP_LAYER_TYPE = "jrpg-layer-type";
     public static final String MAP_LAYER_TYPE_BACKGRAOUND = "background";
@@ -260,5 +263,72 @@ public final class GameMap implements Renderable, Updatable {
     public void update(final long elapsedTime) {
         animations.forEach(animation -> animation.update(elapsedTime));
         mapEffects.forEach(effect -> effect.update(elapsedTime));
+    }
+
+    @Override
+    public Array<Connection<TileCoordinate>> getConnections(final TileCoordinate fromNode) {
+        Array<Connection<TileCoordinate>> connections = new Array<>();
+
+        // Find paths above node
+        TileCoordinate currentNode = fromNode;
+        int cost = 2;
+        while (!isCollision(null, currentNode.getAbove())) {
+            connections.add(new TileCoordinateConnection(currentNode, currentNode.getAbove(), cost++));
+            currentNode = currentNode.getAbove();
+        }
+
+        // Find paths below node
+        currentNode = fromNode;
+        cost = 2;
+        while (!isCollision(null, currentNode.getBelow())) {
+            connections.add(new TileCoordinateConnection(currentNode, currentNode.getBelow(), cost++));
+            currentNode = currentNode.getBelow();
+        }
+
+        // Find paths to the right of node
+        currentNode = fromNode;
+        cost = 2;
+        while (!isCollision(null, currentNode.getRight())) {
+            connections.add(new TileCoordinateConnection(currentNode, currentNode.getRight(), cost++));
+            currentNode = currentNode.getRight();
+        }
+
+
+        // Find paths to the left of node
+        currentNode = fromNode;
+        cost = 2;
+        while (!isCollision(null, currentNode.getLeft())) {
+            connections.add(new TileCoordinateConnection(currentNode, currentNode.getLeft(), cost++));
+            currentNode = currentNode.getLeft();
+        }
+
+        return connections;
+    }
+
+    private static class TileCoordinateConnection implements Connection<TileCoordinate> {
+        private final TileCoordinate fromNode;
+        private final TileCoordinate toNode;
+        private final float cost;
+
+        private TileCoordinateConnection(TileCoordinate fromNode, TileCoordinate toNode, float cost) {
+            this.fromNode = fromNode;
+            this.toNode = toNode;
+            this.cost = cost;
+        }
+
+        @Override
+        public float getCost() {
+            return cost;
+        }
+
+        @Override
+        public TileCoordinate getFromNode() {
+            return fromNode;
+        }
+
+        @Override
+        public TileCoordinate getToNode() {
+            return toNode;
+        }
     }
 }

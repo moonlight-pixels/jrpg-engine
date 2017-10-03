@@ -10,13 +10,21 @@ import com.github.jaystgelais.jrpg.map.TileCoordinate;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
+import com.github.jaystgelais.jrpg.tween.IntegerTween;
+import com.github.jaystgelais.jrpg.tween.Tween;
 import com.github.jaystgelais.jrpg.util.TimeUtil;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public final class Actor implements Entity, InputHandler {
+    public static final String STATE_WALKING = "walking";
+    public static final String STATE_STANDING = "standing";
+    public static final String STATE_INSPECTING = "inspecting";
+    private static final String STATE_PARAM_DIRECTION = "direction";
+
     private final GameMap map;
     private final ActorSpriteSet spriteSet;
     private final StateMachine stateMachine;
@@ -79,23 +87,6 @@ public final class Actor implements Entity, InputHandler {
         this.facing = direction;
     }
 
-    void walk(final Direction direction) {
-        TileCoordinate target = getAdjacentTileCoordinate(direction);
-        if (isOpen(target)) {
-            destination = target;
-            stateMachine.change("walking");
-        }
-    }
-
-    void inspect() {
-        Entity targetEntiry = map.getEntity(getAdjacentTileCoordinate(facing));
-        if (targetEntiry != null) {
-            targetEntiry.interactWith();
-        } else {
-            map.fireOnInspectTrigger(getAdjacentTileCoordinate(facing));
-        }
-    }
-
     private TileCoordinate getAdjacentTileCoordinate(final Direction direction) {
         TileCoordinate target = null;
         switch (direction) {
@@ -151,7 +142,7 @@ public final class Actor implements Entity, InputHandler {
         states.add(new StateAdapter() {
             @Override
             public String getKey() {
-                return "standing";
+                return STATE_STANDING;
             }
 
             @Override
@@ -165,7 +156,10 @@ public final class Actor implements Entity, InputHandler {
                 controller.update(elapsedTime);
                 Action action = controller.nextAction();
                 if (action != null) {
-                    action.perform(actor);
+                    stateMachine.change(
+                            action.getActorState(),
+                            Collections.singletonMap(STATE_PARAM_DIRECTION, action.getDirection())
+                    );
                 }
             }
 
@@ -179,48 +173,73 @@ public final class Actor implements Entity, InputHandler {
             }
         });
         states.add(new StateAdapter() {
-            private long timeInState = 0L;
+            private static final String STATE_PARAM_RESET_TIME_IN_ANIMATION = "RESET_TIME_IN_ANIMATION";
+            private long timeInAnimation = 0L;
+            private Tween<Integer> positionXTween;
+            private Tween<Integer> positionYTween;
 
             @Override
             public String getKey() {
-                return "walking";
+                return STATE_WALKING;
             }
 
             @Override
             public void onEnter(final Map<String, Object> params) {
-                timeInState = 0L;
+                Direction direction = (Direction) params.getOrDefault(STATE_PARAM_DIRECTION, facing);
+                setFacing(direction);
+
+                TileCoordinate target = getAdjacentTileCoordinate(direction);
+                if (isOpen(target)) {
+                    destination = target;
+                    positionXTween = new IntegerTween(
+                            map.getAbsoluteX(location), map.getAbsoluteX(destination), spriteSet.getTimeToTraverseTileMs()
+                    );
+                    positionYTween = new IntegerTween(
+                            map.getAbsoluteY(location), map.getAbsoluteY(destination), spriteSet.getTimeToTraverseTileMs()
+                    );
+                } else {
+                    stateMachine.change(STATE_STANDING);
+                }
             }
 
             @Override
             public void onExit() {
-                map.fireOnExitTrigger(location, actor);
-                location = destination;
-                destination = null;
-                map.fireOnEnterTrigger(location, actor);
+
             }
 
             @Override
             public void update(final long elapsedTime) {
-                timeInState += elapsedTime;
-                if (timeInState > spriteSet.getTimeToTraverseTileMs()) {
-                    stateMachine.change("standing");
+                timeInAnimation += elapsedTime;
+                timeInAnimation = timeInAnimation % TimeUtil.convertFloatSecondsToLongMs(spriteSet.getWalkingAnimation(facing).getAnimationDuration());
+
+                positionXTween.update(elapsedTime);
+                positionYTween.update(elapsedTime);
+
+                if (positionXTween.isComplete() && positionYTween.isComplete()) {
+                    map.fireOnExitTrigger(location, actor);
+                    location = destination;
+                    destination = null;
+                    map.fireOnEnterTrigger(location, actor);
+
+                    Action action = controller.nextAction();
+                    if (action != null) {
+                        stateMachine.change(
+                                action.getActorState(),
+                                Collections.singletonMap(STATE_PARAM_DIRECTION, action.getDirection())
+                        );
+                    } else {
+                        stateMachine.change("standing");
+                    }
                 } else {
-                    float percentComplete = TimeUtil.calculatePercentComplete(
-                            timeInState, spriteSet.getTimeToTraverseTileMs()
-                    );
-                    positionX = weightedAverage(
-                            map.getAbsoluteX(location), map.getAbsoluteX(destination), percentComplete
-                    );
-                    positionY = weightedAverage(
-                            map.getAbsoluteY(location), map.getAbsoluteY(destination), percentComplete
-                    );
+                    positionX = positionXTween.getValue();
+                    positionY = positionYTween.getValue();
                 }
             }
 
             @Override
             public void render(final GraphicsService graphicsService) {
                 final TextureRegion walkingFrame = spriteSet.getWalkingAnimation(facing).getKeyFrame(
-                        TimeUtil.convertMsToFloatSeconds(timeInState)
+                        TimeUtil.convertMsToFloatSeconds(timeInAnimation)
                 );
                 graphicsService.drawSprite(
                         walkingFrame,
@@ -228,8 +247,39 @@ public final class Actor implements Entity, InputHandler {
                 );
             }
         });
+        states.add(new StateAdapter() {
 
-        return new StateMachine(states, "standing");
+            @Override
+            public String getKey() {
+                return STATE_INSPECTING;
+            }
+
+            @Override
+            public void onEnter(Map<String, Object> params) {
+                Entity targetEntity = map.getEntity(getAdjacentTileCoordinate(facing));
+                if (targetEntity != null) {
+                    targetEntity.interactWith();
+                } else {
+                    map.fireOnInspectTrigger(getAdjacentTileCoordinate(facing));
+                }
+            }
+
+            @Override
+            public void update(long elapsedTime) {
+                stateMachine.change(STATE_STANDING);
+            }
+
+            @Override
+            public void render(GraphicsService graphicsService) {
+                final TextureRegion standingImage = spriteSet.getStandingImage(facing);
+                graphicsService.drawSprite(
+                        standingImage,
+                        positionX - (standingImage.getRegionWidth() / 2.0f), positionY
+                );
+            }
+        });
+
+        return new StateMachine(states, STATE_STANDING);
     }
 
     private boolean isOpen(final TileCoordinate targetCoordinate) {
@@ -258,7 +308,4 @@ public final class Actor implements Entity, InputHandler {
         stateMachine.update(elapsedTime);
     }
 
-    public boolean isWaiting() {
-        return stateMachine.getCurrentState().getKey().equals("standing");
-    }
 }

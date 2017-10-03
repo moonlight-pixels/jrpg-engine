@@ -8,9 +8,14 @@ public final class MoveAction implements Action {
         this.direction = direction;
     }
 
+
     @Override
-    public void perform(final Actor actor) {
-        actor.setFacing(direction);
-        actor.walk(direction);
+    public String getActorState() {
+        return Actor.STATE_WALKING;
+    }
+
+    @Override
+    public Direction getDirection() {
+        return direction;
     }
 }

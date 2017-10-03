@@ -2,7 +2,12 @@ package com.github.jaystgelais.jrpg.map.actor;
 
 public final class InspectAction implements Action {
     @Override
-    public void perform(final Actor actor) {
-        actor.inspect();
+    public String getActorState() {
+        return Actor.STATE_INSPECTING;
+    }
+
+    @Override
+    public Direction getDirection() {
+        return null;
     }
 }

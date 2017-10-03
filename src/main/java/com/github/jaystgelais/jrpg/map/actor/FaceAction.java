@@ -8,7 +8,12 @@ public final class FaceAction implements Action {
     }
 
     @Override
-    public void perform(final Actor actor) {
-        actor.setFacing(direction);
+    public String getActorState() {
+        return Actor.STATE_STANDING;
+    }
+
+    @Override
+    public Direction getDirection() {
+        return direction;
     }
 }
