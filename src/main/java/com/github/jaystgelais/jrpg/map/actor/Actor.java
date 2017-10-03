@@ -136,31 +136,35 @@ public final class Actor implements Entity, InputHandler {
     }
 
     private StateMachine initStateMachine() {
-        final Actor actor = this;
-
         Set<State> states = new HashSet<>();
-        states.add(new StateAdapter() {
+        states.add(createStandingState());
+        states.add(createWalkingState());
+        states.add(createInspectingState());
+
+        return new StateMachine(states, STATE_STANDING);
+    }
+
+    private StateAdapter createInspectingState() {
+        return new StateAdapter() {
+
             @Override
             public String getKey() {
-                return STATE_STANDING;
+                return STATE_INSPECTING;
             }
 
             @Override
             public void onEnter(final Map<String, Object> params) {
-                positionX = map.getAbsoluteX(location);
-                positionY = map.getAbsoluteY(location);
+                Entity targetEntity = map.getEntity(getAdjacentTileCoordinate(facing));
+                if (targetEntity != null) {
+                    targetEntity.interactWith();
+                } else {
+                    map.fireOnInspectTrigger(getAdjacentTileCoordinate(facing));
+                }
             }
 
             @Override
             public void update(final long elapsedTime) {
-                controller.update(elapsedTime);
-                Action action = controller.nextAction();
-                if (action != null) {
-                    stateMachine.change(
-                            action.getActorState(),
-                            Collections.singletonMap(STATE_PARAM_DIRECTION, action.getDirection())
-                    );
-                }
+                stateMachine.change(STATE_STANDING);
             }
 
             @Override
@@ -171,9 +175,13 @@ public final class Actor implements Entity, InputHandler {
                         positionX - (standingImage.getRegionWidth() / 2.0f), positionY
                 );
             }
-        });
-        states.add(new StateAdapter() {
-            private static final String STATE_PARAM_RESET_TIME_IN_ANIMATION = "RESET_TIME_IN_ANIMATION";
+        };
+    }
+
+    private StateAdapter createWalkingState() {
+        final Actor actor = this;
+
+        return new StateAdapter() {
             private long timeInAnimation = 0L;
             private Tween<Integer> positionXTween;
             private Tween<Integer> positionYTween;
@@ -192,10 +200,14 @@ public final class Actor implements Entity, InputHandler {
                 if (isOpen(target)) {
                     destination = target;
                     positionXTween = new IntegerTween(
-                            map.getAbsoluteX(location), map.getAbsoluteX(destination), spriteSet.getTimeToTraverseTileMs()
+                            map.getAbsoluteX(location),
+                            map.getAbsoluteX(destination),
+                            spriteSet.getTimeToTraverseTileMs()
                     );
                     positionYTween = new IntegerTween(
-                            map.getAbsoluteY(location), map.getAbsoluteY(destination), spriteSet.getTimeToTraverseTileMs()
+                            map.getAbsoluteY(location),
+                            map.getAbsoluteY(destination),
+                            spriteSet.getTimeToTraverseTileMs()
                     );
                 } else {
                     stateMachine.change(STATE_STANDING);
@@ -210,7 +222,10 @@ public final class Actor implements Entity, InputHandler {
             @Override
             public void update(final long elapsedTime) {
                 timeInAnimation += elapsedTime;
-                timeInAnimation = timeInAnimation % TimeUtil.convertFloatSecondsToLongMs(spriteSet.getWalkingAnimation(facing).getAnimationDuration());
+                final long animationTimeMs = TimeUtil.convertFloatSecondsToLongMs(
+                        spriteSet.getWalkingAnimation(facing).getAnimationDuration()
+                );
+                timeInAnimation = timeInAnimation % animationTimeMs;
 
                 positionXTween.update(elapsedTime);
                 positionYTween.update(elapsedTime);
@@ -246,40 +261,43 @@ public final class Actor implements Entity, InputHandler {
                         positionX - (walkingFrame.getRegionWidth() / 2.0f), positionY
                 );
             }
-        });
-        states.add(new StateAdapter() {
+        };
+    }
 
+    private StateAdapter createStandingState() {
+        return new StateAdapter() {
             @Override
             public String getKey() {
-                return STATE_INSPECTING;
+                return STATE_STANDING;
             }
 
             @Override
-            public void onEnter(Map<String, Object> params) {
-                Entity targetEntity = map.getEntity(getAdjacentTileCoordinate(facing));
-                if (targetEntity != null) {
-                    targetEntity.interactWith();
-                } else {
-                    map.fireOnInspectTrigger(getAdjacentTileCoordinate(facing));
+            public void onEnter(final Map<String, Object> params) {
+                positionX = map.getAbsoluteX(location);
+                positionY = map.getAbsoluteY(location);
+            }
+
+            @Override
+            public void update(final long elapsedTime) {
+                controller.update(elapsedTime);
+                Action action = controller.nextAction();
+                if (action != null) {
+                    stateMachine.change(
+                            action.getActorState(),
+                            Collections.singletonMap(STATE_PARAM_DIRECTION, action.getDirection())
+                    );
                 }
             }
 
             @Override
-            public void update(long elapsedTime) {
-                stateMachine.change(STATE_STANDING);
-            }
-
-            @Override
-            public void render(GraphicsService graphicsService) {
+            public void render(final GraphicsService graphicsService) {
                 final TextureRegion standingImage = spriteSet.getStandingImage(facing);
                 graphicsService.drawSprite(
                         standingImage,
                         positionX - (standingImage.getRegionWidth() / 2.0f), positionY
                 );
             }
-        });
-
-        return new StateMachine(states, STATE_STANDING);
+        };
     }
 
     private boolean isOpen(final TileCoordinate targetCoordinate) {

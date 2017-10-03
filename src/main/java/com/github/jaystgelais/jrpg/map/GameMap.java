@@ -305,12 +305,12 @@ public final class GameMap implements Renderable, Updatable, Graph<TileCoordinat
         return connections;
     }
 
-    private static class TileCoordinateConnection implements Connection<TileCoordinate> {
+    private static final class TileCoordinateConnection implements Connection<TileCoordinate> {
         private final TileCoordinate fromNode;
         private final TileCoordinate toNode;
         private final float cost;
 
-        private TileCoordinateConnection(TileCoordinate fromNode, TileCoordinate toNode, float cost) {
+        private TileCoordinateConnection(final TileCoordinate fromNode, final TileCoordinate toNode, final float cost) {
             this.fromNode = fromNode;
             this.toNode = toNode;
             this.cost = cost;
