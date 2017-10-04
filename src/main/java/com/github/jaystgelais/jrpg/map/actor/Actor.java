@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.map.actor;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputHandler;
@@ -34,6 +35,7 @@ public final class Actor implements Entity, InputHandler {
     private Direction facing;
     private TileCoordinate location;
     private TileCoordinate destination;
+    private long timeToTravelTileMs;
     private int positionX;
     private int positionY;
     private boolean isHero;
@@ -46,6 +48,7 @@ public final class Actor implements Entity, InputHandler {
         this.facing = Direction.DOWN;
         this.location = location;
         this.destination = location;
+        timeToTravelTileMs = WalkSpeeds.FAST;
         positionX = map.getAbsoluteX(location);
         positionY = map.getAbsoluteY(location);
         height = spriteSet.getSpriteHeight();
@@ -182,6 +185,8 @@ public final class Actor implements Entity, InputHandler {
         final Actor actor = this;
 
         return new StateAdapter() {
+            private Animation<TextureRegion> walkingAnimation;
+            private long currentTimeToTravelTileMs = timeToTravelTileMs;
             private long timeInAnimation = 0L;
             private Tween<Integer> positionXTween;
             private Tween<Integer> positionYTween;
@@ -196,18 +201,24 @@ public final class Actor implements Entity, InputHandler {
                 Direction direction = (Direction) params.getOrDefault(STATE_PARAM_DIRECTION, facing);
                 setFacing(direction);
 
+                if (currentTimeToTravelTileMs != timeToTravelTileMs) {
+                    currentTimeToTravelTileMs = timeToTravelTileMs;
+                    timeInAnimation = 0L;
+                }
+
                 TileCoordinate target = getAdjacentTileCoordinate(direction);
                 if (isOpen(target)) {
+                    walkingAnimation = spriteSet.getWalkingAnimation(facing, timeToTravelTileMs);
                     destination = target;
                     positionXTween = new IntegerTween(
                             map.getAbsoluteX(location),
                             map.getAbsoluteX(destination),
-                            spriteSet.getTimeToTraverseTileMs()
+                            timeToTravelTileMs
                     );
                     positionYTween = new IntegerTween(
                             map.getAbsoluteY(location),
                             map.getAbsoluteY(destination),
-                            spriteSet.getTimeToTraverseTileMs()
+                            timeToTravelTileMs
                     );
                 } else {
                     stateMachine.change(STATE_STANDING);
@@ -222,8 +233,9 @@ public final class Actor implements Entity, InputHandler {
             @Override
             public void update(final long elapsedTime) {
                 timeInAnimation += elapsedTime;
+                walkingAnimation = spriteSet.getWalkingAnimation(facing, timeToTravelTileMs);
                 final long animationTimeMs = TimeUtil.convertFloatSecondsToLongMs(
-                        spriteSet.getWalkingAnimation(facing).getAnimationDuration()
+                        walkingAnimation.getAnimationDuration()
                 );
                 timeInAnimation = timeInAnimation % animationTimeMs;
 
@@ -253,7 +265,7 @@ public final class Actor implements Entity, InputHandler {
 
             @Override
             public void render(final GraphicsService graphicsService) {
-                final TextureRegion walkingFrame = spriteSet.getWalkingAnimation(facing).getKeyFrame(
+                final TextureRegion walkingFrame = walkingAnimation.getKeyFrame(
                         TimeUtil.convertMsToFloatSeconds(timeInAnimation)
                 );
                 graphicsService.drawSprite(

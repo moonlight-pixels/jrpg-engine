@@ -37,7 +37,7 @@ class GameMapSpec extends Specification {
                 return ''
             }
         })
-        ActorSpriteSet mockActorSpriteSet = new ActorSpriteSet(300L, 16, 16)
+        ActorSpriteSet mockActorSpriteSet = new ActorSpriteSet(1, 16, 16)
         Actor testActor = new Actor(
                 gameMap, mockActorSpriteSet, new PlayerController(), new TileCoordinate(actorX, actorY)
         )
