@@ -1,5 +1,8 @@
 package com.github.jaystgelais.jrpg.map.actor;
 
+import java.util.Collections;
+import java.util.Map;
+
 public final class FaceAction implements Action {
     private final Direction direction;
 
@@ -13,7 +16,7 @@ public final class FaceAction implements Action {
     }
 
     @Override
-    public Direction getDirection() {
-        return direction;
+    public Map<String, Object> getParameters() {
+        return Collections.singletonMap(Actor.STATE_PARAM_DIRECTION, direction);
     }
 }

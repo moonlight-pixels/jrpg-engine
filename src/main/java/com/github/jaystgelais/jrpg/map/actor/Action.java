@@ -1,6 +1,8 @@
 package com.github.jaystgelais.jrpg.map.actor;
 
+import java.util.Map;
+
 public interface Action {
     String getActorState();
-    Direction getDirection();
+    Map<String, Object> getParameters();
 }

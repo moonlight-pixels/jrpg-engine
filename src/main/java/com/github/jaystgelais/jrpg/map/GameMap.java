@@ -1,7 +1,8 @@
 package com.github.jaystgelais.jrpg.map;
 
 import com.badlogic.gdx.ai.pfa.Connection;
-import com.badlogic.gdx.ai.pfa.Graph;
+import com.badlogic.gdx.ai.pfa.DefaultConnection;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -27,7 +28,7 @@ import java.util.Queue;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public final class GameMap implements Renderable, Updatable, Graph<TileCoordinate> {
+public final class GameMap implements Renderable, Updatable, IndexedGraph<TileCoordinate> {
     public static final String MAP_LAYER_PROP_MAP_LAYER = "jrpg-map-layer";
     public static final String MAP_LAYER_PROP_LAYER_TYPE = "jrpg-layer-type";
     public static final String MAP_LAYER_TYPE_BACKGRAOUND = "background";
@@ -266,69 +267,33 @@ public final class GameMap implements Renderable, Updatable, Graph<TileCoordinat
     }
 
     @Override
-    public Array<Connection<TileCoordinate>> getConnections(final TileCoordinate fromNode) {
-        Array<Connection<TileCoordinate>> connections = new Array<>();
-
-        // Find paths above node
-        TileCoordinate currentNode = fromNode;
-        int cost = 2;
-        while (!isCollision(null, currentNode.getAbove())) {
-            connections.add(new TileCoordinateConnection(currentNode, currentNode.getAbove(), cost++));
-            currentNode = currentNode.getAbove();
-        }
-
-        // Find paths below node
-        currentNode = fromNode;
-        cost = 2;
-        while (!isCollision(null, currentNode.getBelow())) {
-            connections.add(new TileCoordinateConnection(currentNode, currentNode.getBelow(), cost++));
-            currentNode = currentNode.getBelow();
-        }
-
-        // Find paths to the right of node
-        currentNode = fromNode;
-        cost = 2;
-        while (!isCollision(null, currentNode.getRight())) {
-            connections.add(new TileCoordinateConnection(currentNode, currentNode.getRight(), cost++));
-            currentNode = currentNode.getRight();
-        }
-
-
-        // Find paths to the left of node
-        currentNode = fromNode;
-        cost = 2;
-        while (!isCollision(null, currentNode.getLeft())) {
-            connections.add(new TileCoordinateConnection(currentNode, currentNode.getLeft(), cost++));
-            currentNode = currentNode.getLeft();
-        }
-
-        return connections;
+    public int getIndex(final TileCoordinate node) {
+        return (node.getMapLayer() * getMapHeightInTiles() * getMapWidthInTiles())
+                + (node.getY() * getMapWidthInTiles())
+                + node.getX();
     }
 
-    private static final class TileCoordinateConnection implements Connection<TileCoordinate> {
-        private final TileCoordinate fromNode;
-        private final TileCoordinate toNode;
-        private final float cost;
+    @Override
+    public int getNodeCount() {
+        return mapLayers.size() * getMapHeightInTiles() * getMapWidthInTiles();
+    }
 
-        private TileCoordinateConnection(final TileCoordinate fromNode, final TileCoordinate toNode, final float cost) {
-            this.fromNode = fromNode;
-            this.toNode = toNode;
-            this.cost = cost;
+    @Override
+    public Array<Connection<TileCoordinate>> getConnections(final TileCoordinate fromNode) {
+        Array<Connection<TileCoordinate>> array = new Array<>();
+        if (isCollision(null, fromNode.getAbove())) {
+            array.add(new DefaultConnection<>(fromNode, fromNode.getAbove()));
+        }
+        if (isCollision(null, fromNode.getBelow())) {
+            array.add(new DefaultConnection<>(fromNode, fromNode.getBelow()));
+        }
+        if (isCollision(null, fromNode.getLeft())) {
+            array.add(new DefaultConnection<>(fromNode, fromNode.getLeft()));
+        }
+        if (isCollision(null, fromNode.getRight())) {
+            array.add(new DefaultConnection<>(fromNode, fromNode.getRight()));
         }
 
-        @Override
-        public float getCost() {
-            return cost;
-        }
-
-        @Override
-        public TileCoordinate getFromNode() {
-            return fromNode;
-        }
-
-        @Override
-        public TileCoordinate getToNode() {
-            return toNode;
-        }
+        return array;
     }
 }

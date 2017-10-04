@@ -1,5 +1,8 @@
 package com.github.jaystgelais.jrpg.map.actor;
 
+import java.util.Collections;
+import java.util.Map;
+
 public final class InspectAction implements Action {
     @Override
     public String getActorState() {
@@ -7,7 +10,7 @@ public final class InspectAction implements Action {
     }
 
     @Override
-    public Direction getDirection() {
-        return null;
+    public Map<String, Object> getParameters() {
+        return Collections.emptyMap();
     }
 }

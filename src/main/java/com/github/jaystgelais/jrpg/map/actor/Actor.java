@@ -15,7 +15,6 @@ import com.github.jaystgelais.jrpg.tween.IntegerTween;
 import com.github.jaystgelais.jrpg.tween.Tween;
 import com.github.jaystgelais.jrpg.util.TimeUtil;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +23,9 @@ public final class Actor implements Entity, InputHandler {
     public static final String STATE_WALKING = "walking";
     public static final String STATE_STANDING = "standing";
     public static final String STATE_INSPECTING = "inspecting";
-    private static final String STATE_PARAM_DIRECTION = "direction";
+    public static final String STATE_WAITING = "waiting";
+    public static final String STATE_PARAM_DIRECTION = "direction";
+    public static final String STATE_PARAM_WAIT_TIME_MS = "waitTimeMs";
 
     private final GameMap map;
     private final ActorSpriteSet spriteSet;
@@ -138,6 +139,15 @@ public final class Actor implements Entity, InputHandler {
 
     }
 
+    private void processNextAction() {
+        Action action = controller.nextAction();
+        if (action != null) {
+            stateMachine.change(action.getActorState(), action.getParameters());
+        } else {
+            stateMachine.change(STATE_STANDING);
+        }
+    }
+
     private StateMachine initStateMachine() {
         Set<State> states = new HashSet<>();
         states.add(createStandingState());
@@ -147,7 +157,7 @@ public final class Actor implements Entity, InputHandler {
         return new StateMachine(states, STATE_STANDING);
     }
 
-    private StateAdapter createInspectingState() {
+    private State createInspectingState() {
         return new StateAdapter() {
 
             @Override
@@ -181,7 +191,7 @@ public final class Actor implements Entity, InputHandler {
         };
     }
 
-    private StateAdapter createWalkingState() {
+    private State createWalkingState() {
         final Actor actor = this;
 
         return new StateAdapter() {
@@ -248,15 +258,7 @@ public final class Actor implements Entity, InputHandler {
                     destination = null;
                     map.fireOnEnterTrigger(location, actor);
 
-                    Action action = controller.nextAction();
-                    if (action != null) {
-                        stateMachine.change(
-                                action.getActorState(),
-                                Collections.singletonMap(STATE_PARAM_DIRECTION, action.getDirection())
-                        );
-                    } else {
-                        stateMachine.change("standing");
-                    }
+                    processNextAction();
                 } else {
                     positionX = positionXTween.getValue();
                     positionY = positionYTween.getValue();
@@ -276,7 +278,7 @@ public final class Actor implements Entity, InputHandler {
         };
     }
 
-    private StateAdapter createStandingState() {
+    private State createStandingState() {
         return new StateAdapter() {
             @Override
             public String getKey() {
@@ -292,12 +294,29 @@ public final class Actor implements Entity, InputHandler {
             @Override
             public void update(final long elapsedTime) {
                 controller.update(elapsedTime);
-                Action action = controller.nextAction();
-                if (action != null) {
-                    stateMachine.change(
-                            action.getActorState(),
-                            Collections.singletonMap(STATE_PARAM_DIRECTION, action.getDirection())
-                    );
+                processNextAction();
+            }
+
+            @Override
+            public void render(final GraphicsService graphicsService) {
+                final TextureRegion standingImage = spriteSet.getStandingImage(facing);
+                graphicsService.drawSprite(
+                        standingImage,
+                        positionX - (standingImage.getRegionWidth() / 2.0f), positionY
+                );
+            }
+        };
+    }
+
+    private State createWaitingState() {
+        return new StateAdapter() {
+            private long timeRemainingMs;
+
+            @Override
+            public void update(final long elapsedTime) {
+                timeRemainingMs -= elapsedTime;
+                if (timeRemainingMs < 0L) {
+                    processNextAction();
                 }
             }
 
@@ -308,6 +327,16 @@ public final class Actor implements Entity, InputHandler {
                         standingImage,
                         positionX - (standingImage.getRegionWidth() / 2.0f), positionY
                 );
+            }
+
+            @Override
+            public void onEnter(final Map<String, Object> params) {
+                timeRemainingMs = (long) params.getOrDefault(STATE_PARAM_WAIT_TIME_MS, 0L);
+            }
+
+            @Override
+            public String getKey() {
+                return STATE_WAITING;
             }
         };
     }
