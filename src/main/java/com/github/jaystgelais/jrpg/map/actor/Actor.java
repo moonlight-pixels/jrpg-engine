@@ -41,21 +41,26 @@ public final class Actor implements Entity, InputHandler {
     private int positionY;
     private boolean isHero;
 
-    public Actor(final GameMap map, final ActorSpriteSet spriteSet,
-                 final Controller controller, final TileCoordinate location) {
+    public Actor(final GameMap map, final ActorSpriteSet spriteSet, final Controller controller,
+                 final TileCoordinate location, final long timeToTravelTileMs) {
         this.map = map;
         this.spriteSet = spriteSet;
         this.controller = controller;
         this.facing = Direction.DOWN;
         this.location = location;
         this.destination = location;
-        timeToTravelTileMs = WalkSpeeds.FAST;
+        this.timeToTravelTileMs = timeToTravelTileMs;
         positionX = map.getAbsoluteX(location);
         positionY = map.getAbsoluteY(location);
         height = spriteSet.getSpriteHeight();
         width = spriteSet.getSpriteWidth();
         stateMachine = initStateMachine();
         controller.setActor(this);
+    }
+
+    public Actor(final GameMap map, final ActorSpriteSet spriteSet, final Controller controller,
+                 final TileCoordinate location) {
+        this(map, spriteSet, controller, location, WalkSpeeds.NORMAL);
     }
 
     public int getPositionX() {

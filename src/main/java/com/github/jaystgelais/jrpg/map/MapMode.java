@@ -16,6 +16,7 @@ import com.github.jaystgelais.jrpg.map.actor.Actor;
 import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
 import com.github.jaystgelais.jrpg.map.actor.Direction;
 import com.github.jaystgelais.jrpg.map.actor.PlayerController;
+import com.github.jaystgelais.jrpg.map.actor.WalkSpeeds;
 import com.github.jaystgelais.jrpg.map.animation.SpriteSetDefinition;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
@@ -69,7 +70,7 @@ public final class MapMode extends GameMode {
 
         loadMap(mapDefinition);
 
-        hero = new Actor(map, heroSpriteSet.getSpriteSet(assetManager), controller, location);
+        hero = new Actor(map, heroSpriteSet.getSpriteSet(assetManager), controller, location, WalkSpeeds.FAST);
         hero.setIsHero(true);
         if (params.containsKey("facing")) {
             hero.setFacing((Direction) params.get("facing"));
