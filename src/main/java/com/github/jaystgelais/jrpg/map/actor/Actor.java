@@ -55,6 +55,7 @@ public final class Actor implements Entity, InputHandler {
         height = spriteSet.getSpriteHeight();
         width = spriteSet.getSpriteWidth();
         stateMachine = initStateMachine();
+        controller.setActor(this);
     }
 
     public int getPositionX() {
@@ -89,6 +90,10 @@ public final class Actor implements Entity, InputHandler {
 
     public void setFacing(final Direction direction) {
         this.facing = direction;
+    }
+
+    public GameMap getMap() {
+        return map;
     }
 
     private TileCoordinate getAdjacentTileCoordinate(final Direction direction) {
@@ -364,6 +369,7 @@ public final class Actor implements Entity, InputHandler {
 
     @Override
     public void update(final long elapsedTime) {
+        controller.update(elapsedTime);
         stateMachine.update(elapsedTime);
     }
 

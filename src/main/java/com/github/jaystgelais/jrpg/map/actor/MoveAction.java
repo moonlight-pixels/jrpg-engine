@@ -7,7 +7,7 @@ import java.util.Map;
 public final class MoveAction implements Action {
     private final Direction direction;
 
-    MoveAction(final Direction direction) {
+    public MoveAction(final Direction direction) {
         this.direction = direction;
     }
 

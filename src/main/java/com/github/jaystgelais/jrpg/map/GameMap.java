@@ -2,7 +2,6 @@ package com.github.jaystgelais.jrpg.map;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultConnection;
-import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
+import com.github.jaystgelais.jrpg.map.ai.CachingIndexedGraph;
 import com.github.jaystgelais.jrpg.map.animation.TileAnimation;
 import com.github.jaystgelais.jrpg.map.animation.TileAnimationDefinition;
 import com.github.jaystgelais.jrpg.map.fx.MapEffect;
@@ -28,7 +28,7 @@ import java.util.Queue;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public final class GameMap implements Renderable, Updatable, IndexedGraph<TileCoordinate> {
+public final class GameMap implements Renderable, Updatable, CachingIndexedGraph<TileCoordinate> {
     public static final String MAP_LAYER_PROP_MAP_LAYER = "jrpg-map-layer";
     public static final String MAP_LAYER_PROP_LAYER_TYPE = "jrpg-layer-type";
     public static final String MAP_LAYER_TYPE_BACKGRAOUND = "background";
@@ -47,6 +47,7 @@ public final class GameMap implements Renderable, Updatable, IndexedGraph<TileCo
     private final List<TileAnimation> animations;
     private final List<MapEffect> mapEffects;
     private final Location parentLocation;
+    private final TileCoordinate[] graphNodeIndex;
     private boolean areEffectsInitialized = false;
 
     public GameMap(final OrthographicCamera camera, final TiledMap map,
@@ -63,6 +64,7 @@ public final class GameMap implements Renderable, Updatable, IndexedGraph<TileCo
         animations = new LinkedList<>();
         mapEffects = new LinkedList<>();
         buildMapLayers(map);
+        graphNodeIndex = new TileCoordinate[getNodeCount()];
     }
 
     private void buildMapLayers(final TiledMap map) {
@@ -281,19 +283,29 @@ public final class GameMap implements Renderable, Updatable, IndexedGraph<TileCo
     @Override
     public Array<Connection<TileCoordinate>> getConnections(final TileCoordinate fromNode) {
         Array<Connection<TileCoordinate>> array = new Array<>();
-        if (isCollision(null, fromNode.getAbove())) {
-            array.add(new DefaultConnection<>(fromNode, fromNode.getAbove()));
+        if (!isCollision(null, fromNode.getAbove())) {
+            array.add(new DefaultConnection<>(getCachedNode(fromNode), getCachedNode(fromNode.getAbove())));
         }
-        if (isCollision(null, fromNode.getBelow())) {
-            array.add(new DefaultConnection<>(fromNode, fromNode.getBelow()));
+        if (!isCollision(null, fromNode.getBelow())) {
+            array.add(new DefaultConnection<>(getCachedNode(fromNode), getCachedNode(fromNode.getBelow())));
         }
-        if (isCollision(null, fromNode.getLeft())) {
-            array.add(new DefaultConnection<>(fromNode, fromNode.getLeft()));
+        if (!isCollision(null, fromNode.getLeft())) {
+            array.add(new DefaultConnection<>(getCachedNode(fromNode), getCachedNode(fromNode.getLeft())));
         }
-        if (isCollision(null, fromNode.getRight())) {
-            array.add(new DefaultConnection<>(fromNode, fromNode.getRight()));
+        if (!isCollision(null, fromNode.getRight())) {
+            array.add(new DefaultConnection<>(getCachedNode(fromNode), getCachedNode(fromNode.getRight())));
         }
 
         return array;
+    }
+
+    @Override
+    public TileCoordinate getCachedNode(final TileCoordinate matching) {
+        final int nodeIndex = getIndex(matching);
+        if (graphNodeIndex[nodeIndex] == null) {
+            graphNodeIndex[nodeIndex] = matching;
+        }
+
+        return graphNodeIndex[nodeIndex];
     }
 }

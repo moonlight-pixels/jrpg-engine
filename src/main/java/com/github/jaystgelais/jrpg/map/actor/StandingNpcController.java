@@ -16,4 +16,9 @@ public final class StandingNpcController implements Controller {
     public Action nextAction() {
         return new FaceAction(preferredDirection);
     }
+
+    @Override
+    public void setActor(final Actor actor) {
+
+    }
 }

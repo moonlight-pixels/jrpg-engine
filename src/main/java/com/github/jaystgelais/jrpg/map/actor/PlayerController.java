@@ -40,6 +40,11 @@ public final class PlayerController implements Controller, InputHandler {
         return action;
     }
 
+    @Override
+    public void setActor(final Actor actor) {
+
+    }
+
     public void flushInput() {
         nextAction = null;
     }
