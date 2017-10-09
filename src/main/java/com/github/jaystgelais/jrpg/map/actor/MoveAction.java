@@ -11,7 +11,6 @@ public final class MoveAction implements Action {
         this.direction = direction;
     }
 
-
     @Override
     public String getActorState() {
         return Actor.STATE_WALKING;
@@ -20,5 +19,10 @@ public final class MoveAction implements Action {
     @Override
     public Map<String, Object> getParameters() {
         return Collections.singletonMap(Actor.STATE_PARAM_DIRECTION, direction);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("MoveAction{direction=%s}", direction);
     }
 }

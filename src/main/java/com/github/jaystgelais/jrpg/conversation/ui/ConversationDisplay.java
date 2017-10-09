@@ -103,4 +103,9 @@ public final class ConversationDisplay implements Renderable, Updatable, InputHa
                 .setPositionY(graphicsService.getResolutionHeight() - height - DEFAULT_PANEL_TOP_MARGIN)
                 .setTransitionTimeMs(DEFAULT_TRANSITION_TIME_MS);
     }
+
+    @Override
+    public String toString() {
+        return String.format("ConversationDisplay{conversation=%s}", conversation);
+    }
 }

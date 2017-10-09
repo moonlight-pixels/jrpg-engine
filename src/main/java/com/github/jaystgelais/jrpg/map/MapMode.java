@@ -18,6 +18,7 @@ import com.github.jaystgelais.jrpg.map.actor.Direction;
 import com.github.jaystgelais.jrpg.map.actor.PlayerController;
 import com.github.jaystgelais.jrpg.map.actor.WalkSpeeds;
 import com.github.jaystgelais.jrpg.map.animation.SpriteSetDefinition;
+import com.github.jaystgelais.jrpg.map.script.Scene;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
 import com.github.jaystgelais.jrpg.state.State;
@@ -30,7 +31,6 @@ import java.util.Map;
 import java.util.Set;
 
 public final class MapMode extends GameMode {
-    private static final int DEFAULT_TIME_TO_TRAVERSE_TILE_MS = 300;
     private static final long DEFAULT_INITIAL_PAUSE_MS = 500;
     private static final int DEBUG_TEXT_X = 10;
     private static final int DEBUB_TEXT_Y = 20;
@@ -114,6 +114,10 @@ public final class MapMode extends GameMode {
         return hero;
     }
 
+    public void startScene(final Scene scene) {
+        stateMachine.change("scene", Collections.singletonMap("scene", scene));
+    }
+
     private void loadMap(final MapDefinition mapDefinition) {
         this.map = mapDefinition.getMap(getGame().getGraphicsService(), assetManager);
         GameState.setLocation(map.getParentLocation());
@@ -125,77 +129,74 @@ public final class MapMode extends GameMode {
 
     private StateMachine initStateMachine() {
         Set<State> states = new HashSet<>();
-        states.add(new StateAdapter() {
-            private long timeRemainingMs;
+        states.add(createPauseState());
+        states.add(createPlayerInControlState());
+        states.add(createTriggerInControlState());
+        states.add(createSceneState());
 
+        return new StateMachine(states, "initialPause");
+    }
+
+    private State createSceneState() {
+        return new StateAdapter() {
+            private Scene scene;
             @Override
             public String getKey() {
-                return "initialPause";
+                return "scene";
             }
 
             @Override
             public void onEnter(final Map<String, Object> params) {
-                timeRemainingMs = DEFAULT_INITIAL_PAUSE_MS;
+                scene = (Scene) params.get("scene");
+                map.getEntities().stream()
+                        .filter(Actor.class::isInstance)
+                        .map(Actor.class::cast)
+                        .forEach(Actor::startScene);
+            }
+
+            @Override
+            public void onExit() {
+                scene = null;
+                controller.flushInput();
+                map.getEntities().stream()
+                        .filter(Actor.class::isInstance)
+                        .map(Actor.class::cast)
+                        .forEach(Actor::endScene);
             }
 
             @Override
             public void update(final long elapsedTime) {
-                timeRemainingMs -= elapsedTime;
-                if (timeRemainingMs <= 0) {
-                    controller.flushInput();
+                if (scene.isComplete()) {
                     stateMachine.change("playerInControl");
+                } else {
+                    scene.update(elapsedTime);
+
+                    for (Entity entity : map.getEntities()) {
+                        entity.update(elapsedTime);
+                    }
                 }
             }
 
             @Override
             public void render(final GraphicsService graphicsService) {
                 renderMapAndEntities(graphicsService);
-            }
-        });
-        states.add(new StateAdapter() {
-            @Override
-            public String getKey() {
-                return "playerInControl";
+                scene.render(graphicsService);
             }
 
             @Override
             public void handleInput(final InputService inputService) {
-                if (inputService.isPressed(Inputs.PAUSE)) {
-                    getGame().exitGame();
-                } else if (getGame().hasGameMode("menu") && inputService.isPressed(Inputs.MENU)) {
-                    getGame().activateGameMode("menu");
-                } else {
-                    controller.handleInput(inputService);
-                }
+                scene.handleInput(inputService);
             }
 
             @Override
-            public void update(final long elapsedTime) {
-                TriggerAction nextTriggeredAction = map.getNextTriggeredAction();
-                if (nextTriggeredAction != null) {
-                    stateMachine.change("triggerInControl", Collections.singletonMap("action", nextTriggeredAction));
-                    return;
-                }
-                for (Trigger trigger : map.getTriggers()) {
-                    if (trigger.isTriggered(hero)) {
-                        stateMachine.change(
-                                "triggerInControl",
-                                Collections.singletonMap("action", trigger.getAction())
-                        );
-                        return;
-                    }
-                }
-                for (Entity entity : map.getEntities()) {
-                    entity.update(elapsedTime);
-                }
+            public void dispose() {
+                scene.dispose();
             }
+        };
+    }
 
-            @Override
-            public void render(final GraphicsService graphicsService) {
-                renderMapAndEntities(graphicsService);
-            }
-        });
-        states.add(new State() {
+    private State createTriggerInControlState() {
+        return new State() {
             private TriggerAction triggerAction;
 
             @Override
@@ -242,9 +243,83 @@ public final class MapMode extends GameMode {
                     triggerAction.update(elapsedTime);
                 }
             }
-        });
+        };
+    }
 
-        return new StateMachine(states, "initialPause");
+    private State createPlayerInControlState() {
+        return new StateAdapter() {
+            @Override
+            public String getKey() {
+                return "playerInControl";
+            }
+
+            @Override
+            public void handleInput(final InputService inputService) {
+                if (inputService.isPressed(Inputs.PAUSE)) {
+                    getGame().exitGame();
+                } else if (getGame().hasGameMode("menu") && inputService.isPressed(Inputs.MENU)) {
+                    getGame().activateGameMode("menu");
+                } else {
+                    controller.handleInput(inputService);
+                }
+            }
+
+            @Override
+            public void update(final long elapsedTime) {
+                TriggerAction nextTriggeredAction = map.getNextTriggeredAction();
+                if (nextTriggeredAction != null) {
+                    stateMachine.change("triggerInControl", Collections.singletonMap("action", nextTriggeredAction));
+                    return;
+                }
+                for (Trigger trigger : map.getTriggers()) {
+                    if (trigger.isTriggered(hero)) {
+                        stateMachine.change(
+                                "triggerInControl",
+                                Collections.singletonMap("action", trigger.getAction())
+                        );
+                        return;
+                    }
+                }
+                for (Entity entity : map.getEntities()) {
+                    entity.update(elapsedTime);
+                }
+            }
+
+            @Override
+            public void render(final GraphicsService graphicsService) {
+                renderMapAndEntities(graphicsService);
+            }
+        };
+    }
+
+    private State createPauseState() {
+        return new StateAdapter() {
+            private long timeRemainingMs;
+
+            @Override
+            public String getKey() {
+                return "initialPause";
+            }
+
+            @Override
+            public void onEnter(final Map<String, Object> params) {
+                timeRemainingMs = DEFAULT_INITIAL_PAUSE_MS;
+            }
+
+            @Override
+            public void update(final long elapsedTime) {
+                timeRemainingMs -= elapsedTime;
+                if (timeRemainingMs <= 0) {
+                    controller.flushInput();
+                    stateMachine.change("playerInControl");
+                }
+            }
+
+            @Override
+            public void render(final GraphicsService graphicsService) {
+                renderMapAndEntities(graphicsService);
+            }
+        };
     }
 
     private void renderMapAndEntities(final GraphicsService graphicsService) {

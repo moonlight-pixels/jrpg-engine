@@ -5,6 +5,7 @@ import com.github.jaystgelais.jrpg.map.actor.Actor;
 import com.github.jaystgelais.jrpg.state.Updatable;
 
 public interface Goal extends Updatable {
+    boolean isAchievable(final Actor actor);
     boolean isComplete(final Actor actor);
     Action nextAction(final Actor actor);
 }

@@ -140,6 +140,10 @@ public class Game implements ApplicationListener {
         gameModes.change(stateKey);
     }
 
+    public final GameMode getActiveMode() {
+        return (GameMode) gameModes.getCurrentState();
+    }
+
     private void handleDebugInput(final InputService inputService) {
         if (screenShotInput.isPressed(inputService)) {
             ScreenShotUtil.takeScreenShot();

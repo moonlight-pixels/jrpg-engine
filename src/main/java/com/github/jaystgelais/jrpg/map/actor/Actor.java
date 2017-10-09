@@ -31,6 +31,7 @@ public final class Actor implements Entity, InputHandler {
     private final ActorSpriteSet spriteSet;
     private final StateMachine stateMachine;
     private final Controller controller;
+    private final SceneController sceneController;
     private final int height;
     private final int width;
     private Direction facing;
@@ -40,6 +41,7 @@ public final class Actor implements Entity, InputHandler {
     private int positionX;
     private int positionY;
     private boolean isHero;
+    private boolean isControlledByScene = false;
 
     public Actor(final GameMap map, final ActorSpriteSet spriteSet, final Controller controller,
                  final TileCoordinate location, final long timeToTravelTileMs) {
@@ -54,6 +56,7 @@ public final class Actor implements Entity, InputHandler {
         positionY = map.getAbsoluteY(location);
         height = spriteSet.getSpriteHeight();
         width = spriteSet.getSpriteWidth();
+        sceneController =  new SceneController();
         stateMachine = initStateMachine();
         controller.setActor(this);
     }
@@ -150,7 +153,7 @@ public final class Actor implements Entity, InputHandler {
     }
 
     private void processNextAction() {
-        Action action = controller.nextAction();
+        Action action = getActiveController().nextAction();
         if (action != null) {
             stateMachine.change(action.getActorState(), action.getParameters());
         } else {
@@ -299,11 +302,14 @@ public final class Actor implements Entity, InputHandler {
             public void onEnter(final Map<String, Object> params) {
                 positionX = map.getAbsoluteX(location);
                 positionY = map.getAbsoluteY(location);
+                if (params.containsKey(STATE_PARAM_DIRECTION)) {
+                    facing = (Direction) params.get(STATE_PARAM_DIRECTION);
+                }
             }
 
             @Override
             public void update(final long elapsedTime) {
-                controller.update(elapsedTime);
+                getActiveController().update(elapsedTime);
                 processNextAction();
             }
 
@@ -374,8 +380,23 @@ public final class Actor implements Entity, InputHandler {
 
     @Override
     public void update(final long elapsedTime) {
-        controller.update(elapsedTime);
+        getActiveController().update(elapsedTime);
         stateMachine.update(elapsedTime);
     }
 
+    public void startScene() {
+        isControlledByScene = true;
+    }
+
+    public void endScene() {
+        isControlledByScene = false;
+    }
+
+    private Controller getActiveController() {
+        return (isControlledByScene) ? sceneController : controller;
+    }
+
+    public SceneController getSceneController() {
+        return sceneController;
+    }
 }

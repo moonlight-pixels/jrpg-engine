@@ -14,6 +14,11 @@ public final class MoveToGoal implements Goal {
     }
 
     @Override
+    public boolean isAchievable(final Actor actor) {
+        return nextAction(actor) != null;
+    }
+
+    @Override
     public boolean isComplete(final Actor actor) {
         return destination.equals(actor.getLocation());
     }
@@ -48,5 +53,9 @@ public final class MoveToGoal implements Goal {
     @Override
     public void update(final long elapsedTime) {
 
+    }
+
+    public TileCoordinate getDestination() {
+        return destination;
     }
 }

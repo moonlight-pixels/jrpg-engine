@@ -40,6 +40,7 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
     private final TiledMapRenderer mapRenderer;
     private final SortedMap<Integer, MapLayer> mapLayers;
     private final List<Entity> entities;
+    private final Map<String, Actor> namedActors;
     private Actor focalPoint;
     private final List<Trigger> triggers;
     private final Map<TileCoordinate, TileTrigger> tileTriggers;
@@ -65,6 +66,7 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
         mapEffects = new LinkedList<>();
         buildMapLayers(map);
         graphNodeIndex = new TileCoordinate[getNodeCount()];
+        namedActors = new HashMap<>();
     }
 
     private void buildMapLayers(final TiledMap map) {
@@ -98,13 +100,20 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
 
     public void setFocalPoint(final Actor focalPoint) {
         this.focalPoint = focalPoint;
-        if (!entities.contains(focalPoint)) {
-            entities.add(focalPoint);
-        }
+        addNamedActor("hero", focalPoint);
     }
 
     public void addEntity(final Entity entity) {
         entities.add(entity);
+    }
+
+    public void addNamedActor(final String name, final Actor actor) {
+        namedActors.put(name, actor);
+        addEntity(actor);
+    }
+
+    public Actor getNamedActor(final String name) {
+        return namedActors.get(name);
     }
 
     public void addMapEffect(final MapEffect mapEffect) {
