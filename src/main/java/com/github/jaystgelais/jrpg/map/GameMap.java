@@ -5,6 +5,7 @@ import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -275,6 +276,13 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
     public void update(final long elapsedTime) {
         animations.forEach(animation -> animation.update(elapsedTime));
         mapEffects.forEach(effect -> effect.update(elapsedTime));
+    }
+
+    public void updateTile(final TileCoordinate location, final String layerName, final TiledMapTile tile) {
+        mapLayers
+                .get(location.getMapLayer())
+                .updateTile(layerName, location.getX(), location.getY(), tile);
+
     }
 
     @Override

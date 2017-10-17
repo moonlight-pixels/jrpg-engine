@@ -3,11 +3,9 @@ package com.github.jaystgelais.jrpg.map;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.state.Updatable;
 
-public interface Entity extends Renderable, Updatable {
+public interface Entity extends Renderable, Updatable, Interactable {
 
     boolean isOccupying(final TileCoordinate coordinate);
-
-    void interactWith();
 
     TileCoordinate getLocation();
 
