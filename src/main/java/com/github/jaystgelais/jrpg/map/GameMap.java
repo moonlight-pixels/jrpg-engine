@@ -13,6 +13,7 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.Renderable;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
 import com.github.jaystgelais.jrpg.map.ai.CachingIndexedGraph;
+import com.github.jaystgelais.jrpg.map.animation.Door;
 import com.github.jaystgelais.jrpg.map.animation.TileAnimation;
 import com.github.jaystgelais.jrpg.map.animation.TileAnimationDefinition;
 import com.github.jaystgelais.jrpg.map.fx.MapEffect;
@@ -21,6 +22,7 @@ import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
 import com.github.jaystgelais.jrpg.state.Updatable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,6 +50,7 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
     private final Queue<TriggerAction> actionQueue;
     private final List<TileAnimation> animations;
     private final List<MapEffect> mapEffects;
+    private final Map<String, Door> doors;
     private final Location parentLocation;
     private final TileCoordinate[] graphNodeIndex;
     private boolean areEffectsInitialized = false;
@@ -65,9 +68,10 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
         actionQueue = new LinkedList<>();
         animations = new LinkedList<>();
         mapEffects = new LinkedList<>();
+        namedActors = new HashMap<>();
+        doors = new HashMap<>();
         buildMapLayers(map);
         graphNodeIndex = new TileCoordinate[getNodeCount()];
-        namedActors = new HashMap<>();
     }
 
     private void buildMapLayers(final TiledMap map) {
@@ -95,6 +99,10 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
         }
     }
 
+    public TiledMap getTiledMap() {
+        return map;
+    }
+
     public Actor getFocalPoint() {
         return focalPoint;
     }
@@ -115,6 +123,18 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
 
     public Actor getNamedActor(final String name) {
         return namedActors.get(name);
+    }
+
+    public void addDoor(final Door door) {
+        doors.put(door.getId(), door);
+    }
+
+    public Door getDoor(final String id) {
+        return doors.get(id);
+    }
+
+    public Collection<Door> getDoors() {
+        return doors.values();
     }
 
     public void addMapEffect(final MapEffect mapEffect) {
@@ -276,13 +296,11 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
     public void update(final long elapsedTime) {
         animations.forEach(animation -> animation.update(elapsedTime));
         mapEffects.forEach(effect -> effect.update(elapsedTime));
+        doors.values().forEach(door -> door.update(elapsedTime));
     }
 
-    public void updateTile(final TileCoordinate location, final String layerName, final TiledMapTile tile) {
-        mapLayers
-                .get(location.getMapLayer())
-                .updateTile(layerName, location.getX(), location.getY(), tile);
-
+    public boolean isBackgroundLayer(final int mapLayerIndex, final String layerName) {
+        return mapLayers.get(mapLayerIndex).isBackground(layerName);
     }
 
     @Override

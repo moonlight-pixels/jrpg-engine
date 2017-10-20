@@ -64,16 +64,8 @@ public final class MapLayer {
         return false;
     }
 
-    public void updateTile(final String layerName, final int x, final int y, final TiledMapTile tile) {
-        Stream
-                .concat(backgroundLayers.stream(), foregroundLayers.stream())
-                .forEach(
-                        layer -> {
-                            if (layerName.equals(layer.getName())) {
-                                layer.getCell(x, y).setTile(tile);
-                            }
-                        }
-                );
+    public boolean isBackground(final String layerName) {
+        return backgroundLayers.stream().anyMatch(layer -> layerName.equals(layer.getName()));
     }
 
     private static class EntitiesToRenderComparator implements Comparator<Entity>, Serializable {

@@ -8,6 +8,7 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.map.Entity;
 import com.github.jaystgelais.jrpg.map.GameMap;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
+import com.github.jaystgelais.jrpg.map.animation.Door;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
@@ -184,6 +185,9 @@ public final class Actor implements Entity, InputHandler {
                 if (targetEntity != null) {
                     targetEntity.interactWith();
                 } else {
+                    map.getDoors().stream()
+                            .filter(door -> door.isInteractableWithAt(getAdjacentTileCoordinate(facing)))
+                            .forEach(Door::interactWith);
                     map.fireOnInspectTrigger(getAdjacentTileCoordinate(facing));
                 }
             }
