@@ -1,7 +1,6 @@
 package com.github.jaystgelais.jrpg.map;
 
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 
@@ -9,7 +8,6 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public final class MapLayer {
     private static final EntitiesToRenderComparator ENTITIES_TO_RENDER_COMPARATOR = new EntitiesToRenderComparator();
