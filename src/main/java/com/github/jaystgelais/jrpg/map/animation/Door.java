@@ -5,6 +5,7 @@ import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.map.GameMap;
 import com.github.jaystgelais.jrpg.map.Interactable;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
+import com.github.jaystgelais.jrpg.map.trigger.MessageTriggerAction;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
@@ -61,13 +62,17 @@ public final class Door implements Updatable, Interactable {
     }
 
     public void open() {
-        if (isClosed() && !isLocked()) {
+        if (isLocked()) {
+            doorTiles.get(0).map.queueAction(new MessageTriggerAction("Locked"));
+        } else {
             forceOpen();
         }
     }
 
     public void forceOpen() {
-        stateMachine.change(STATE_OPENING);
+        if (isClosed()) {
+            stateMachine.change(STATE_OPENING);
+        }
     }
 
     public boolean isLocked() {
