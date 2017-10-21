@@ -205,6 +205,11 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
                 return true;
             }
         }
+        for (Door door : doors.values()) {
+            if (door.isCollision(coordinate)) {
+                return true;
+            }
+        }
         return mapLayers.get(coordinate.getMapLayer()).isCollision(coordinate);
     }
 

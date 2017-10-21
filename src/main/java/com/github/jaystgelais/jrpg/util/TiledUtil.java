@@ -9,11 +9,27 @@ import com.github.jaystgelais.jrpg.map.GameMap;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
 
 public final class TiledUtil {
+    private static final String FISRTGID_PARAM = "firstgid";
     private TiledUtil() { }
 
     public static TiledMapTile getTile(final TiledMap tiledMap, final String tilesetName, final int tileId) {
         final TiledMapTileSet tileset = tiledMap.getTileSets().getTileSet(tilesetName);
-        return (tileset != null) ? tileset.getTile(tileId) : null;
+        return (tileset != null)
+                ? tileset.getTile(tileset.getProperties().get(FISRTGID_PARAM, Integer.class) + tileId)
+                : null;
+    }
+
+    public static boolean isBackground(final TiledMap tiledMap, final int tileLayerIndex, final String layerName) {
+        final TiledMapTileLayer mapLayer = (TiledMapTileLayer) tiledMap.getLayers().get(layerName);
+        return (
+                mapLayer != null
+                        && matchProperty(mapLayer, GameMap.MAP_LAYER_PROP_MAP_LAYER, tileLayerIndex)
+                        && matchProperty(
+                                mapLayer,
+                                GameMap.MAP_LAYER_PROP_LAYER_TYPE,
+                                GameMap.MAP_LAYER_TYPE_BACKGRAOUND
+                        )
+        );
     }
 
     public static void updateTile(final TiledMap tiledMap, final TileCoordinate location,

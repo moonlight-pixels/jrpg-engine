@@ -98,6 +98,19 @@ public final class Door implements Updatable, Interactable {
         return false;
     }
 
+    public boolean isCollision(final TileCoordinate tileCoordinate) {
+        for (DoorTile doorTile : doorTiles) {
+            if (isClosed()
+                    && doorTile.location.equals(tileCoordinate)
+                    && TiledUtil.isBackground(
+                            doorTile.map.getTiledMap(), tileCoordinate.getMapLayer(), doorTile.layerName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private String getStateFlag() {
         return String.format("door:%s:opened", id);
     }
