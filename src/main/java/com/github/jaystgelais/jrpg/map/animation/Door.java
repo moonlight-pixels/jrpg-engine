@@ -105,7 +105,7 @@ public final class Door implements Updatable, Interactable {
 
     public boolean isCollision(final TileCoordinate tileCoordinate) {
         for (DoorTile doorTile : doorTiles) {
-            if (isClosed()
+            if (!isOpen()
                     && doorTile.location.equals(tileCoordinate)
                     && TiledUtil.isBackground(
                             doorTile.map.getTiledMap(), tileCoordinate.getMapLayer(), doorTile.layerName)) {
