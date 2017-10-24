@@ -56,20 +56,14 @@ public final class Door implements Updatable, Interactable {
 
     @Override
     public void interactWith() {
-        if (openAction == OpenActions.INSPECT) {
+        if (isLocked()) {
+            doorTiles.get(0).map.queueAction(new MessageTriggerAction("Locked"));
+        } else if (openAction == OpenActions.INSPECT) {
             open();
         }
     }
 
     public void open() {
-        if (isLocked()) {
-            doorTiles.get(0).map.queueAction(new MessageTriggerAction("Locked"));
-        } else {
-            forceOpen();
-        }
-    }
-
-    public void forceOpen() {
         if (isClosed()) {
             stateMachine.change(STATE_OPENING);
         }
@@ -109,6 +103,9 @@ public final class Door implements Updatable, Interactable {
                     && doorTile.location.equals(tileCoordinate)
                     && TiledUtil.isBackground(
                             doorTile.map.getTiledMap(), tileCoordinate.getMapLayer(), doorTile.layerName)) {
+                if (openAction == OpenActions.PUSH && !isLocked()) {
+                    open();
+                }
                 return true;
             }
         }
