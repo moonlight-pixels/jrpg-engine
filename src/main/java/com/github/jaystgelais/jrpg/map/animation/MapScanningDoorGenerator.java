@@ -35,9 +35,6 @@ public final class MapScanningDoorGenerator {
     public void createDoors(final GameMap map) {
         final Set<MapTile> doorTiles = findDoorTiles(map);
         final Map<String, TiledMapTile[]> animations = buildDoorAnimations(map, getDistinctAnimationIds(doorTiles));
-        animations.keySet().forEach(animationId -> {
-            System.out.printf("%s(%d)%n", animationId, animations.get(animationId).length);
-        });
         final Set<Set<MapTile>> tileClusters = new HashSet<>();
         doorTiles.forEach(doorTile -> {
             Set<MapTile> cluster = new HashSet<>();
@@ -130,7 +127,7 @@ public final class MapScanningDoorGenerator {
             for (int y = 0; y < layer.getHeight(); y++) {
                 final TiledMapTileLayer.Cell cell = layer.getCell(x, y);
                 TiledMapTile tile = (cell != null) ? cell.getTile() : null;
-                if (tile != null && tile.getProperties().get(JRPG_TILE_IS_DOOR, true, Boolean.class)) {
+                if (tile != null && tile.getProperties().get(JRPG_TILE_IS_DOOR, false, Boolean.class)) {
                     mapTiles.add(new MapTile(
                             new TileCoordinate(x, y, layerIndex),
                             layer.getName(),
