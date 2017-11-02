@@ -36,6 +36,7 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
     public static final String MAP_LAYER_TYPE_BACKGRAOUND = "background";
     public static final String MAP_LAYER_TYPE_FOREGRAOUND = "foreground";
     public static final String MAP_LAYER_TYPE_COLLISION = "collision";
+    public static final String TILE_PROP_ECLIPSED_HEIGHT = "jrpg-eclipsed-height";
 
     private final OrthographicCamera camera;
     private final TiledMap map;

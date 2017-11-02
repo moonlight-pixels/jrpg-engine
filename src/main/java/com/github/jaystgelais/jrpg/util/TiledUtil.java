@@ -1,6 +1,7 @@
 package com.github.jaystgelais.jrpg.util;
 
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -40,9 +41,27 @@ public final class TiledUtil {
         }
     }
 
-    public static <T extends Object> boolean matchProperty(final MapLayer mapLayer, final String propertyName,
+    public static <T> boolean matchProperty(final MapLayer mapLayer, final String propertyName,
                                                            final T value) {
         return value.equals(mapLayer.getProperties().get(propertyName, value.getClass()));
+    }
+
+    public static <T> T getCellPropertyFromTopMostTile(final TiledMap tiledMap, final TileCoordinate coordinate,
+                                                       final String propertyName, final Class<T> clazz) {
+        T value = null;
+        for (MapLayer mapLayer : tiledMap.getLayers()) {
+            if (mapLayer instanceof TiledMapTileLayer
+                    && matchProperty(mapLayer, GameMap.MAP_LAYER_PROP_MAP_LAYER, coordinate.getMapLayer())) {
+                TiledMapTileLayer tiledMapTileLayer = (TiledMapTileLayer) mapLayer;
+                TiledMapTileLayer.Cell cell = tiledMapTileLayer.getCell(coordinate.getX(), coordinate.getY());
+                if (cell != null) {
+                    final MapProperties cellProps = cell.getTile().getProperties();
+                    value = (cellProps.get(propertyName, clazz) != null) ? cellProps.get(propertyName, clazz) : value;
+                }
+            }
+        }
+
+        return value;
     }
 
 }

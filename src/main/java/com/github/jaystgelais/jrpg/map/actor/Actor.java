@@ -14,6 +14,7 @@ import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.tween.IntegerTween;
 import com.github.jaystgelais.jrpg.tween.Tween;
+import com.github.jaystgelais.jrpg.util.TiledUtil;
 import com.github.jaystgelais.jrpg.util.TimeUtil;
 
 import java.util.HashSet;
@@ -200,10 +201,7 @@ public final class Actor implements Entity, InputHandler {
             @Override
             public void render(final GraphicsService graphicsService) {
                 final TextureRegion standingImage = spriteSet.getStandingImage(facing);
-                graphicsService.drawSprite(
-                        standingImage,
-                        positionX - (standingImage.getRegionWidth() / 2.0f), positionY
-                );
+                drawSprite(graphicsService, standingImage);
             }
         };
     }
@@ -287,10 +285,7 @@ public final class Actor implements Entity, InputHandler {
                 final TextureRegion walkingFrame = walkingAnimation.getKeyFrame(
                         TimeUtil.convertMsToFloatSeconds(timeInAnimation)
                 );
-                graphicsService.drawSprite(
-                        walkingFrame,
-                        positionX - (walkingFrame.getRegionWidth() / 2.0f), positionY
-                );
+                drawSprite(graphicsService, walkingFrame);
             }
         };
     }
@@ -320,10 +315,7 @@ public final class Actor implements Entity, InputHandler {
             @Override
             public void render(final GraphicsService graphicsService) {
                 final TextureRegion standingImage = spriteSet.getStandingImage(facing);
-                graphicsService.drawSprite(
-                        standingImage,
-                        positionX - (standingImage.getRegionWidth() / 2.0f), positionY
-                );
+                drawSprite(graphicsService, standingImage);
             }
         };
     }
@@ -343,10 +335,7 @@ public final class Actor implements Entity, InputHandler {
             @Override
             public void render(final GraphicsService graphicsService) {
                 final TextureRegion standingImage = spriteSet.getStandingImage(facing);
-                graphicsService.drawSprite(
-                        standingImage,
-                        positionX - (standingImage.getRegionWidth() / 2.0f), positionY
-                );
+                drawSprite(graphicsService, standingImage);
             }
 
             @Override
@@ -359,6 +348,38 @@ public final class Actor implements Entity, InputHandler {
                 return STATE_WAITING;
             }
         };
+    }
+
+    private void drawSprite(final GraphicsService graphicsService, final TextureRegion sprite) {
+        ActorRenderFrame frame = new ActorRenderFrame(
+                sprite,
+                Math.round(positionX - (sprite.getRegionWidth() / 2.0f)),
+                positionY
+        )
+                .translate(getEclipseTranslation());
+        graphicsService.drawSprite(frame.getSprite(), frame.getPositionX(), frame.getPositionY());
+    }
+
+    private PartialEclipseTranslation getEclipseTranslation() {
+        Integer locationEclipseHeight = TiledUtil.getCellPropertyFromTopMostTile(
+                map.getTiledMap(),
+                location,
+                GameMap.TILE_PROP_ECLIPSED_HEIGHT,
+                Integer.class
+        );
+        Integer destinationEclipseHeight = TiledUtil.getCellPropertyFromTopMostTile(
+                map.getTiledMap(),
+                (destination != null) ? destination : location,
+                GameMap.TILE_PROP_ECLIPSED_HEIGHT,
+                Integer.class
+        );
+
+        return new PartialEclipseTranslation(
+                Math.min(
+                        (locationEclipseHeight != null) ? locationEclipseHeight : 0,
+                        (destinationEclipseHeight != null) ? destinationEclipseHeight : 0
+                )
+        );
     }
 
     private boolean isOpen(final TileCoordinate targetCoordinate) {
