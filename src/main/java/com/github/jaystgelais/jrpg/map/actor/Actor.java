@@ -361,25 +361,14 @@ public final class Actor implements Entity, InputHandler {
     }
 
     private PartialEclipseTranslation getEclipseTranslation() {
-        Integer locationEclipseHeight = TiledUtil.getCellPropertyFromTopMostTile(
-                map.getTiledMap(),
-                location,
-                GameMap.TILE_PROP_ECLIPSED_HEIGHT,
-                Integer.class
-        );
-        Integer destinationEclipseHeight = TiledUtil.getCellPropertyFromTopMostTile(
+        Integer eclipsedHeight = TiledUtil.getCellPropertyFromTopMostTile(
                 map.getTiledMap(),
                 (destination != null) ? destination : location,
                 GameMap.TILE_PROP_ECLIPSED_HEIGHT,
                 Integer.class
         );
 
-        return new PartialEclipseTranslation(
-                Math.min(
-                        (locationEclipseHeight != null) ? locationEclipseHeight : 0,
-                        (destinationEclipseHeight != null) ? destinationEclipseHeight : 0
-                )
-        );
+        return new PartialEclipseTranslation((eclipsedHeight != null) ? eclipsedHeight : 0);
     }
 
     private boolean isOpen(final TileCoordinate targetCoordinate) {
