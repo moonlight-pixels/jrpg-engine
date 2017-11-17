@@ -1,6 +1,6 @@
 package com.github.jaystgelais.jrpg.inventory;
 
-import com.github.jaystgelais.jrpg.party.Character;
+import com.github.jaystgelais.jrpg.party.PlayerCharacter;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +22,7 @@ public final class Inventory {
         this(DEFAULT_MAX_QUANTITY_PER_ITEM);
     }
 
-    public boolean useItem(final Item item, final Character target) {
+    public boolean useItem(final Item item, final PlayerCharacter target) {
         if (item.doesUsageConsumesItem() && getQuantity(item) < 1) {
             return false;
         }

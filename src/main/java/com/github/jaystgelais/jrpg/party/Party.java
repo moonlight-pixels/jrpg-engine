@@ -6,7 +6,7 @@ import java.util.List;
 
 public final class Party {
     private final int maxSize;
-    private final List<Character> members;
+    private final List<PlayerCharacter> members;
 
     public Party(final int maxSize) {
         this.maxSize = maxSize;
@@ -17,11 +17,11 @@ public final class Party {
         return maxSize;
     }
 
-    public List<Character> getMembers() {
+    public List<PlayerCharacter> getMembers() {
         return Collections.unmodifiableList(members);
     }
 
-    public void addMember(final Character member) {
+    public void addMember(final PlayerCharacter member) {
         if (members.size() >= maxSize) {
             throw new IllegalStateException("Party is already full");
         }
@@ -31,14 +31,14 @@ public final class Party {
         members.add(member);
     }
 
-    public void removeMember(final Character member) {
+    public void removeMember(final PlayerCharacter member) {
         if (!members.contains(member)) {
             throw new IllegalStateException("Member not in party");
         }
         members.remove(member);
     }
 
-    public Character getLeader() {
+    public PlayerCharacter getLeader() {
         if (members.isEmpty()) {
             throw new IllegalStateException("Party is empty");
         }

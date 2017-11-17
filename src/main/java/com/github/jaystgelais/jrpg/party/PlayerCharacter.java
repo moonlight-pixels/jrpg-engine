@@ -1,17 +1,17 @@
 package com.github.jaystgelais.jrpg.party;
 
+import com.github.jaystgelais.jrpg.combat.Combatant;
 import com.github.jaystgelais.jrpg.combat.stats.MaxHP;
 import com.github.jaystgelais.jrpg.combat.stats.MaxMP;
 import com.github.jaystgelais.jrpg.combat.stats.MissingStatException;
 import com.github.jaystgelais.jrpg.combat.stats.Stat;
-import com.github.jaystgelais.jrpg.combat.stats.StatHolder;
 import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
 import com.github.jaystgelais.jrpg.map.animation.SpriteSetDefinition;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Character implements StatHolder {
+public class PlayerCharacter implements Combatant {
     private final String name;
     private final SpriteSetDefinition<ActorSpriteSet> spriteSetDefinition;
     private final CharacterClass characterClass;
@@ -21,8 +21,8 @@ public class Character implements StatHolder {
     private int level;
     private int xp;
 
-    public Character(final String name, final SpriteSetDefinition<ActorSpriteSet> spriteSetDefinition,
-                     final CharacterClass characterClass, final Stat... stats) {
+    public PlayerCharacter(final String name, final SpriteSetDefinition<ActorSpriteSet> spriteSetDefinition,
+                           final CharacterClass characterClass, final Stat... stats) {
         this.name = name;
         this.spriteSetDefinition = spriteSetDefinition;
         this.characterClass = characterClass;
@@ -82,5 +82,10 @@ public class Character implements StatHolder {
 
     public final CharacterClass getCharacterClass() {
         return characterClass;
+    }
+
+    @Override
+    public final void applyDamage(final int damage) {
+        setCurrentHp(Math.max(getCurrentHp() - damage, 0));
     }
 }
