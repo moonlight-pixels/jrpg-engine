@@ -6,7 +6,7 @@ import com.github.jaystgelais.jrpg.combat.stats.MaxMP;
 import com.github.jaystgelais.jrpg.combat.stats.MissingStatException;
 import com.github.jaystgelais.jrpg.combat.stats.Stat;
 import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
-import com.github.jaystgelais.jrpg.map.animation.SpriteSetDefinition;
+import com.github.jaystgelais.jrpg.animation.SpriteSetDefinition;
 
 import java.util.HashMap;
 import java.util.Map;

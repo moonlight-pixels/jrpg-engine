@@ -2,7 +2,7 @@ package com.github.jaystgelais.jrpg.map.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.github.jaystgelais.jrpg.map.animation.SpriteSet;
+import com.github.jaystgelais.jrpg.animation.SpriteSet;
 
 public final class AnimatedDecorationSpriteSet extends SpriteSet {
     private final Animation<TextureRegion> animation;

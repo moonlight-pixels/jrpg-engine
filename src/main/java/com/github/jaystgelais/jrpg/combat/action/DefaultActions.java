@@ -5,16 +5,18 @@ public final class DefaultActions {
     private DefaultActions() {
     }
 
-    public static ActionType createStandardSingleAttack(final DamageFormula damageFormula,
+    public static ActionType createStandardSingleAttack(final HitCalculation hitCalculation,
+                                                        final DamageFormula damageFormula,
                                                         final ActionEffect additionalEffect) {
         return new ActionType(
                 "Attack",
-                new DamageEffect(damageFormula, additionalEffect),
+                new DamageEffect(hitCalculation, damageFormula, additionalEffect),
                 CombatTargetingData.STANDARD_SINGLE_ATTACK
         );
     }
 
-    public static ActionType createStandardSingleAttack(final DamageFormula damageFormula) {
-        return createStandardSingleAttack(damageFormula, null);
+    public static ActionType createStandardSingleAttack(final HitCalculation hitCalculation,
+                                                        final DamageFormula damageFormula) {
+        return createStandardSingleAttack(hitCalculation, damageFormula, null);
     }
 }

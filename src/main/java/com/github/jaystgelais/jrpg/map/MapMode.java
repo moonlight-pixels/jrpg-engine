@@ -17,7 +17,7 @@ import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
 import com.github.jaystgelais.jrpg.map.actor.Direction;
 import com.github.jaystgelais.jrpg.map.actor.PlayerController;
 import com.github.jaystgelais.jrpg.map.actor.WalkSpeeds;
-import com.github.jaystgelais.jrpg.map.animation.SpriteSetDefinition;
+import com.github.jaystgelais.jrpg.animation.SpriteSetDefinition;
 import com.github.jaystgelais.jrpg.map.script.Scene;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;

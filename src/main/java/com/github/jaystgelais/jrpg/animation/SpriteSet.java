@@ -1,4 +1,4 @@
-package com.github.jaystgelais.jrpg.map.animation;
+package com.github.jaystgelais.jrpg.animation;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
