@@ -34,6 +34,8 @@ public interface GraphicsService extends Disposable {
 
     void drawSprite(Pixmap pixmap, float posX, float posY);
 
+    void drawBackground(Texture background);
+
     SpriteBatch getSpriteBatch();
 
     OrthographicCamera getCamera();

@@ -131,6 +131,23 @@ public final class GraphicsServiceImpl implements GraphicsService {
     }
 
     @Override
+    public void drawBackground(final Texture background) {
+        spriteBatch.draw(
+                background,
+                0,
+                0,
+                getResolutionWidth(),
+                getResolutionHeight(),
+                0,
+                0,
+                background.getWidth(),
+                background.getHeight(),
+                false,
+                false
+        );
+    }
+
+    @Override
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;
     }
