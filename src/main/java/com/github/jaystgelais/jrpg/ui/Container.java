@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.ui;
 
+import com.github.jaystgelais.jrpg.graphics.Coordinate2D;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 
@@ -49,5 +50,12 @@ public final class Container extends AbstractContent {
             if (content != null) {
                 content.handleInput(inputService);
             }
+    }
+
+    public Coordinate2D getCenter() {
+        return new Coordinate2D(
+                getContentPositionX() + (getContentWidth() / 2),
+                getContentPositionY() + (getContentHeight() / 2)
+        );
     }
 }

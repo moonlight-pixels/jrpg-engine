@@ -17,6 +17,10 @@ public final class Party {
         return maxSize;
     }
 
+    public int getSize() {
+        return members.size();
+    }
+
     public List<PlayerCharacter> getMembers() {
         return Collections.unmodifiableList(members);
     }
