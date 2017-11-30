@@ -15,21 +15,23 @@ public final class CombatLayout implements Renderable {
 
     private final Layout parentLayout;
     private final Layout playerLayout;
+    private final EnemyLayout enemyLayout;
 
     public CombatLayout(final Layout parentLayout, final PlayerLayoutDefinition playerLayoutDefinition,
-                        final Layout enemyLayout) {
+                        final EnemyLayoutDefinition enemyLayoutDefinition) {
         Preconditions.checkNotNull(parentLayout.getContainer(SECTION_PLAYERS));
         Preconditions.checkNotNull(parentLayout.getContainer(SECTION_ENEMIES));
         Preconditions.checkNotNull(parentLayout.getContainer(SECTION_UI));
         Preconditions.checkNotNull(parentLayout.getContainer(SECTION_MESSAGES));
         Preconditions.checkNotNull(playerLayoutDefinition);
-        Preconditions.checkNotNull(enemyLayout);
+        Preconditions.checkNotNull(enemyLayoutDefinition);
         this.parentLayout = parentLayout;
         playerLayout = playerLayoutDefinition.getLayout(
                 parentLayout.getContainer(SECTION_PLAYERS),
                 GameState.getParty()
         );
         parentLayout.getContainer(SECTION_PLAYERS).setContent(playerLayout);
+        enemyLayout = enemyLayoutDefinition.getLayout(parentLayout.getContainer(SECTION_ENEMIES));
         parentLayout.getContainer(SECTION_ENEMIES).setContent(enemyLayout);
     }
 

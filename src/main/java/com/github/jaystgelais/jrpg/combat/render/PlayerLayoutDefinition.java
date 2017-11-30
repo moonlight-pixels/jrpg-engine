@@ -53,8 +53,8 @@ public final class PlayerLayoutDefinition {
         Preconditions.checkNotNull(party);
 
         final Layout layout = new Layout(
-                container.getScreenPositionX(),
-                container.getScreenPositionY(),
+                container.getContentPositionX(),
+                container.getContentPositionY(),
                 container.getContentWidth(),
                 container.getContentHeight()
         );
