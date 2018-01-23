@@ -8,14 +8,14 @@ plugins {
     id 'jacoco'
     id 'idea'
     id 'maven-publish'
-    id 'com.github.ben-manes.versions' version '0.14.0'
+    id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
 version = '0.1.1-SNAPSHOT'
 group = 'com.github.jaystgelais'
 
 ext {
-    gdxVersion = '1.9.6'
+    gdxVersion = '1.9.8'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -96,7 +96,7 @@ repositories {
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-ai:1.8.0"
+    compile "com.badlogicgames.gdx:gdx-ai:1.8.1"
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
@@ -107,11 +107,11 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    compile 'com.google.guava:guava:23.4-jre'
+    compile 'com.google.guava:guava:23.6-jre'
 
-    testCompile "org.codehaus.groovy:groovy-all:2.4.11"
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
-    testCompile "nl.jqno.equalsverifier:equalsverifier:2.2.2"
-    testRuntime "cglib:cglib-nodep:3.2.5"
-    testRuntime "org.objenesis:objenesis:2.5.1"
+    testCompile "org.codehaus.groovy:groovy-all:2.4.13"
+    testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
+    testCompile "nl.jqno.equalsverifier:equalsverifier:2.4.2"
+    testRuntime "cglib:cglib-nodep:3.2.6"
+    testRuntime "org.objenesis:objenesis:2.6"
 }
