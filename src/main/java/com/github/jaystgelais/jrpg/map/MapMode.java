@@ -25,6 +25,7 @@ import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
 
+import javax.inject.Inject;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -48,7 +49,8 @@ public final class MapMode extends GameMode {
         this(initialMap, initialLocation, new AssetManager());
     }
 
-    MapMode(final MapDefinition initialMap, final TileCoordinate initialLocation,
+    @Inject
+    public MapMode(final MapDefinition initialMap, final TileCoordinate initialLocation,
             final AssetManager assetManager) {
         this.initialMap = initialMap;
         this.initialLocation = initialLocation;

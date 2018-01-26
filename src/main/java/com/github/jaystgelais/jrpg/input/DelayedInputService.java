@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.input;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public final class DelayedInputService implements InputService {
 
     private final InputService inputService;
 
+    @Inject
     public DelayedInputService(final InputService inputService) {
         this.inputService = inputService;
     }

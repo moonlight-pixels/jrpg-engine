@@ -3,18 +3,24 @@ package com.github.jaystgelais.jrpg;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.github.jaystgelais.jrpg.combat.CombatMode;
 import com.github.jaystgelais.jrpg.devtools.ScreenShotUtil;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
+import com.github.jaystgelais.jrpg.map.MapMode;
+import com.github.jaystgelais.jrpg.menu.MenuMode;
 import com.github.jaystgelais.jrpg.state.StackedStateMachine;
 
+import javax.inject.Inject;
 import java.time.Clock;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Game implements ApplicationListener {
+    public static final String INITIAL_GAME_MODE = "mapMode";
     private static Game instance;
 
     private final StackedStateMachine gameModes;
@@ -27,17 +33,14 @@ public class Game implements ApplicationListener {
 
     private final DelayedInput screenShotInput = new DelayedInput(Inputs.SCREENSHOT);
 
-    public Game(final Set<GameMode> gameModes, final String initialGameMode, final GraphicsService graphicsService,
-                final InputService inputService) {
-        this(gameModes, initialGameMode, graphicsService, inputService, Clock.systemUTC());
-    }
-
-    Game(final Set<GameMode> gameModes, final String initialGameMode, final GraphicsService graphicsService,
-         final InputService inputService, final Clock clock) {
+    @Inject
+    public Game(final MapMode mapMode, final CombatMode combatMode, final MenuMode menuMode,
+                final GraphicsService graphicsService, final InputService inputService, final Clock clock) {
+        final HashSet<GameMode> gameModes = new HashSet<>(Arrays.asList(mapMode, combatMode, menuMode));
         for (GameMode gameMode : gameModes) {
             gameMode.setGame(this);
         }
-        this.gameModes = new StackedStateMachine(gameModes, initialGameMode);
+        this.gameModes = new StackedStateMachine(gameModes, INITIAL_GAME_MODE);
         this.graphicsService = graphicsService;
         this.inputService = inputService;
         this.clock = clock;

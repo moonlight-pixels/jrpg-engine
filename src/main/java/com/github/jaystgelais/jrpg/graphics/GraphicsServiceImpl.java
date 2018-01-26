@@ -22,9 +22,12 @@ import com.github.jaystgelais.jrpg.graphics.factory.SpriteBatchFactoryImpl;
 import com.github.jaystgelais.jrpg.ui.text.FontDefinition;
 import com.github.jaystgelais.jrpg.ui.text.FontSet;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+@Singleton
 public final class GraphicsServiceImpl implements GraphicsService {
     public static final int DEFAULT_RESOLUTION_WIDTH = 384;
     public static final int DEFAULT_RESOLUTION_HEIGHT = 216;
@@ -42,6 +45,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
     private int resolutionWidth = DEFAULT_RESOLUTION_WIDTH;
     private int resolutionHeight = DEFAULT_RESOLUTION_HEIGHT;
 
+    @Inject
     public GraphicsServiceImpl(final AssetManager assetManager) {
         this(assetManager, new SpriteBatchFactoryImpl());
     }
