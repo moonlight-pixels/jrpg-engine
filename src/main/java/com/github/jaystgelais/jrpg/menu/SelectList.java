@@ -35,7 +35,9 @@ public final class SelectList extends AbstractContent {
         this.items = items;
         this.visibleRows = visibleRows;
         this.columns = columns;
-        items.get(currentSelectionIndex).performOnCursorAction();
+        if (!items.isEmpty()) {
+            items.get(currentSelectionIndex).performOnCursorAction();
+        }
     }
 
     public SelectList(final Container parent, final List<SelectItem> items, final int visibleRows) {

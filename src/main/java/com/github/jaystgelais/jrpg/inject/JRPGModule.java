@@ -34,9 +34,10 @@ public abstract class JRPGModule extends AbstractModule {
     @Provides
     @Singleton
     public final GraphicsService provideGraphicsService(final AssetManager assetManager) {
-        final GraphicsServiceImpl graphicsService = new GraphicsServiceImpl(assetManager);
+        final GraphicsService graphicsService = new GraphicsServiceImpl(assetManager);
         graphicsService.setResolutionWidth(getResolutionWidth());
         graphicsService.setResolutionHeight(getResolutionHeight());
+        configureGraphicsService(graphicsService);
 
         return graphicsService;
     }
@@ -63,6 +64,8 @@ public abstract class JRPGModule extends AbstractModule {
     public final MenuMode providMenuMode() {
         return new MenuMode(createMainMenu());
     }
+
+    protected void configureGraphicsService(final GraphicsService graphicsService) { }
 
     protected abstract int getResolutionWidth();
 

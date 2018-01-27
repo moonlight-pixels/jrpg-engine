@@ -55,8 +55,13 @@ public final class TiledUtil {
                 TiledMapTileLayer tiledMapTileLayer = (TiledMapTileLayer) mapLayer;
                 TiledMapTileLayer.Cell cell = tiledMapTileLayer.getCell(coordinate.getX(), coordinate.getY());
                 if (cell != null) {
-                    final MapProperties cellProps = cell.getTile().getProperties();
-                    value = (cellProps.get(propertyName, clazz) != null) ? cellProps.get(propertyName, clazz) : value;
+                    final TiledMapTile tile = cell.getTile();
+                    if (tile != null) {
+                        final MapProperties cellProps = tile.getProperties();
+                        value = (cellProps.get(propertyName, clazz) != null)
+                                ? cellProps.get(propertyName, clazz)
+                                : value;
+                    }
                 }
             }
         }
