@@ -3,12 +3,12 @@ package com.github.jaystgelais.jrpg.inject;
 import com.badlogic.gdx.assets.AssetManager;
 import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.combat.CombatMode;
+import com.github.jaystgelais.jrpg.frontend.FrontEndMode;
+import com.github.jaystgelais.jrpg.frontend.NewGameLauncher;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.GraphicsServiceImpl;
 import com.github.jaystgelais.jrpg.input.InputService;
-import com.github.jaystgelais.jrpg.map.MapDefinition;
 import com.github.jaystgelais.jrpg.map.MapMode;
-import com.github.jaystgelais.jrpg.map.TileCoordinate;
 import com.github.jaystgelais.jrpg.menu.MenuDefinition;
 import com.github.jaystgelais.jrpg.menu.MenuMode;
 import com.google.inject.AbstractModule;
@@ -49,8 +49,14 @@ public abstract class JRPGModule extends AbstractModule {
 
     @Provides
     @Singleton
+    public final FrontEndMode providFrontEndMode() {
+        return new FrontEndMode(getTitleScreenPath(), getNewGameLauncher());
+    }
+
+    @Provides
+    @Singleton
     public final MapMode provideMapMode(final AssetManager assetManager) {
-        return new MapMode(getInitialMapDefinition(), getInitialLocation(), assetManager);
+        return new MapMode(assetManager);
     }
 
     @Provides
@@ -73,9 +79,9 @@ public abstract class JRPGModule extends AbstractModule {
 
     protected abstract InputService createInputService();
 
-    protected abstract MapDefinition getInitialMapDefinition();
+    protected abstract String getTitleScreenPath();
 
-    protected abstract TileCoordinate getInitialLocation();
+    protected abstract NewGameLauncher getNewGameLauncher();
 
     protected abstract MenuDefinition createMainMenu();
 }

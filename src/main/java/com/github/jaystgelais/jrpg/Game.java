@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.github.jaystgelais.jrpg.combat.CombatMode;
 import com.github.jaystgelais.jrpg.devtools.ScreenShotUtil;
+import com.github.jaystgelais.jrpg.frontend.FrontEndMode;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputService;
@@ -20,7 +21,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class Game implements ApplicationListener {
-    public static final String INITIAL_GAME_MODE = "mapMode";
+    private static final String INITIAL_GAME_MODE = "frontEnd";
     private static Game instance;
 
     private final StackedStateMachine gameModes;
@@ -34,9 +35,10 @@ public class Game implements ApplicationListener {
     private final DelayedInput screenShotInput = new DelayedInput(Inputs.SCREENSHOT);
 
     @Inject
-    public Game(final MapMode mapMode, final CombatMode combatMode, final MenuMode menuMode,
-                final GraphicsService graphicsService, final InputService inputService, final Clock clock) {
-        final HashSet<GameMode> gameModes = new HashSet<>(Arrays.asList(mapMode, combatMode, menuMode));
+    public Game(final FrontEndMode frontEndMode, final MapMode mapMode, final CombatMode combatMode,
+                final MenuMode menuMode, final GraphicsService graphicsService, final InputService inputService,
+                final Clock clock) {
+        final HashSet<GameMode> gameModes = new HashSet<>(Arrays.asList(frontEndMode, mapMode, combatMode, menuMode));
         for (GameMode gameMode : gameModes) {
             gameMode.setGame(this);
         }
