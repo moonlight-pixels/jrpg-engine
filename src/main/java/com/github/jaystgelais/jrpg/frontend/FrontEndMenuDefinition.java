@@ -25,13 +25,7 @@ public final class FrontEndMenuDefinition extends MenuDefinition {
     @Override
     public Menu getMenu(final GraphicsService graphicsService) {
         return new Menu() {
-            private Layout layout = initLayout();
             private SelectList selectList;
-
-            @Override
-            protected Layout getLayout() {
-                return layout;
-            }
 
             @Override
             protected InputHandler getActiveInputHandler() {
@@ -39,7 +33,8 @@ public final class FrontEndMenuDefinition extends MenuDefinition {
             }
 
             @SuppressWarnings("checkstyle:magicnumber")
-            private Layout initLayout() {
+            @Override
+            protected Layout createLayout() {
                 Layout layout = new Layout(
                         graphicsService.getResolutionWidth() / 3,
                         graphicsService.getResolutionHeight() / 10,
@@ -55,7 +50,7 @@ public final class FrontEndMenuDefinition extends MenuDefinition {
                         Arrays.asList(
                                 new SelectItem("New Game", () -> launchNewGame()),
                                 new SelectItem("Load Saved Game", () -> System.out.println("")),
-                                new SelectItem("Exit", () -> setAction(new ExitGameAction()))),
+                                new SelectItem("Exit", () -> performAction(new ExitGameAction()))),
                         3
                 );
                 menuPanel.getPanelContainer().setContent(selectList);

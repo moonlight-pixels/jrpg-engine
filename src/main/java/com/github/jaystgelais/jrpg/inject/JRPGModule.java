@@ -10,7 +10,6 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsServiceImpl;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.map.MapMode;
 import com.github.jaystgelais.jrpg.menu.MenuDefinition;
-import com.github.jaystgelais.jrpg.menu.MenuMode;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -56,19 +55,13 @@ public abstract class JRPGModule extends AbstractModule {
     @Provides
     @Singleton
     public final MapMode provideMapMode(final AssetManager assetManager) {
-        return new MapMode(assetManager);
+        return new MapMode(assetManager, createMainMenu());
     }
 
     @Provides
     @Singleton
     public final CombatMode providCombatMode() {
         return new CombatMode();
-    }
-
-    @Provides
-    @Singleton
-    public final MenuMode providMenuMode() {
-        return new MenuMode(createMainMenu());
     }
 
     protected void configureGraphicsService(final GraphicsService graphicsService) { }

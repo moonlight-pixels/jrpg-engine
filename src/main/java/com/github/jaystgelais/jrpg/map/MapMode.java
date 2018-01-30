@@ -6,10 +6,12 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.audio.MusicService;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.github.jaystgelais.jrpg.input.DelayedInputService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.map.actor.Actor;
@@ -19,6 +21,8 @@ import com.github.jaystgelais.jrpg.map.actor.WalkSpeeds;
 import com.github.jaystgelais.jrpg.map.script.Scene;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
+import com.github.jaystgelais.jrpg.menu.Menu;
+import com.github.jaystgelais.jrpg.menu.MenuDefinition;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
@@ -37,13 +41,15 @@ public final class MapMode extends GameMode {
 
     private final StateMachine stateMachine;
     private final AssetManager assetManager;
+    private final MenuDefinition mainMenuDefinition;
     private final PlayerController controller = new PlayerController();
     private GameMap map;
     private Actor hero;
 
     @Inject
-    public MapMode(final AssetManager assetManager) {
+    public MapMode(final AssetManager assetManager, final MenuDefinition mainMenuDefinition) {
         this.assetManager = assetManager;
+        this.mainMenuDefinition = mainMenuDefinition;
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         stateMachine = initStateMachine();
     }
@@ -104,7 +110,9 @@ public final class MapMode extends GameMode {
 
     @Override
     public void dispose() {
-        map.dispose();
+        if (map != null) {
+            map.dispose();
+        }
         assetManager.dispose();
     }
 
@@ -131,8 +139,54 @@ public final class MapMode extends GameMode {
         states.add(createPlayerInControlState());
         states.add(createTriggerInControlState());
         states.add(createSceneState());
+        states.add(createMenuState());
 
         return new StateMachine(states, "initialPause");
+    }
+
+    private State createMenuState() {
+        return new StateAdapter() {
+            private Menu menu;
+
+            @Override
+            public String getKey() {
+                return "menu";
+            }
+
+            @Override
+            public void update(final long elapsedTime) {
+                if (menu.isActive()) {
+                    menu.update(elapsedTime);
+                } else {
+                    stateMachine.change("playerInControl");
+                }
+            }
+
+            @Override
+            public void handleInput(final InputService inputService) {
+                menu.handleInput(new DelayedInputService(inputService));
+            }
+
+            @Override
+            public void render(final GraphicsService graphicsService) {
+                renderMapAndEntities(graphicsService);
+
+                graphicsService.renderStart();
+                menu.render(graphicsService);
+                graphicsService.renderEnd();
+            }
+
+            @Override
+            public void onEnter(final Map<String, Object> params) {
+                menu = mainMenuDefinition.getMenu(Game.getInstance().getGraphicsService());
+            }
+
+            @Override
+            public void onExit() {
+                menu = null;
+                controller.flushInput();
+            }
+        };
     }
 
     private State createSceneState() {
@@ -255,8 +309,8 @@ public final class MapMode extends GameMode {
             public void handleInput(final InputService inputService) {
                 if (inputService.isPressed(Inputs.PAUSE)) {
                     getGame().exitGame();
-                } else if (getGame().hasGameMode("menu") && inputService.isPressed(Inputs.MENU)) {
-                    getGame().activateGameMode("menu");
+                } else if (inputService.isPressed(Inputs.MENU)) {
+                    stateMachine.change("menu");
                 } else {
                     controller.handleInput(inputService);
                 }

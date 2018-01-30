@@ -11,7 +11,6 @@ import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.map.MapMode;
-import com.github.jaystgelais.jrpg.menu.MenuMode;
 import com.github.jaystgelais.jrpg.state.StackedStateMachine;
 
 import javax.inject.Inject;
@@ -36,9 +35,8 @@ public class Game implements ApplicationListener {
 
     @Inject
     public Game(final FrontEndMode frontEndMode, final MapMode mapMode, final CombatMode combatMode,
-                final MenuMode menuMode, final GraphicsService graphicsService, final InputService inputService,
-                final Clock clock) {
-        final HashSet<GameMode> gameModes = new HashSet<>(Arrays.asList(frontEndMode, mapMode, combatMode, menuMode));
+                final GraphicsService graphicsService, final InputService inputService, final Clock clock) {
+        final HashSet<GameMode> gameModes = new HashSet<>(Arrays.asList(frontEndMode, mapMode, combatMode));
         for (GameMode gameMode : gameModes) {
             gameMode.setGame(this);
         }
