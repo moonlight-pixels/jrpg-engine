@@ -2,13 +2,16 @@ package com.github.jaystgelais.jrpg.map.actor;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.map.Entity;
 import com.github.jaystgelais.jrpg.map.GameMap;
+import com.github.jaystgelais.jrpg.map.MapMode;
 import com.github.jaystgelais.jrpg.map.TileCoordinate;
 import com.github.jaystgelais.jrpg.map.animation.Door;
+import com.github.jaystgelais.jrpg.map.script.SceneFactory;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
@@ -44,6 +47,7 @@ public final class Actor implements Entity, InputHandler {
     private int positionY;
     private boolean isHero;
     private boolean isControlledByScene = false;
+    private SceneFactory interaction;
 
     public Actor(final GameMap map, final ActorSpriteSet spriteSet, final Controller controller,
                  final TileCoordinate location, final long timeToTravelTileMs) {
@@ -139,9 +143,15 @@ public final class Actor implements Entity, InputHandler {
         return coordinate.equals(location) || coordinate.equals(destination);
     }
 
+    public void setInteraction(final SceneFactory interaction) {
+        this.interaction = interaction;
+    }
+
     @Override
     public void interactWith() {
-
+        if (interaction != null) {
+            ((MapMode) Game.getInstance().getActiveMode()).startScene(interaction.createScene());
+        }
     }
 
     @Override

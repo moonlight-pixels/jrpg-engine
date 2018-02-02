@@ -1,16 +1,16 @@
 package com.github.jaystgelais.jrpg.map.script;
 
-import com.github.jaystgelais.jrpg.conversation.Conversation;
+import com.github.jaystgelais.jrpg.conversation.ConversationProvider;
 import com.github.jaystgelais.jrpg.conversation.ui.ConversationDisplay;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 
 public final class ConversationCommand implements Command {
-    private final Conversation conversation;
+    private final ConversationProvider conversationProvider;
     private ConversationDisplay conversationDisplay;
 
-    public ConversationCommand(final Conversation conversation) {
-        this.conversation = conversation;
+    public ConversationCommand(final ConversationProvider conversationProvider) {
+        this.conversationProvider = conversationProvider;
     }
 
     @Override
@@ -20,7 +20,7 @@ public final class ConversationCommand implements Command {
 
     @Override
     public void start() {
-        conversationDisplay = new ConversationDisplay(conversation);
+        conversationDisplay = new ConversationDisplay(conversationProvider.getConversation());
     }
 
     @Override
@@ -43,10 +43,5 @@ public final class ConversationCommand implements Command {
     @Override
     public void handleInput(final InputService inputService) {
         conversationDisplay.handleInput(inputService);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("ConversationCommand{conversation=%s}", conversation);
     }
 }

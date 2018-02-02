@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 public final class MapMode extends GameMode {
-    private static final long DEFAULT_INITIAL_PAUSE_MS = 500;
+    private static final long DEFAULT_INITIAL_PAUSE_MS = 50;
     private static final int DEBUG_TEXT_X = 10;
     private static final int DEBUB_TEXT_Y = 20;
 
