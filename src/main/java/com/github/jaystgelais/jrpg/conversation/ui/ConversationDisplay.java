@@ -14,7 +14,7 @@ import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.state.Updatable;
 import com.github.jaystgelais.jrpg.ui.Panel;
-import com.github.jaystgelais.jrpg.ui.text.TextArea;
+import com.github.jaystgelais.jrpg.ui.text.TextDisplay;
 import com.github.jaystgelais.jrpg.ui.text.transition.TypedTextTransition;
 
 public final class ConversationDisplay implements Updatable, InputHandler {
@@ -29,7 +29,7 @@ public final class ConversationDisplay implements Updatable, InputHandler {
     private final float y;
     private final float width;
     private final float height;
-    private TextArea textArea;
+    private TextDisplay textDisplay;
 
     public ConversationDisplay(final Conversation conversation, final Skin skin,
                                final float x, final float y,
@@ -54,13 +54,13 @@ public final class ConversationDisplay implements Updatable, InputHandler {
     private void layoutNextNode() {
         ConversationNode node = conversation.getNextNode();
         if (node == null) {
-            textArea = null;
+            textDisplay = null;
         } else {
             final BitmapFont font = skin.getFont("conversation");
-            textArea = new TextArea(font, node.getLineTextList(), new TypedTextTransition());
+            textDisplay = new TextDisplay(font, node.getLineTextList(), new TypedTextTransition());
             Table layout = new Table();
             layout.setFillParent(true);
-            layout.defaults().pad(font.getLineHeight() / 2);
+            layout.pad(font.getLineHeight() / 2);
             final Label speakerLabel = new Label(
                     node.getSpeaker().getName(),
                     skin.get("conversation", Label.LabelStyle.class)
@@ -68,7 +68,7 @@ public final class ConversationDisplay implements Updatable, InputHandler {
             speakerLabel.setAlignment(Align.left);
             layout.add(speakerLabel).fillX().spaceBottom(font.getLineHeight() / 2);
             layout.row();
-            layout.add(textArea).fill().expand();
+            layout.add(textDisplay).fill().expand();
             Game.getInstance().getGraphicsService().registerUI(createPanel(layout).bottom().left());
         }
     }
@@ -80,15 +80,15 @@ public final class ConversationDisplay implements Updatable, InputHandler {
     }
 
     public boolean isComplete() {
-        return textArea == null;
+        return textDisplay == null;
     }
 
     @Override
     public void update(final long elapsedTime) {
-        if (textArea != null) {
-            textArea.update(elapsedTime);
+        if (textDisplay != null) {
+            textDisplay.update(elapsedTime);
 
-            if (textArea.isEmpty()) {
+            if (textDisplay.isEmpty()) {
                 layoutNextNode();
             }
         }
@@ -96,8 +96,8 @@ public final class ConversationDisplay implements Updatable, InputHandler {
 
     @Override
     public void handleInput(final InputService inputService) {
-        if (textArea != null) {
-            textArea.handleInput(inputService);
+        if (textDisplay != null) {
+            textDisplay.handleInput(inputService);
         }
     }
 

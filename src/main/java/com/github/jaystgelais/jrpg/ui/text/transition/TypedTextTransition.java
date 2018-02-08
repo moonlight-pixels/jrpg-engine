@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.github.jaystgelais.jrpg.tween.IntegerTween;
-import com.github.jaystgelais.jrpg.ui.text.TextArea;
+import com.github.jaystgelais.jrpg.ui.text.TextDisplay;
 
 public final class TypedTextTransition implements TextTransition {
     public static final long DEFAULT_TIME_PER_GLYPH_MS = 50;
@@ -21,18 +21,18 @@ public final class TypedTextTransition implements TextTransition {
     }
 
     @Override
-    public TextTransitionHandler handleTransition(final TextArea parent, final GlyphLayout oldText,
+    public TextTransitionHandler handleTransition(final TextDisplay parent, final GlyphLayout oldText,
                                                   final GlyphLayout newText) {
         return new Handler(parent, newText, timePerGlyphMs);
     }
 
     private static class Handler extends BaseDrawable implements TextTransitionHandler {
-        private final TextArea parent;
+        private final TextDisplay parent;
         private final GlyphLayout newText;
         private final long timePerGlyphMs;
         private final IntegerTween glyphCountTween;
 
-        Handler(final TextArea parent, final GlyphLayout newText, final long timePerGlyphMs) {
+        Handler(final TextDisplay parent, final GlyphLayout newText, final long timePerGlyphMs) {
             this.parent = parent;
             this.newText = newText;
             this.timePerGlyphMs = timePerGlyphMs;

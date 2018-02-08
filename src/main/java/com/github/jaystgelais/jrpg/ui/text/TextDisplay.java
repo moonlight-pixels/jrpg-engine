@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public final class TextArea extends Widget implements Updatable, InputHandler {
+public final class TextDisplay extends Widget implements Updatable, InputHandler {
 
     private final TextTransition textTransition;
     private final List<String> rawPages;
@@ -31,12 +31,12 @@ public final class TextArea extends Widget implements Updatable, InputHandler {
     private GlyphLayout currentPage;
     private GlyphLayout nextPage;
 
-    public TextArea(final BitmapFont font, final String text, final TextTransition textTransition) {
+    public TextDisplay(final BitmapFont font, final String text, final TextTransition textTransition) {
         this(font, Collections.singletonList(text), textTransition);
     }
 
-    public TextArea(final BitmapFont font, final List<String> rawPages,
-                    final TextTransition textTransition) {
+    public TextDisplay(final BitmapFont font, final List<String> rawPages,
+                       final TextTransition textTransition) {
         this.font = font;
         this.rawPages = rawPages;
         this.textTransition = textTransition;
