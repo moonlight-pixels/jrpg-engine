@@ -4,10 +4,10 @@ import com.github.jaystgelais.jrpg.graphics.Coordinate2D;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 
-public final class Container extends AbstractContent {
+public final class LegacyContainer extends AbstractContent {
     private Content content;
 
-    public Container(final int screenPositionX, final int screenPositionY, final int width, final int height) {
+    public LegacyContainer(final int screenPositionX, final int screenPositionY, final int width, final int height) {
         super(screenPositionX, screenPositionY, width, height);
     }
 

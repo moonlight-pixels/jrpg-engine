@@ -2,7 +2,7 @@ package com.github.jaystgelais.jrpg.menu;
 
 import com.badlogic.gdx.utils.Align;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 import com.github.jaystgelais.jrpg.ui.Content;
 import com.github.jaystgelais.jrpg.ui.text.Label;
 
@@ -14,9 +14,9 @@ public final class TextSelectItemRenderer implements SelectItemRenderer {
     }
 
     @Override
-    public Content renderItem(final GraphicsService graphicsService, final Container container) {
+    public Content renderItem(final GraphicsService graphicsService, final LegacyContainer legacyContainer) {
         return new Label(
-                container,
+                legacyContainer,
                 graphicsService.getFontSet().getTextFont(),
                 text,
                 Align.topLeft

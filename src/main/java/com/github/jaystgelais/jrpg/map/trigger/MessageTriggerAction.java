@@ -106,11 +106,11 @@ public final class MessageTriggerAction implements TriggerAction {
                                 .setTransitionTimeMs(DEFAULT_TRANSITION_TIME_MS)
                 );
                 content = new Label(
-                        panel.getPanelContainer(),
+                        panel.getPanelLegacyContainer(),
                         graphicsService.getFontSet().getTextFont(),
                         message
                 );
-                panel.getPanelContainer().setContent(content);
+                panel.getPanelLegacyContainer().setContent(content);
             }
 
             @Override

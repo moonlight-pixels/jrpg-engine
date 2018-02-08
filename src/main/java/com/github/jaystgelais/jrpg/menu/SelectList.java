@@ -6,7 +6,7 @@ import com.github.jaystgelais.jrpg.input.DelayedInput;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 
 import java.util.List;
 
@@ -27,7 +27,8 @@ public final class SelectList extends AbstractContent {
     private Texture cursorSprite;
     private boolean active = true;
 
-    public SelectList(final Container parent, final List<SelectItem> items, final int visibleRows, final int columns) {
+    public SelectList(final LegacyContainer parent, final List<SelectItem> items,
+                      final int visibleRows, final int columns) {
         super(
                 parent.getContentPositionX(), parent.getContentPositionY(),
                 parent.getContentWidth(), parent.getContentHeight()
@@ -40,7 +41,7 @@ public final class SelectList extends AbstractContent {
         }
     }
 
-    public SelectList(final Container parent, final List<SelectItem> items, final int visibleRows) {
+    public SelectList(final LegacyContainer parent, final List<SelectItem> items, final int visibleRows) {
         this(parent, items, visibleRows, 1);
     }
 
@@ -105,7 +106,7 @@ public final class SelectList extends AbstractContent {
 
                     renderer.renderItem(
                             graphicsService,
-                            new Container(
+                            new LegacyContainer(
                                     positionX,
                                     currentRowY - renderer.getItemHeight(graphicsService),
                                     columnWidth,

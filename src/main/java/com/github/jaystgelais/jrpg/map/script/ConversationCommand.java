@@ -30,14 +30,12 @@ public final class ConversationCommand implements Command {
 
     @Override
     public void render(final GraphicsService graphicsService) {
-        graphicsService.renderStart();
-        conversationDisplay.render(graphicsService);
-        graphicsService.renderEnd();
+        graphicsService.renderUI();
     }
 
     @Override
     public void dispose() {
-        conversationDisplay.dispose();
+
     }
 
     @Override

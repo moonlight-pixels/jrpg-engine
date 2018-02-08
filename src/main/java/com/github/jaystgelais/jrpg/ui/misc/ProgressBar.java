@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 
 public final class ProgressBar extends AbstractContent {
     private final int maxValue;
@@ -14,7 +14,7 @@ public final class ProgressBar extends AbstractContent {
     private Texture foreground;
     private Integer scaledWidth;
 
-    public ProgressBar(final Container parent, final int maxValue, final int currentValue) {
+    public ProgressBar(final LegacyContainer parent, final int maxValue, final int currentValue) {
         super(
                 parent.getContentPositionX(), parent.getContentPositionY(),
                 parent.getContentWidth(), parent.getContentHeight()
@@ -23,7 +23,7 @@ public final class ProgressBar extends AbstractContent {
         this.currentValue = currentValue;
     }
 
-    public ProgressBar(final Container parent, final int maxValue, final int currentValue, final int scaledWdth) {
+    public ProgressBar(final LegacyContainer parent, final int maxValue, final int currentValue, final int scaledWdth) {
         this(parent, maxValue, currentValue);
         this.scaledWidth = scaledWdth;
     }

@@ -209,11 +209,11 @@ public final class MapMode extends GameMode {
             @Override
             public void onExit() {
                 scene = null;
-                controller.flushInput();
                 map.getEntities().stream()
                         .filter(Actor.class::isInstance)
                         .map(Actor.class::cast)
                         .forEach(Actor::endScene);
+                controller.flushInput();
             }
 
             @Override

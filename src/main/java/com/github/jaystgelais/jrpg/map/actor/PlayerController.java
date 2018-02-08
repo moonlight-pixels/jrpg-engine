@@ -47,5 +47,6 @@ public final class PlayerController implements Controller, InputHandler {
 
     public void flushInput() {
         nextAction = null;
+        okInput.delay();
     }
 }

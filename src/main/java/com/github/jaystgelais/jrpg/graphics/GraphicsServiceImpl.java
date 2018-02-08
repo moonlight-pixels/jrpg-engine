@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -41,7 +43,10 @@ public final class GraphicsServiceImpl implements GraphicsService {
     private FontDefinition numberFont;
     private SpriteBatch spriteBatch;
     private OrthographicCamera camera;
+    private OrthographicCamera uiCamera;
     private Viewport viewport;
+    private Viewport uiViewport;
+    private Stage uiStage;
     private int resolutionWidth = DEFAULT_RESOLUTION_WIDTH;
     private int resolutionHeight = DEFAULT_RESOLUTION_HEIGHT;
 
@@ -54,6 +59,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
         this.assetManager = assetManager;
         this.spriteBatchFactory = spriteBatchFactory;
         camera = new OrthographicCamera(resolutionWidth, resolutionHeight);
+        uiCamera = new OrthographicCamera(resolutionWidth, resolutionHeight);
     }
 
     @Override
@@ -96,7 +102,10 @@ public final class GraphicsServiceImpl implements GraphicsService {
     public void init() {
         viewport = new FitViewport(resolutionWidth, resolutionHeight, camera);
         camera.update();
+        uiViewport = new FitViewport(resolutionWidth, resolutionHeight, uiCamera);
+        uiCamera.update();
         spriteBatch = spriteBatchFactory.createSpriteBatch();
+        uiStage = new Stage(uiViewport, spriteBatch);
 
         Graphics.Monitor monitor = Gdx.graphics.getMonitor();
         Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode(monitor);
@@ -242,5 +251,17 @@ public final class GraphicsServiceImpl implements GraphicsService {
     @Override
     public int getPhysicalYFromResolutionY(final int resolutionY) {
         return Math.round(resolutionY * ((float) Gdx.graphics.getHeight() / (float) resolutionHeight));
+    }
+
+    @Override
+    public void registerUI(final Actor root) {
+        uiStage.clear();
+        uiStage.addActor(root);
+    }
+
+    @Override
+    public void renderUI() {
+        spriteBatch.setProjectionMatrix(uiCamera.combined);
+        uiStage.draw();
     }
 }

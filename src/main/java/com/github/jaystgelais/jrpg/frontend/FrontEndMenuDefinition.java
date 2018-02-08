@@ -46,14 +46,14 @@ public final class FrontEndMenuDefinition extends MenuDefinition {
 
                 final Panel menuPanel = fillContainerWithPanel(layout.getContainer("content"));
                 selectList = new SelectList(
-                        menuPanel.getPanelContainer(),
+                        menuPanel.getPanelLegacyContainer(),
                         Arrays.asList(
                                 new SelectItem("New Game", () -> launchNewGame()),
                                 new SelectItem("Load Saved Game", () -> System.out.println("")),
                                 new SelectItem("Exit", () -> performAction(new ExitGameAction()))),
                         3
                 );
-                menuPanel.getPanelContainer().setContent(selectList);
+                menuPanel.getPanelLegacyContainer().setContent(selectList);
 
                 return layout;
             }

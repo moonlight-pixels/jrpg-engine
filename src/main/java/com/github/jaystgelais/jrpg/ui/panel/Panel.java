@@ -9,7 +9,7 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 import com.github.jaystgelais.jrpg.ui.Content;
 
 import java.util.HashSet;
@@ -29,7 +29,7 @@ public final class Panel implements Content {
     private final PanelData data;
     private final Pixmap pixmap;
     private final StateMachine stateMachine;
-    private final Container panelContainer;
+    private final LegacyContainer panelLegacyContainer;
     private TextureRegion[][] panelSprites;
     private boolean active = true;
 
@@ -37,15 +37,15 @@ public final class Panel implements Content {
         this.data = panelData;
         pixmap = new Pixmap(panelData.getWidth(), panelData.getHeight(), Pixmap.Format.RGBA8888);
         stateMachine = initStateMachine();
-        panelContainer = new Container(getScreenPositionX(), getScreenPositionY(), getWidth(), getHeight());
-        panelContainer.setRightMargin(PANEL_CONTENT_MARGIN);
-        panelContainer.setLeftMargin(PANEL_CONTENT_MARGIN);
-        panelContainer.setTopMargin(PANEL_CONTENT_MARGIN);
-        panelContainer.setBottomMargin(PANEL_CONTENT_MARGIN);
+        panelLegacyContainer = new LegacyContainer(getScreenPositionX(), getScreenPositionY(), getWidth(), getHeight());
+        panelLegacyContainer.setRightMargin(PANEL_CONTENT_MARGIN);
+        panelLegacyContainer.setLeftMargin(PANEL_CONTENT_MARGIN);
+        panelLegacyContainer.setTopMargin(PANEL_CONTENT_MARGIN);
+        panelLegacyContainer.setBottomMargin(PANEL_CONTENT_MARGIN);
     }
 
-    public Container getPanelContainer() {
-        return panelContainer;
+    public LegacyContainer getPanelLegacyContainer() {
+        return panelLegacyContainer;
     }
 
     public void close() {
@@ -189,17 +189,17 @@ public final class Panel implements Content {
             @Override
             public void render(final GraphicsService graphicsService) {
                 renderPanel(graphicsService, data.getWidth(), data.getHeight());
-                panelContainer.render(graphicsService);
+                panelLegacyContainer.render(graphicsService);
             }
 
             @Override
             public void update(final long elapsedTime) {
-                panelContainer.update(elapsedTime);
+                panelLegacyContainer.update(elapsedTime);
             }
 
             @Override
             public void handleInput(final InputService inputService) {
-                panelContainer.handleInput(inputService);
+                panelLegacyContainer.handleInput(inputService);
             }
         });
         states.add(new StateAdapter() {

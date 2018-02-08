@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 
 public final class SpriteArea extends AbstractContent {
     private final TextureRegion sprite;
 
-    public SpriteArea(final Container parent, final TextureRegion sprite) {
+    public SpriteArea(final LegacyContainer parent, final TextureRegion sprite) {
         super(
                 parent.getContentPositionX(), parent.getContentPositionY(),
                 parent.getContentWidth(), parent.getContentHeight()

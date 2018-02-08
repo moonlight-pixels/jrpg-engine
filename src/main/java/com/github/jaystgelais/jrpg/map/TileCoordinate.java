@@ -11,7 +11,6 @@ public final class TileCoordinate {
         this(x, y, 0);
     }
 
-
     public TileCoordinate(final int x, final int y, final int mapLayer) {
         this.x = x;
         this.y = y;

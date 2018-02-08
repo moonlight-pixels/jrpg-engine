@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class Layout extends AbstractContent {
-    private final Map<String, Container> children = new HashMap<>();
+    private final Map<String, LegacyContainer> children = new HashMap<>();
 
     public Layout(final int screenPositionX, final int screenPositionY, final int width, final int height) {
         super(screenPositionX, screenPositionY, width, height);
@@ -43,47 +43,47 @@ public final class Layout extends AbstractContent {
 
     public void splitHorizontal(final String containerId, final String leftID, final String rightID,
                                 final int leftWidth) {
-        Container container = children.get(containerId);
-        if (container == null) {
+        LegacyContainer legacyContainer = children.get(containerId);
+        if (legacyContainer == null) {
             throw new IllegalArgumentException("Unknown container: " + containerId);
         }
         children.remove(containerId);
-        createHorizontalDivisions(container, leftID, rightID, leftWidth);
+        createHorizontalDivisions(legacyContainer, leftID, rightID, leftWidth);
     }
 
     public void splitHorizontal(final String containerId, final String leftID, final String rightID,
                                 final float leftPercent) {
-        Container container = children.get(containerId);
-        if (container == null) {
+        LegacyContainer legacyContainer = children.get(containerId);
+        if (legacyContainer == null) {
             throw new IllegalArgumentException("Unknown container: " + containerId);
         }
-        splitHorizontal(containerId, leftID, rightID, Math.round(container.getWidth() * leftPercent));
+        splitHorizontal(containerId, leftID, rightID, Math.round(legacyContainer.getWidth() * leftPercent));
     }
 
     public void splitVertical(final String containerId, final String topID, final String bottomID,
                               final int topHeight) {
-        Container container = children.get(containerId);
-        if (container == null) {
+        LegacyContainer legacyContainer = children.get(containerId);
+        if (legacyContainer == null) {
             throw new IllegalArgumentException("Unknown container: " + containerId);
         }
         children.remove(containerId);
-        createVerticalDivisions(container, topID, bottomID, topHeight);
+        createVerticalDivisions(legacyContainer, topID, bottomID, topHeight);
     }
 
     public void splitVertical(final String containerId, final String topID, final String bottomID,
                               final float topPercent) {
-        Container container = children.get(containerId);
-        if (container == null) {
+        LegacyContainer legacyContainer = children.get(containerId);
+        if (legacyContainer == null) {
             throw new IllegalArgumentException("Unknown container: " + containerId);
         }
-        splitVertical(containerId, topID, bottomID, Math.round(container.getHeight() * topPercent));
+        splitVertical(containerId, topID, bottomID, Math.round(legacyContainer.getHeight() * topPercent));
     }
 
     private void createHorizontalDivisions(final Content parent, final String leftID, final String rightID,
                                            final int leftWidth) {
         children.put(
                 leftID,
-                new Container(
+                new LegacyContainer(
                         parent.getScreenPositionX(),
                         parent.getScreenPositionY(),
                         leftWidth,
@@ -92,7 +92,7 @@ public final class Layout extends AbstractContent {
         );
         children.put(
                 rightID,
-                new Container(
+                new LegacyContainer(
                         parent.getScreenPositionX() + leftWidth,
                         parent.getScreenPositionY(),
                         parent.getWidth() - leftWidth,
@@ -105,7 +105,7 @@ public final class Layout extends AbstractContent {
                                          final int topHeight) {
         children.put(
                 topID,
-                new Container(
+                new LegacyContainer(
                         parent.getScreenPositionX(),
                         parent.getScreenPositionY() + parent.getHeight() - topHeight,
                         parent.getWidth(),
@@ -114,7 +114,7 @@ public final class Layout extends AbstractContent {
         );
         children.put(
                 bottomID,
-                new Container(
+                new LegacyContainer(
                         parent.getScreenPositionX(),
                         parent.getScreenPositionY(),
                         parent.getWidth(),
@@ -123,7 +123,7 @@ public final class Layout extends AbstractContent {
         );
     }
 
-    public Container getContainer(final String id) {
+    public LegacyContainer getContainer(final String id) {
         return children.get(id);
     }
 

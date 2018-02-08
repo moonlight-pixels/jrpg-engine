@@ -1,7 +1,7 @@
 package com.github.jaystgelais.jrpg.combat.render;
 
 import com.github.jaystgelais.jrpg.party.Party;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 import com.github.jaystgelais.jrpg.ui.Layout;
 import com.google.common.base.Preconditions;
 
@@ -48,15 +48,15 @@ public final class PlayerLayoutDefinition {
         this.orientation = orientation;
     }
 
-    public Layout getLayout(final Container container, final Party party) {
-        Preconditions.checkNotNull(container);
+    public Layout getLayout(final LegacyContainer legacyContainer, final Party party) {
+        Preconditions.checkNotNull(legacyContainer);
         Preconditions.checkNotNull(party);
 
         final Layout layout = new Layout(
-                container.getContentPositionX(),
-                container.getContentPositionY(),
-                container.getContentWidth(),
-                container.getContentHeight()
+                legacyContainer.getContentPositionX(),
+                legacyContainer.getContentPositionY(),
+                legacyContainer.getContentWidth(),
+                legacyContainer.getContentHeight()
         );
         orientation.partitionLayout(layout, party);
 

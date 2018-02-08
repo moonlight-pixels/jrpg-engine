@@ -1,21 +1,21 @@
 package com.github.jaystgelais.jrpg.menu;
 
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 import com.github.jaystgelais.jrpg.ui.panel.Panel;
 import com.github.jaystgelais.jrpg.ui.panel.PanelData;
 
 public abstract class MenuDefinition {
     public abstract Menu getMenu(GraphicsService graphicsService);
 
-    protected final Panel fillContainerWithPanel(final Container container) {
+    protected final Panel fillContainerWithPanel(final LegacyContainer legacyContainer) {
         final Panel panel = new Panel(
-                new PanelData(container.getContentWidth(), container.getContentHeight())
-                        .setPositionX(container.getContentPositionX())
-                        .setPositionY(container.getContentPositionY())
+                new PanelData(legacyContainer.getContentWidth(), legacyContainer.getContentHeight())
+                        .setPositionX(legacyContainer.getContentPositionX())
+                        .setPositionY(legacyContainer.getContentPositionY())
                         .setTransitionTimeMs(0)
         );
-        container.setContent(panel);
+        legacyContainer.setContent(panel);
 
         return panel;
     }

@@ -1,7 +1,7 @@
 package com.github.jaystgelais.jrpg.combat.render;
 
 import com.github.jaystgelais.jrpg.graphics.Coordinate2D;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +13,7 @@ public final class EnemyLayoutDefinition {
         this.enemyLocations = Arrays.asList(enemyLocations);
     }
 
-    public EnemyLayout getLayout(final Container container) {
-        return new EnemyLayout(container, enemyLocations);
+    public EnemyLayout getLayout(final LegacyContainer legacyContainer) {
+        return new EnemyLayout(legacyContainer, enemyLocations);
     }
 }

@@ -4,19 +4,19 @@ import com.github.jaystgelais.jrpg.graphics.Coordinate2D;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 
 import java.util.List;
 
 public final class EnemyLayout extends AbstractContent {
     private final List<Coordinate2D> enemyLocations;
 
-    public EnemyLayout(final Container container, final List<Coordinate2D> enemyLocations) {
+    public EnemyLayout(final LegacyContainer legacyContainer, final List<Coordinate2D> enemyLocations) {
         super(
-                container.getContentPositionX(),
-                container.getContentPositionY(),
-                container.getContentWidth(),
-                container.getContentHeight()
+                legacyContainer.getContentPositionX(),
+                legacyContainer.getContentPositionY(),
+                legacyContainer.getContentWidth(),
+                legacyContainer.getContentHeight()
         );
         this.enemyLocations = enemyLocations;
     }

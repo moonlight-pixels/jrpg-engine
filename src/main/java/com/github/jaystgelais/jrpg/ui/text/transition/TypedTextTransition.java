@@ -1,8 +1,9 @@
 package com.github.jaystgelais.jrpg.ui.text.transition;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.github.jaystgelais.jrpg.graphics.GraphicsService;
+import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.github.jaystgelais.jrpg.tween.IntegerTween;
 import com.github.jaystgelais.jrpg.ui.text.TextArea;
 
@@ -25,7 +26,7 @@ public final class TypedTextTransition implements TextTransition {
         return new Handler(parent, newText, timePerGlyphMs);
     }
 
-    private static class Handler implements TextTransitionHandler {
+    private static class Handler extends BaseDrawable implements TextTransitionHandler {
         private final TextArea parent;
         private final GlyphLayout newText;
         private final long timePerGlyphMs;
@@ -48,24 +49,15 @@ public final class TypedTextTransition implements TextTransition {
         }
 
         @Override
-        public void render(final GraphicsService graphicsService) {
+        public void draw(final Batch batch, final float x, final float y, final float width, final float height) {
             final BitmapFontCache fontCache = new BitmapFontCache(parent.getFont());
-            fontCache.addText(
-                    newText,
-                    graphicsService.getCameraOffsetX() + parent.getContentPositionX(),
-                    graphicsService.getCameraOffsetY() + parent.getContentPositionY() + parent.getHeight()
-            );
-            fontCache.draw(graphicsService.getSpriteBatch(), 0, glyphCountTween.getValue());
+            fontCache.addText(newText, x, y + height);
+            fontCache.draw(batch, 0, glyphCountTween.getValue());
         }
 
         @Override
         public boolean isComplete() {
             return glyphCountTween.isComplete();
-        }
-
-        @Override
-        public void dispose() {
-
         }
     }
 }

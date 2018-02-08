@@ -5,18 +5,18 @@ import com.badlogic.gdx.utils.Align;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.ui.AbstractContent;
-import com.github.jaystgelais.jrpg.ui.Container;
+import com.github.jaystgelais.jrpg.ui.LegacyContainer;
 
 public final class Label extends AbstractContent {
     private final String text;
     private final BitmapFont font;
     private final int alignment;
 
-    public Label(final Container parent, final BitmapFont font, final String text) {
+    public Label(final LegacyContainer parent, final BitmapFont font, final String text) {
         this(parent, font, text, Align.center);
     }
 
-    public Label(final Container parent, final BitmapFont font, final String text, final int alignment) {
+    public Label(final LegacyContainer parent, final BitmapFont font, final String text, final int alignment) {
         super(
                 parent.getContentPositionX(), parent.getContentPositionY(),
                 parent.getContentWidth(), parent.getContentHeight()

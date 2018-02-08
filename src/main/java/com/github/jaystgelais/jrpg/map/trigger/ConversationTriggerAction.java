@@ -30,9 +30,7 @@ public final class ConversationTriggerAction implements TriggerAction {
 
     @Override
     public void render(final GraphicsService graphicsService) {
-        graphicsService.renderStart();
-        conversationDisplay.render(graphicsService);
-        graphicsService.renderEnd();
+
     }
 
     @Override
@@ -47,6 +45,6 @@ public final class ConversationTriggerAction implements TriggerAction {
 
     @Override
     public void dispose() {
-        conversationDisplay.dispose();
+
     }
 }
