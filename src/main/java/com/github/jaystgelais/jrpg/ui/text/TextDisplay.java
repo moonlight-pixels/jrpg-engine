@@ -30,6 +30,7 @@ public final class TextDisplay extends Widget implements Updatable, InputHandler
     private boolean isTransitionActive;
     private GlyphLayout currentPage;
     private GlyphLayout nextPage;
+    private boolean hasLayoutBeenCalled = false;
 
     public TextDisplay(final BitmapFont font, final String text, final TextTransition textTransition) {
         this(font, Collections.singletonList(text), textTransition);
@@ -47,7 +48,7 @@ public final class TextDisplay extends Widget implements Updatable, InputHandler
     }
 
     public boolean isEmpty() {
-        return pages.isEmpty();
+        return hasLayoutBeenCalled && pages.isEmpty();
     }
 
     @Override
@@ -68,6 +69,7 @@ public final class TextDisplay extends Widget implements Updatable, InputHandler
         }
         pages.add(new GlyphLayout());
         loadNextPage();
+        hasLayoutBeenCalled = true;
     }
 
     @Override

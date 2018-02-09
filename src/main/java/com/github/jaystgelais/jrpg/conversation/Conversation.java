@@ -15,19 +15,4 @@ public final class Conversation {
     public ConversationNode getNextNode() {
         return nodes.poll();
     }
-
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer();
-        sb.append(String.format("Conversation (%d):%n", nodes.size()));
-        nodes.forEach(node -> {
-            sb.append(String.format("    %s:%n", node.getSpeaker()));
-            node.getLineTextList().forEach(line -> {
-                sb.append(String.format("    %s%n", line));
-            });
-            sb.append("\n");
-        });
-
-        return sb.toString();
-    }
 }

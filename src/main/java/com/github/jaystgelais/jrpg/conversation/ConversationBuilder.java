@@ -14,7 +14,7 @@ public final class ConversationBuilder {
         }
 
         if (!currentNode.getSpeaker().getName().equals(name)) {
-            nodes.add(currentNode);
+            saveCurrentNode();
             currentNode = startNewNode(name);
         }
 
@@ -32,13 +32,20 @@ public final class ConversationBuilder {
     }
 
     public Conversation build() {
-        if (currentNode == null) {
+        saveCurrentNode();
+
+        if (nodes.isEmpty()) {
             throw new IllegalStateException("Cannot build empty conversation");
         }
 
-        nodes.add(currentNode);
-
         return new Conversation(nodes);
+    }
+
+    private void saveCurrentNode() {
+        if (currentNode != null) {
+            nodes.add(currentNode);
+            currentNode = null;
+        }
     }
 
     private ConversationNode startNewNode(final String name) {
