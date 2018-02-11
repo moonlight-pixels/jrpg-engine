@@ -161,7 +161,7 @@ public final class TreasureChest implements Entity {
 
             @Override
             public void onExit() {
-                map.queueAction(new MessageTriggerAction(contents.getName(), graphicsService));
+                map.queueAction(new MessageTriggerAction(contents.getName()));
             }
         });
         states.add(new StateAdapter() {

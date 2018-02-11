@@ -272,6 +272,7 @@ public final class MapMode extends GameMode {
             public void render(final GraphicsService graphicsService) {
                 renderMapAndEntities(graphicsService);
                 triggerAction.render(graphicsService);
+                graphicsService.renderUI();
             }
 
             @Override
