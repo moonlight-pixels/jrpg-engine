@@ -256,6 +256,7 @@ public final class GraphicsServiceImpl implements GraphicsService {
     @Override
     public void registerUI(final Actor root) {
         uiStage.clear();
+        // uiStage.setDebugAll(true);
         uiStage.addActor(root);
     }
 
