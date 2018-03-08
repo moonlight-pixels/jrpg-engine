@@ -9,7 +9,7 @@ import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.graphics.GraphicsServiceImpl;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.map.MapMode;
-import com.github.jaystgelais.jrpg.menu.MenuDefinition;
+import com.github.jaystgelais.jrpg.ui.menu.MenuDefinition;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;

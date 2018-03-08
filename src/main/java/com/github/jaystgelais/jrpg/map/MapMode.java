@@ -21,11 +21,11 @@ import com.github.jaystgelais.jrpg.map.actor.WalkSpeeds;
 import com.github.jaystgelais.jrpg.map.script.Scene;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
-import com.github.jaystgelais.jrpg.menu.Menu;
-import com.github.jaystgelais.jrpg.menu.MenuDefinition;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
+import com.github.jaystgelais.jrpg.ui.menu.Menu;
+import com.github.jaystgelais.jrpg.ui.menu.MenuDefinition;
 import com.google.common.base.Preconditions;
 
 import javax.inject.Inject;
@@ -170,20 +170,18 @@ public final class MapMode extends GameMode {
             @Override
             public void render(final GraphicsService graphicsService) {
                 renderMapAndEntities(graphicsService);
-
-                graphicsService.renderStart();
-                menu.render(graphicsService);
-                graphicsService.renderEnd();
             }
 
             @Override
             public void onEnter(final Map<String, Object> params) {
-                menu = mainMenuDefinition.getMenu(Game.getInstance().getGraphicsService());
+                menu = mainMenuDefinition.getMenu();
+                Game.getInstance().getUserInterface().add(menu.getLayout());
             }
 
             @Override
             public void onExit() {
                 menu = null;
+                Game.getInstance().getUserInterface().clear();
                 controller.flushInput();
             }
         };
@@ -272,7 +270,6 @@ public final class MapMode extends GameMode {
             public void render(final GraphicsService graphicsService) {
                 renderMapAndEntities(graphicsService);
                 triggerAction.render(graphicsService);
-                graphicsService.renderUI();
             }
 
             @Override

@@ -30,7 +30,7 @@ public final class ConversationCommand implements Command {
 
     @Override
     public void render(final GraphicsService graphicsService) {
-        graphicsService.renderUI();
+
     }
 
     @Override

@@ -1,9 +1,6 @@
 package com.github.jaystgelais.jrpg.ui;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputHandler;
@@ -26,7 +23,6 @@ public abstract class PopupPanel implements Updatable, InputHandler {
     private static final float DEFAULT_PANEL_HEIGHT_AS_PORTION_OF_SCREEN = 4;
     private static final float MINIMUM_PANEL_SCALE = 0.1f;
 
-    private final Skin skin;
     private final float x;
     private final float y;
     private final float width;
@@ -34,8 +30,7 @@ public abstract class PopupPanel implements Updatable, InputHandler {
     private final StateMachine stateMachine;
     private boolean complete;
 
-    public PopupPanel(final Skin skin, final float x, final float y, final float width, final float height) {
-        this.skin = skin;
+    public PopupPanel(final float x, final float y, final float width, final float height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -44,15 +39,11 @@ public abstract class PopupPanel implements Updatable, InputHandler {
         complete = false;
     }
 
-    public PopupPanel(final Skin skin) {
-        this(skin, getDefaultX(), getDefaultY(), getDefaultWidth(), getDefaultHeight());
-    }
-
     public PopupPanel() {
-        this(getDefaultSkin());
+        this(getDefaultX(), getDefaultY(), getDefaultWidth(), getDefaultHeight());
     }
 
-    protected abstract Actor buildLayout(Skin skin);
+    protected abstract Actor buildLayout();
 
     protected abstract Optional<Updatable> getUpdatable();
 
@@ -79,10 +70,11 @@ public abstract class PopupPanel implements Updatable, InputHandler {
         float currentHeight = panelScale * height;
         float currentX = x + ((width - currentWidth) / 2);
         float currentY = y + ((height - currentHeight) / 2);
-        final Panel<Actor> panel = new Panel<>(skin.get("popup", Panel.PanelStyle.class));
+        final Panel<Actor> panel = new Panel<>(UiStyle.get("popup", Panel.PanelStyle.class));
         panel.setBounds(currentX, currentY, currentWidth, currentHeight);
 
-        Game.getInstance().getGraphicsService().registerUI(panel);
+        Game.getInstance().getUserInterface().clear();
+        Game.getInstance().getUserInterface().add(panel);
     }
 
     private StateMachine initStateMachine() {
@@ -121,7 +113,12 @@ public abstract class PopupPanel implements Updatable, InputHandler {
 
             @Override
             public void onEnter(final Map<String, Object> params) {
-                Game.getInstance().getGraphicsService().registerUI(createPanel(buildLayout(skin)).bottom().left());
+                Game.getInstance().getUserInterface().add(createPanel(buildLayout()).bottom().left());
+            }
+
+            @Override
+            public void onExit() {
+                Game.getInstance().getUserInterface().clear();
             }
 
             @Override
@@ -141,7 +138,7 @@ public abstract class PopupPanel implements Updatable, InputHandler {
             }
 
             private <T extends Actor>  Panel<T> createPanel(final T content) {
-                final Panel<T> panel = new Panel<>(content, skin.get("popup", Panel.PanelStyle.class));
+                final Panel<T> panel = new Panel<>(content, UiStyle.get("popup", Panel.PanelStyle.class));
                 panel.setBounds(x, y, width, height);
                 return panel;
             }
@@ -193,16 +190,5 @@ public abstract class PopupPanel implements Updatable, InputHandler {
     private static float getDefaultY() {
         GraphicsService graphicsService = Game.getInstance().getGraphicsService();
         return graphicsService.getResolutionHeight() - getDefaultHeight() - DEFAULT_PANEL_TOP_MARGIN;
-    }
-
-    private static Skin getDefaultSkin() {
-        final BitmapFont font = Game.getInstance().getGraphicsService().getFontSet().getTextFont();
-
-        Skin skin = new Skin();
-        skin.add("conversation", new Label.LabelStyle(font, font.getColor()));
-        skin.add("conversation", font);
-        skin.add("popup", new Panel.PanelStyle(Panel.getDefaultBackground()));
-
-        return skin;
     }
 }

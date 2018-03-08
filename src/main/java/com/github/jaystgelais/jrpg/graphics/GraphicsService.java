@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
 import com.github.jaystgelais.jrpg.ui.text.FontDefinition;
 import com.github.jaystgelais.jrpg.ui.text.FontSet;
@@ -70,8 +69,4 @@ public interface GraphicsService extends Disposable {
     int getPhysicalXFromResolutionX(int resolutionX);
 
     int getPhysicalYFromResolutionY(int resolutionY);
-
-    void registerUI(Actor root);
-
-    void renderUI();
 }

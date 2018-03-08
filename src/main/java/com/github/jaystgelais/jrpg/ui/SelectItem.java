@@ -1,10 +1,10 @@
 package com.github.jaystgelais.jrpg.ui;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Optional;
 
-public final class SelectItem<T extends Widget> {
+public final class SelectItem<T extends Actor> {
     private final T display;
     private final Action action;
     private final Action onCursorAction;

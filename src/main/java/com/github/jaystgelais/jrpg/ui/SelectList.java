@@ -1,10 +1,12 @@
 package com.github.jaystgelais.jrpg.ui;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.utils.Align;
 import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.DelayedInput;
@@ -18,7 +20,7 @@ import java.util.List;
 
 public final class SelectList extends WidgetGroup implements InputHandler {
     public static final float DEFAULT_SPACING = 0.05f;
-    private final List<SelectItem<? extends Widget>> items;
+    private final List<SelectItem<? extends Actor>> items;
     private final int columns;
     private DelayedInput okInput = new DelayedInput(Inputs.OK);
     private final DelayedInput downInput = new DelayedInput(Inputs.DOWN);
@@ -28,14 +30,14 @@ public final class SelectList extends WidgetGroup implements InputHandler {
     private int currentSelectionIndex = 0;
     private Table layout;
 
-    public SelectList(final List<SelectItem<? extends Widget>> items, final int columns) {
+    public SelectList(final List<SelectItem<? extends Actor>> items, final int columns) {
         Preconditions.checkArgument(!items.isEmpty());
         Preconditions.checkArgument(columns > 0);
         this.items = new LinkedList<>(items);
         this.columns = columns;
     }
 
-    public SelectList(final List<SelectItem<? extends Widget>> items) {
+    public SelectList(final List<SelectItem<? extends Actor>> items) {
         this(items, 1);
     }
 
@@ -71,17 +73,23 @@ public final class SelectList extends WidgetGroup implements InputHandler {
         for (int rowIndex = 0; rowIndex < totalRows; rowIndex++) {
             for (int colIndex = 0; colIndex < columns; colIndex++) {
                 final int itemIndex = (rowIndex * columns) + colIndex;
-                final SelectItem<? extends Widget> item = items.get(itemIndex);
+                final SelectItem<? extends Actor> item = items.get(itemIndex);
                 final boolean isSelected = (currentSelectionIndex == itemIndex);
 
                 final Image cursor = new Image(cursorTexture);
                 cursor.setVisible(isSelected);
                 layout.add(cursor).padLeft(cursorTexture.getWidth());
 
-                layout.add(item.getDisplay()).fillX().expand();
+                layout.add(wrapDisplay(item.getDisplay())).fillX().expand();
             }
             layout.row();
         }
+    }
+
+    private <T extends Actor> Container<T> wrapDisplay(final T display) {
+        final Container<T> container = new Container<>(display);
+        container.align(Align.left);
+        return container;
     }
 
     @Override
@@ -94,7 +102,7 @@ public final class SelectList extends WidgetGroup implements InputHandler {
         return (layout != null) ? layout.getPrefHeight() : 0;
     }
 
-    private void onSelect(final SelectItem<? extends Widget> selectItem) {
+    private void onSelect(final SelectItem<? extends Actor> selectItem) {
         selectItem.getOnCursorAction().ifPresent(SelectItem.Action::perform);
         clear();
         layout();

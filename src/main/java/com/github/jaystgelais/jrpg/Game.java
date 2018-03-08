@@ -12,6 +12,7 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
 import com.github.jaystgelais.jrpg.map.MapMode;
 import com.github.jaystgelais.jrpg.state.StackedStateMachine;
+import com.github.jaystgelais.jrpg.ui.UserInterface;
 
 import javax.inject.Inject;
 import java.time.Clock;
@@ -27,6 +28,7 @@ public class Game implements ApplicationListener {
     private final GraphicsService graphicsService;
     private final InputService inputService;
     private final Clock clock;
+    private final UserInterface userInterface;
     private long lastRenderTimestampMs;
     private long pauseTimeMs;
     private boolean debug = false;
@@ -45,6 +47,7 @@ public class Game implements ApplicationListener {
         this.inputService = inputService;
         this.clock = clock;
         lastRenderTimestampMs = this.clock.millis();
+        userInterface = new UserInterface(graphicsService.getResolutionWidth(), graphicsService.getResolutionHeight());
     }
 
     public static Game getInstance() {
@@ -69,6 +72,7 @@ public class Game implements ApplicationListener {
     public final void render() {
         long timeElapsed = updateRenderTimeAndGetTimeElapsed();
         gameModes.update(timeElapsed);
+        userInterface.update(timeElapsed);
 
         if (isDebug()) {
             handleDebugInput(inputService);
@@ -77,6 +81,7 @@ public class Game implements ApplicationListener {
 
         graphicsService.clearScreen();
         gameModes.render(graphicsService);
+        userInterface.render(graphicsService);
     }
 
     @Override
@@ -98,6 +103,7 @@ public class Game implements ApplicationListener {
     @Override
     public final void create() {
         graphicsService.init();
+        userInterface.init(graphicsService.getSpriteBatch());
     }
 
     @Override
@@ -119,6 +125,10 @@ public class Game implements ApplicationListener {
         return graphicsService;
     }
 
+    public final UserInterface getUserInterface() {
+        return userInterface;
+    }
+
     public final boolean isDebug() {
         return debug;
     }
@@ -136,10 +146,12 @@ public class Game implements ApplicationListener {
     }
 
     public final void activateGameMode(final String stateKey, final Map<String, Object> params) {
+        userInterface.clear();
         gameModes.change(stateKey, params);
     }
 
     public final void activateGameMode(final String stateKey) {
+        userInterface.clear();
         gameModes.change(stateKey);
     }
 

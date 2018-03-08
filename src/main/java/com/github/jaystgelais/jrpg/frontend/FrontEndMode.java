@@ -16,6 +16,7 @@ import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.ui.Panel;
 import com.github.jaystgelais.jrpg.ui.SelectItem;
 import com.github.jaystgelais.jrpg.ui.SelectList;
+import com.github.jaystgelais.jrpg.ui.UiStyle;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -71,7 +72,6 @@ public final class FrontEndMode extends GameMode {
         graphicsService.renderStart();
         graphicsService.drawSprite(titleScreen, 0, 0);
         graphicsService.renderEnd();
-        graphicsService.renderUI();
     }
 
     private StateMachine initStateMachine() {
@@ -112,11 +112,16 @@ public final class FrontEndMode extends GameMode {
                         createMenuItem("New Game", () -> launchNewGame()),
                         createMenuItem("Exit Game", () -> Game.getInstance().exitGame())
                 ));
-                Game.getInstance().getGraphicsService().registerUI(createPanel(startMenu).left());
+                Game.getInstance().getUserInterface().add(createPanel(startMenu).left());
+            }
+
+            @Override
+            public void onExit() {
+                Game.getInstance().getUserInterface().clear();
             }
 
             private <T extends Actor>  Panel<T> createPanel(final T content) {
-                final Panel<T> panel = new Panel<>(content, new Panel.PanelStyle(Panel.getDefaultBackground()));
+                final Panel<T> panel = new Panel<>(content, UiStyle.get(Panel.PanelStyle.class));
                 panel.setBounds(getDefaultX(), getDefaultY(), getDefaultWidth(), getDefaultHeight());
                 return panel;
             }

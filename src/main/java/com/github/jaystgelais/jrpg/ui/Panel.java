@@ -35,7 +35,7 @@ public final class Panel<T extends Actor> extends Container<T> {
         invalidateHierarchy();
     }
 
-    public static Drawable getDefaultBackground() {
+    static Drawable getDefaultBackground() {
         return new NinePatchDrawable(createPanelNinePatch());
     }
 
