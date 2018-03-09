@@ -164,6 +164,7 @@ public abstract class PopupPanel implements Updatable, InputHandler {
                 tween.update(elapsedTime);
                 if (tween.isComplete()) {
                     complete = true;
+                    Game.getInstance().getUserInterface().clear();
                 } else {
                     renderScaledPanel(tween.getValue());
                 }
