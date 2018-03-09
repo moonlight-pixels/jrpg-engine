@@ -1,7 +1,6 @@
 package com.github.jaystgelais.jrpg.ui;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -60,33 +59,16 @@ public final class UiStyle {
     }
 
     private static void initDefaultProgressBarStyle() {
-        final Pixmap backgroundPixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
-        backgroundPixmap.setColor(Color.WHITE);
-        backgroundPixmap.fill();
         final TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(
-                new TextureRegion(new Texture(backgroundPixmap))
+                new TextureRegion(loadTexture("assets/jrpg/panel/background.png"))
         );
-        backgroundPixmap.dispose();
 
-        final Pixmap knobPixmap = new Pixmap(0, 18, Pixmap.Format.RGBA8888);
-        knobPixmap.setColor(Color.GREEN);
-        knobPixmap.fill();
-        final TextureRegionDrawable knobDrawable = new TextureRegionDrawable(
-                new TextureRegion(new Texture(knobPixmap))
-        );
-        knobPixmap.dispose();
-
-        final Pixmap knobBeforePixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
-        knobBeforePixmap.setColor(Color.GREEN);
-        knobBeforePixmap.fill();
         final TextureRegionDrawable knobBeforeDrawable = new TextureRegionDrawable(
-                new TextureRegion(new Texture(knobBeforePixmap))
+                new TextureRegion(loadTexture("assets/jrpg/panel/foreground.png"))
         );
-        knobBeforePixmap.dispose();
 
         ProgressBar.ProgressBarStyle defaultProgressBarStyle = new ProgressBar.ProgressBarStyle();
         defaultProgressBarStyle.background = backgroundDrawable;
-        defaultProgressBarStyle.knob = knobDrawable;
         defaultProgressBarStyle.knobBefore = knobBeforeDrawable;
 
         SKIN.add(DEFAULT_STYLE, defaultProgressBarStyle);

@@ -1,6 +1,7 @@
 package com.github.jaystgelais.jrpg.ui.menu;
 
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.input.InputHandler;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.input.Inputs;
@@ -41,6 +42,7 @@ public abstract class Menu implements InputHandler, Updatable {
 
     public final void setChildMenu(final Menu childMenu) {
         this.childMenu = childMenu;
+        Game.getInstance().getUserInterface().add(childMenu.getLayout());
     }
 
     @Override
@@ -74,6 +76,7 @@ public abstract class Menu implements InputHandler, Updatable {
         if (childMenu.isActive()) {
             childMenu.update(elapsedTime);
         } else {
+            Game.getInstance().getUserInterface().remove(childMenu.getLayout());
             childMenu = null;
         }
     }

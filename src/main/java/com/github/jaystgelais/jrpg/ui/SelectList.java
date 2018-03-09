@@ -28,6 +28,7 @@ public final class SelectList extends WidgetGroup implements InputHandler {
     private final DelayedInput rightInput = new DelayedInput(Inputs.RIGHT);
     private final DelayedInput upInput = new DelayedInput(Inputs.UP);
     private int currentSelectionIndex = 0;
+    private boolean active = true;
     private Table layout;
 
     public SelectList(final List<SelectItem<? extends Actor>> items, final int columns) {
@@ -77,7 +78,7 @@ public final class SelectList extends WidgetGroup implements InputHandler {
                 final boolean isSelected = (currentSelectionIndex == itemIndex);
 
                 final Image cursor = new Image(cursorTexture);
-                cursor.setVisible(isSelected);
+                cursor.setVisible(active && isSelected);
                 layout.add(cursor).padLeft(cursorTexture.getWidth());
 
                 layout.add(wrapDisplay(item.getDisplay())).fillX().expand();
@@ -90,6 +91,15 @@ public final class SelectList extends WidgetGroup implements InputHandler {
         final Container<T> container = new Container<>(display);
         container.align(Align.left);
         return container;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(final boolean active) {
+        this.active = active;
+        invalidate();
     }
 
     @Override
