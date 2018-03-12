@@ -31,6 +31,7 @@ public class PlayerCharacter implements Combatant {
         }
     }
 
+    @Override
     public final String getName() {
         return name;
     }

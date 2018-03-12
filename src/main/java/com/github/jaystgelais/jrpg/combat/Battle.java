@@ -1,5 +1,7 @@
 package com.github.jaystgelais.jrpg.combat;
 
+import com.github.jaystgelais.jrpg.combat.event.CombatEvent;
+import com.github.jaystgelais.jrpg.combat.outcome.CombatOutcome;
 import com.github.jaystgelais.jrpg.party.Party;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
@@ -14,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
 
 public final class Battle implements Updatable {
     private static final String STATE_READY = "ready";
@@ -23,9 +23,9 @@ public final class Battle implements Updatable {
     private static final String STATE_PARAM_EVENT = "event";
 
     private final PriorityQueue<CombatEvent> eventQueue = new PriorityQueue<>();
-    private final Queue<String> messageQueue = new LinkedList<>();
-    private final Set<Combatant> combatants = new HashSet<>();
+    private final List<MesageListener> mesageListeners = new LinkedList<>();
     private final List<CombatEventListener> eventListeners = new LinkedList<>();
+    private final List<CombatOutcomeListener> outcomeListeners = new LinkedList<>();
     private final BattleSystem battleSystem;
     private final Party party;
     private final StateMachine stateMachine;
@@ -37,22 +37,29 @@ public final class Battle implements Updatable {
         stateMachine = initStateMachine();
     }
 
-    void queueEvent(final CombatEvent combatEvent) {
+    public void addMessageListener(final MesageListener mesageListener) {
+        mesageListeners.add(mesageListener);
+    }
+
+    public void addCombatEventListener(final CombatEventListener eventListener) {
+        eventListeners.add(eventListener);
+    }
+
+    public void addCombatOutcomeListener(final CombatOutcomeListener outcomeListener) {
+        outcomeListeners.add(outcomeListener);
+    }
+
+    public void queueEvent(final CombatEvent combatEvent) {
         eventQueue.offer(combatEvent);
         eventListeners.forEach(combatEventListener -> combatEventListener.onQueue(combatEvent));
     }
 
-    void queueMessage(final String message) {
-        messageQueue.offer(message);
+    public void postMessage(final String message) {
+        mesageListeners.forEach(mesageListener -> mesageListener.onMessage(message));
     }
 
-    void addCombatant(final Combatant combatant) {
-        combatants.add(combatant);
-    }
-
-    void removeCombatant(final Combatant combatant) {
-        combatants.remove(combatant);
-        eventQueue.removeIf(combatEvent -> combatEvent.getOwner().equals(Optional.of(combatant)));
+    public void postOutcome(final CombatOutcome outcome) {
+        outcomeListeners.forEach(outcomeListener -> outcomeListener.onOutcome(outcome));
     }
 
     @Override

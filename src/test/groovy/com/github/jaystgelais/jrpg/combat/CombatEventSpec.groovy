@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.combat
 
+import com.github.jaystgelais.jrpg.combat.event.CombatEvent
 import spock.lang.Specification
 
 class CombatEventSpec extends Specification {

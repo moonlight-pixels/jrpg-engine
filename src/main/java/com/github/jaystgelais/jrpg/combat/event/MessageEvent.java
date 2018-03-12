@@ -1,4 +1,6 @@
-package com.github.jaystgelais.jrpg.combat;
+package com.github.jaystgelais.jrpg.combat.event;
+
+import com.github.jaystgelais.jrpg.combat.Battle;
 
 public final class MessageEvent extends CombatEvent {
     private final String message;
@@ -10,7 +12,7 @@ public final class MessageEvent extends CombatEvent {
 
     @Override
     public void start(final Battle battle) {
-        battle.queueMessage(message);
+        battle.postMessage(message);
     }
 
     @Override

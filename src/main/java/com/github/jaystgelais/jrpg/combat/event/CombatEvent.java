@@ -1,21 +1,14 @@
-package com.github.jaystgelais.jrpg.combat;
+package com.github.jaystgelais.jrpg.combat.event;
 
+import com.github.jaystgelais.jrpg.combat.Battle;
 import com.github.jaystgelais.jrpg.state.Updatable;
-
-import java.util.Optional;
 
 public abstract class CombatEvent implements Updatable, Comparable<CombatEvent> {
     public static final int TICKS_REMAINING_IMMEDIATE = -1;
     private int ticksRemaining;
-    private final Combatant owner;
 
-    protected CombatEvent(final int ticksRemaining, final Combatant owner) {
+    public CombatEvent(final int ticksRemaining) {
         this.ticksRemaining = ticksRemaining;
-        this.owner = owner;
-    }
-
-    protected CombatEvent(final int ticksRemaining) {
-        this(ticksRemaining, null);
     }
 
     public abstract void start(final Battle battle);
@@ -32,10 +25,6 @@ public abstract class CombatEvent implements Updatable, Comparable<CombatEvent> 
 
     public final int getTicksRemaining() {
         return ticksRemaining;
-    }
-
-    public final Optional<Combatant> getOwner() {
-        return Optional.ofNullable(owner);
     }
 
     @Override
