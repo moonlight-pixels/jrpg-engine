@@ -1,20 +1,27 @@
 package com.github.jaystgelais.jrpg.party;
 
+import com.github.jaystgelais.jrpg.combat.action.CombatActionType;
+
+import java.util.List;
+
 public class CharacterClass {
     private final String name;
+    private final List<CombatActionType> actionTypes;
     private final NextLevelFunction nextLevelFunction;
 
-    public CharacterClass(final String name, final NextLevelFunction nextLevelFunction) {
+    public CharacterClass(final String name, final List<CombatActionType> actionTypes,
+                          final NextLevelFunction nextLevelFunction) {
         this.name = name;
+        this.actionTypes = actionTypes;
         this.nextLevelFunction = nextLevelFunction;
-    }
-
-    public CharacterClass(final String name) {
-        this(name, new DefaultNextLevelFunction());
     }
 
     public final String getName() {
         return name;
+    }
+
+    public final List<CombatActionType> getActionTypes() {
+        return actionTypes;
     }
 
     public final int getXPNeededForNextLevel(final int currentLevel) {

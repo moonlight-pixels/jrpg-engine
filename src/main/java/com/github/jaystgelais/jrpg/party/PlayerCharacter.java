@@ -1,6 +1,7 @@
 package com.github.jaystgelais.jrpg.party;
 
 import com.github.jaystgelais.jrpg.combat.Combatant;
+import com.github.jaystgelais.jrpg.combat.action.CombatActionType;
 import com.github.jaystgelais.jrpg.combat.stats.MaxHP;
 import com.github.jaystgelais.jrpg.combat.stats.MaxMP;
 import com.github.jaystgelais.jrpg.combat.stats.MissingStatException;
@@ -9,6 +10,7 @@ import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
 import com.github.jaystgelais.jrpg.animation.SpriteSetDefinition;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PlayerCharacter implements Combatant {
@@ -34,6 +36,11 @@ public class PlayerCharacter implements Combatant {
     @Override
     public final String getName() {
         return name;
+    }
+
+    @Override
+    public final List<CombatActionType> getActionTypes() {
+        return characterClass.getActionTypes();
     }
 
     public final SpriteSetDefinition<ActorSpriteSet> getSpriteSetDefinition() {
@@ -87,7 +94,7 @@ public class PlayerCharacter implements Combatant {
     }
 
     @Override
-    public final void applyDamage(final int damage) {
-        setCurrentHp(Math.max(getCurrentHp() - damage, 0));
+    public final void applyHpChange(final int hpChange) {
+        setCurrentHp(Math.max(getCurrentHp() + hpChange, 0));
     }
 }
