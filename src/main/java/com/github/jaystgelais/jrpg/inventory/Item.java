@@ -1,25 +1,28 @@
 package com.github.jaystgelais.jrpg.inventory;
 
-public final class Item implements InventoryContent {
+import com.github.jaystgelais.jrpg.combat.action.AllowedTargets;
+import com.github.jaystgelais.jrpg.combat.action.Targetable;
+
+public final class Item implements InventoryContent, Targetable {
     private final String id;
     private final String name;
     private final String description;
     private final boolean useFromMenu;
     private final boolean useInBattle;
-    private final boolean requiresTarget;
+    private final AllowedTargets allowedTargets;
     private final boolean usageConsumesItem;
     private final ItemAction action;
 
     @SuppressWarnings("checkstyle:parameternumber")
     private Item(final String id, final String name, final String description, final boolean useFromMenu,
-                 final boolean useInBattle, final boolean requiresTarget, final boolean usageConsumesItem,
+                 final boolean useInBattle, final AllowedTargets allowedTargets, final boolean usageConsumesItem,
                  final ItemAction action) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.useFromMenu = useFromMenu;
         this.useInBattle = useInBattle;
-        this.requiresTarget = requiresTarget;
+        this.allowedTargets = allowedTargets;
         this.usageConsumesItem = usageConsumesItem;
         this.action = action;
     }
@@ -45,8 +48,9 @@ public final class Item implements InventoryContent {
         return useInBattle;
     }
 
-    public boolean requiresTarget() {
-        return requiresTarget;
+    @Override
+    public AllowedTargets getAllowedTargets() {
+        return allowedTargets;
     }
 
     public boolean doesUsageConsumesItem() {
@@ -72,7 +76,7 @@ public final class Item implements InventoryContent {
         private String description;
         private boolean useFromMenu = true;
         private boolean useInBattle = true;
-        private boolean requiresTarget = false;
+        private AllowedTargets allowedTargets = AllowedTargets.Untargeted;
         private boolean usageConsumesItem = true;
         private ItemAction action;
 
@@ -96,8 +100,8 @@ public final class Item implements InventoryContent {
             return this;
         }
 
-        public Builder setRequiresTarget(final boolean requiresTarget) {
-            this.requiresTarget = requiresTarget;
+        public Builder setAllowedTargets(final AllowedTargets allowedTargets) {
+            this.allowedTargets = allowedTargets;
             return this;
         }
 
@@ -112,7 +116,7 @@ public final class Item implements InventoryContent {
         }
 
         public Item createItem() {
-            return new Item(id, name, description, useFromMenu, useInBattle, requiresTarget, usageConsumesItem, action);
+            return new Item(id, name, description, useFromMenu, useInBattle, allowedTargets, usageConsumesItem, action);
         }
     }
 }

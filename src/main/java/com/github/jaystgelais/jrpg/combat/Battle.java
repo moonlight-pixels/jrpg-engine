@@ -1,5 +1,8 @@
 package com.github.jaystgelais.jrpg.combat;
 
+import com.github.jaystgelais.jrpg.combat.action.ActionTypeProvider;
+import com.github.jaystgelais.jrpg.combat.action.TargetChoiceProvider;
+import com.github.jaystgelais.jrpg.combat.action.TargetableChoiceProvider;
 import com.github.jaystgelais.jrpg.combat.event.CombatEvent;
 import com.github.jaystgelais.jrpg.combat.outcome.CombatOutcome;
 import com.github.jaystgelais.jrpg.party.Party;
@@ -7,6 +10,7 @@ import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.state.Updatable;
+import com.github.jaystgelais.jrpg.ui.dialog.Dialog;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,6 +64,19 @@ public final class Battle implements Updatable {
 
     public void postOutcome(final CombatOutcome outcome) {
         outcomeListeners.forEach(outcomeListener -> outcomeListener.onOutcome(outcome));
+    }
+
+    public void handlePlayerInput(final ActionTypeProvider provider) {
+    }
+
+    public void handlePlayerInput(final TargetableChoiceProvider provider) {
+    }
+
+    public void handlePlayerInput(final TargetChoiceProvider provider) {
+    }
+
+    public void handleDialog(final Dialog dialog) {
+
     }
 
     @Override

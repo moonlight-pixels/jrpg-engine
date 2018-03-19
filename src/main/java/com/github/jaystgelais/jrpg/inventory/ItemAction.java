@@ -1,8 +1,10 @@
 package com.github.jaystgelais.jrpg.inventory;
 
-import com.github.jaystgelais.jrpg.party.PlayerCharacter;
+import com.github.jaystgelais.jrpg.combat.Combatant;
+import com.github.jaystgelais.jrpg.combat.outcome.CombatOutcome;
+
+import java.util.List;
 
 public interface ItemAction {
-    // TODO once we have enemies that can be targetted, this paramter should be a common interface.
-    void perform(PlayerCharacter target);
+    List<CombatOutcome> perform(Combatant target);
 }

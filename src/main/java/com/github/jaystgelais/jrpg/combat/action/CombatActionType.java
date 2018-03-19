@@ -13,7 +13,7 @@ public abstract class CombatActionType<T extends CombatAction> {
 
     public abstract T createAction(Combatant actor, List<Combatant> targets);
 
-    public abstract TargetableChoiceProvider<Targetable> getTargetableChoiceProvider();
+    public abstract TargetableChoiceProvider<? extends Targetable> getTargetableChoiceProvider();
 
     public final String getName() {
         return name;

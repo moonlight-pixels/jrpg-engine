@@ -1,5 +1,6 @@
-package com.github.jaystgelais.jrpg.party;
+package com.github.jaystgelais.jrpg.combat.enemy;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.github.jaystgelais.jrpg.combat.Battle;
 import com.github.jaystgelais.jrpg.combat.Combatant;
 import com.github.jaystgelais.jrpg.combat.action.ActionTypeProvider;
@@ -7,35 +8,35 @@ import com.github.jaystgelais.jrpg.combat.action.AllowedTargets;
 import com.github.jaystgelais.jrpg.combat.action.CombatActionType;
 import com.github.jaystgelais.jrpg.combat.action.TargetChoiceProvider;
 import com.github.jaystgelais.jrpg.combat.action.TargetableChoiceProvider;
+import com.github.jaystgelais.jrpg.combat.enemy.ai.EnemyAI;
 import com.github.jaystgelais.jrpg.combat.stats.MaxHP;
 import com.github.jaystgelais.jrpg.combat.stats.MaxMP;
 import com.github.jaystgelais.jrpg.combat.stats.MissingStatException;
 import com.github.jaystgelais.jrpg.combat.stats.Stat;
-import com.github.jaystgelais.jrpg.map.actor.ActorSpriteSet;
-import com.github.jaystgelais.jrpg.animation.SpriteSetDefinition;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class PlayerCharacter implements Combatant {
+public class Enemy implements Combatant {
     private final String name;
-    private final SpriteSetDefinition<ActorSpriteSet> spriteSetDefinition;
-    private final CharacterClass characterClass;
+    private final Texture image;
+    private final Map<Class<? extends Stat>, Stat> stats = new HashMap<>();
+    private final int level;
+    private final EnemyAI enemyAI;
     private int currentHp;
     private int currentMp;
-    private final Map<Class<? extends Stat>, Stat> stats = new HashMap<>();
-    private int level;
-    private int xp;
 
-    public PlayerCharacter(final String name, final SpriteSetDefinition<ActorSpriteSet> spriteSetDefinition,
-                           final CharacterClass characterClass, final Stat... stats) {
+    public Enemy(final String name, final Texture image, final int level,
+                 final EnemyAI enemyAI, final Stat... stats) {
         this.name = name;
-        this.spriteSetDefinition = spriteSetDefinition;
-        this.characterClass = characterClass;
+        this.image = image;
+        this.level = level;
+        this.enemyAI = enemyAI;
         for (Stat stat : stats) {
             this.stats.put(stat.getClass(), stat);
         }
+        currentHp = getStatValue(MaxHP.class);
+        currentMp = getStatValue(MaxMP.class);
     }
 
     @Override
@@ -43,28 +44,9 @@ public class PlayerCharacter implements Combatant {
         return name;
     }
 
-    public final List<CombatActionType> getActionTypes() {
-        return characterClass.getActionTypes();
-    }
-
-    public final SpriteSetDefinition<ActorSpriteSet> getSpriteSetDefinition() {
-        return spriteSetDefinition;
-    }
-
-    public final int getCurrentHp() {
-        return Math.min(currentHp, getStatValue(MaxHP.class));
-    }
-
-    public final void setCurrentHp(final int currentHp) {
-        this.currentHp = Math.min(currentHp, getStatValue(MaxHP.class));
-    }
-
-    public final int getCurrentMp() {
-        return Math.min(currentMp, getStatValue(MaxMP.class));
-    }
-
-    public final void setCurrentMp(final int currentMp) {
-        this.currentMp = Math.min(currentMp, getStatValue(MaxMP.class));
+    @Override
+    public final void applyHpChange(final int hpChange) {
+        setCurrentHp(Math.max(getCurrentHp() + hpChange, 0));
     }
 
     @Override
@@ -75,17 +57,17 @@ public class PlayerCharacter implements Combatant {
     @Override
     public final ActionTypeProvider getActionTypeProvider(final Battle battle) {
         final ActionTypeProvider provider = new ActionTypeProvider();
-        battle.handlePlayerInput(provider);
+        enemyAI.handle(provider, battle);
 
         return provider;
     }
 
     @Override
     public final TargetableChoiceProvider getTargetableChoiceProvider(final CombatActionType actionType,
-                                                                final Battle battle) {
+                                                                      final Battle battle) {
         TargetableChoiceProvider provider = actionType.getTargetableChoiceProvider();
         if (!provider.isComplete()) {
-            battle.handlePlayerInput(provider);
+            enemyAI.handle(provider, battle);
         }
 
         return provider;
@@ -95,21 +77,9 @@ public class PlayerCharacter implements Combatant {
     public final TargetChoiceProvider getTargetChoiceProvider(final AllowedTargets allowedTargets,
                                                               final Battle battle) {
         TargetChoiceProvider provider = new TargetChoiceProvider();
-        battle.handlePlayerInput(provider);
+        enemyAI.handle(provider, battle);
 
         return provider;
-    }
-
-    public final void setLevel(final int level) {
-        this.level = level;
-    }
-
-    public final int getXp() {
-        return xp;
-    }
-
-    public final void setXp(final int xp) {
-        this.xp = xp;
     }
 
     @Override
@@ -121,12 +91,23 @@ public class PlayerCharacter implements Combatant {
         return stats.get(statClass);
     }
 
-    public final CharacterClass getCharacterClass() {
-        return characterClass;
+    public final Texture getImage() {
+        return image;
     }
 
-    @Override
-    public final void applyHpChange(final int hpChange) {
-        setCurrentHp(Math.max(getCurrentHp() + hpChange, 0));
+    public final int getCurrentHp() {
+        return currentHp;
+    }
+
+    public final int getCurrentMp() {
+        return currentMp;
+    }
+
+    public final void setCurrentHp(final int currentHp) {
+        this.currentHp = Math.min(currentHp, getStatValue(MaxHP.class));
+    }
+
+    public final void setCurrentMp(final int currentMp) {
+        this.currentMp = Math.min(currentMp, getStatValue(MaxMP.class));
     }
 }
