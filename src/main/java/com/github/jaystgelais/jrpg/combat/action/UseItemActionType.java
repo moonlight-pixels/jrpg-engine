@@ -6,20 +6,22 @@ import com.github.jaystgelais.jrpg.inventory.Item;
 import java.util.List;
 
 public final class UseItemActionType extends CombatActionType<UseItemAction> {
-    private final TargetableChoiceProvider<Item> choiceProvider;
+    private TargetableChoiceProvider<Item> choiceProvider;
 
     protected UseItemActionType() {
         super("Item");
-        choiceProvider = new TargetableChoiceProvider<>();
     }
 
     @Override
     public UseItemAction createAction(final Combatant actor, final List<Combatant> targets) {
-        return new UseItemAction(choiceProvider.getChoice(), targets);
+        final UseItemAction action = new UseItemAction(choiceProvider.getChoice(), targets);
+        choiceProvider = null;
+        return action;
     }
 
     @Override
     public TargetableChoiceProvider<Item> getTargetableChoiceProvider() {
+        choiceProvider = new TargetableChoiceProvider<>();
         return choiceProvider;
     }
 }

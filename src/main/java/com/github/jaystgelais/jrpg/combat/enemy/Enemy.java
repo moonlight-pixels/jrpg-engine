@@ -1,6 +1,6 @@
 package com.github.jaystgelais.jrpg.combat.enemy;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.github.jaystgelais.jrpg.animation.TextureProvider;
 import com.github.jaystgelais.jrpg.combat.Battle;
 import com.github.jaystgelais.jrpg.combat.Combatant;
 import com.github.jaystgelais.jrpg.combat.action.ActionTypeProvider;
@@ -19,14 +19,14 @@ import java.util.Map;
 
 public class Enemy implements Combatant {
     private final String name;
-    private final Texture image;
+    private final TextureProvider image;
     private final Map<Class<? extends Stat>, Stat> stats = new HashMap<>();
     private final int level;
     private final EnemyAI enemyAI;
     private int currentHp;
     private int currentMp;
 
-    public Enemy(final String name, final Texture image, final int level,
+    public Enemy(final String name, final TextureProvider image, final int level,
                  final EnemyAI enemyAI, final Stat... stats) {
         this.name = name;
         this.image = image;
@@ -57,7 +57,7 @@ public class Enemy implements Combatant {
     @Override
     public final ActionTypeProvider getActionTypeProvider(final Battle battle) {
         final ActionTypeProvider provider = new ActionTypeProvider();
-        enemyAI.handle(provider, battle);
+        enemyAI.handle(this, provider, battle);
 
         return provider;
     }
@@ -67,7 +67,7 @@ public class Enemy implements Combatant {
                                                                       final Battle battle) {
         TargetableChoiceProvider provider = actionType.getTargetableChoiceProvider();
         if (!provider.isComplete()) {
-            enemyAI.handle(provider, battle);
+            enemyAI.handle(this, provider, battle);
         }
 
         return provider;
@@ -77,7 +77,7 @@ public class Enemy implements Combatant {
     public final TargetChoiceProvider getTargetChoiceProvider(final AllowedTargets allowedTargets,
                                                               final Battle battle) {
         TargetChoiceProvider provider = new TargetChoiceProvider();
-        enemyAI.handle(provider, battle);
+        enemyAI.handle(this, provider, battle);
 
         return provider;
     }
@@ -91,7 +91,7 @@ public class Enemy implements Combatant {
         return stats.get(statClass);
     }
 
-    public final Texture getImage() {
+    public final TextureProvider getImage() {
         return image;
     }
 

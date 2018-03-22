@@ -1,6 +1,6 @@
 package com.github.jaystgelais.jrpg.dice;
 
-import java.util.concurrent.ThreadLocalRandom;
+import com.badlogic.gdx.math.MathUtils;
 
 final class DieRoll implements Rollable {
     private final int rolls;
@@ -21,7 +21,7 @@ final class DieRoll implements Rollable {
     }
 
     private int rollDie() {
-        return ThreadLocalRandom.current().nextInt(1, sides + 1);
+        return MathUtils.random(1, sides);
     }
 
     @Override
