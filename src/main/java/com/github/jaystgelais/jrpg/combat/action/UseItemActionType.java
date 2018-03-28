@@ -21,7 +21,7 @@ public final class UseItemActionType extends CombatActionType<UseItemAction> {
 
     @Override
     public TargetableChoiceProvider<Item> getTargetableChoiceProvider() {
-        choiceProvider = new TargetableChoiceProvider<>();
+        choiceProvider = new TargetableChoiceProvider<>(Item.class);
         return choiceProvider;
     }
 }

@@ -1,6 +1,7 @@
 package com.github.jaystgelais.jrpg.util;
 
-import com.github.jaystgelais.jrpg.dice.Dice;
+import com.badlogic.gdx.math.MathUtils;
+import com.google.common.base.Preconditions;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,15 +11,14 @@ public final class OddmentTable<T> {
     private int totalOddments = 0;
 
     public void addRow(final int oddment, final T value) {
-        if (oddment < 1) {
-            throw new IllegalArgumentException("Oddments must eb positive integers");
-        }
+        Preconditions.checkArgument(oddment > 0, "Oddments must be positive integers");
+        Preconditions.checkNotNull(value, "Value must not be null");
         rows.add(new OddmentTableRow(oddment, value));
         totalOddments += oddment;
     }
 
     public T getValue() {
-        int selection = new Dice().add("1d" + totalOddments).roll();
+        int selection = MathUtils.random(1, totalOddments);
         for (OddmentTableRow row : rows) {
             if (selection <= row.oddment) {
                 return row.value;
@@ -26,7 +26,11 @@ public final class OddmentTable<T> {
             selection -= row.oddment;
         }
 
-        return null;
+        throw new IllegalStateException("[PROGRAMMER ERROR] Random number generated out of bounds of OddmentTable");
+    }
+
+    public boolean isEmpty() {
+        return rows.isEmpty();
     }
 
     private final class OddmentTableRow {

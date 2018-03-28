@@ -83,6 +83,11 @@ public class Enemy implements Combatant {
     }
 
     @Override
+    public final boolean isAlive() {
+        return currentHp > 0;
+    }
+
+    @Override
     public final <T extends Stat> Stat getStat(final Class<T> statClass) throws MissingStatException {
         if (!stats.containsKey(statClass)) {
             throw new MissingStatException(statClass);

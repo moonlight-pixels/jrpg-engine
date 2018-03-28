@@ -16,4 +16,8 @@ public abstract class ActionRenderer {
     public final void registerOutcome(final CombatOutcome outcome) {
         outcomes.add(outcome);
     }
+
+    protected final List<CombatOutcome> getOutcomes() {
+        return outcomes;
+    }
 }

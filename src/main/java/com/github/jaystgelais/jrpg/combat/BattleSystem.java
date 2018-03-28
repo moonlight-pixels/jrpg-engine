@@ -1,13 +1,21 @@
 package com.github.jaystgelais.jrpg.combat;
 
-public final class BattleSystem {
+import com.github.jaystgelais.jrpg.graphics.Renderable;
+import com.github.jaystgelais.jrpg.input.InputHandler;
+import com.github.jaystgelais.jrpg.state.Updatable;
+
+public abstract class BattleSystem implements PlayerInputHandler, Updatable, Renderable, InputHandler {
     private final long turnLengthMs;
 
     public BattleSystem(final long turnLengthMs) {
         this.turnLengthMs = turnLengthMs;
     }
 
-    public long getTurnLengthMs() {
+    final long getTurnLengthMs() {
         return turnLengthMs;
     }
+
+    public abstract void configureBattle(Battle battle);
+
+    public abstract void registerEncounter(Encounter encounter);
 }

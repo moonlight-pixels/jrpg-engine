@@ -10,6 +10,7 @@ import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.audio.MusicService;
+import com.github.jaystgelais.jrpg.combat.Encounter;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.DelayedInputService;
 import com.github.jaystgelais.jrpg.input.InputService;
@@ -96,7 +97,7 @@ public final class MapMode extends GameMode {
 
     @Override
     public void update(final long elapsedTime) {
-        GameState.incrementTimePLayed(elapsedTime);
+        GameState.incrementTimePlayed(elapsedTime);
         map.update(elapsedTime);
         stateMachine.update(elapsedTime);
         GameState.setLocationOnMap(hero.getLocation());
@@ -388,5 +389,9 @@ public final class MapMode extends GameMode {
             );
             graphicsService.renderEnd();
         }
+    }
+
+    public void startEncounter(final Encounter encounter) {
+        // TODO make this happen
     }
 }

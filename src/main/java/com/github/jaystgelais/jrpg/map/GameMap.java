@@ -15,7 +15,9 @@ import com.github.jaystgelais.jrpg.map.ai.CachingIndexedGraph;
 import com.github.jaystgelais.jrpg.map.animation.Door;
 import com.github.jaystgelais.jrpg.map.animation.TileAnimation;
 import com.github.jaystgelais.jrpg.map.animation.TileAnimationDefinition;
+import com.github.jaystgelais.jrpg.map.encounter.EncounterTable;
 import com.github.jaystgelais.jrpg.map.fx.MapEffect;
+import com.github.jaystgelais.jrpg.map.trigger.EncounterTriggerAction;
 import com.github.jaystgelais.jrpg.map.trigger.TileTrigger;
 import com.github.jaystgelais.jrpg.map.trigger.Trigger;
 import com.github.jaystgelais.jrpg.map.trigger.TriggerAction;
@@ -26,6 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -54,6 +57,7 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
     private final Location parentLocation;
     private final TileCoordinate[] graphNodeIndex;
     private boolean areEffectsInitialized = false;
+    private EncounterTable encounterTable;
 
     public GameMap(final OrthographicCamera camera, final TiledMap map,
                    final TiledMapRenderer mapRenderer, final Location parentLocation) {
@@ -250,6 +254,8 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
     public void fireOnEnterTrigger(final TileCoordinate coordinate, final Actor actor) {
         if (tileTriggers.containsKey(coordinate)) {
             tileTriggers.get(coordinate).onEnter(this, actor);
+        } else {
+            checkForEncounter(coordinate);
         }
     }
 
@@ -306,6 +312,22 @@ public final class GameMap implements Renderable, Updatable, CachingIndexedGraph
 
     public boolean isBackgroundLayer(final int mapLayerIndex, final String layerName) {
         return mapLayers.get(mapLayerIndex).isBackground(layerName);
+    }
+
+    public void setEncounterTable(final EncounterTable encounterTable) {
+        this.encounterTable = encounterTable;
+    }
+
+    public Optional<EncounterTable> getEncounterTable() {
+        return Optional.ofNullable(encounterTable);
+    }
+
+    private void checkForEncounter(final TileCoordinate coordinate) {
+        getEncounterTable().ifPresent(encounterTable -> {
+            encounterTable.registerStepAndCheckForEncounter().ifPresent(encounter -> {
+                queueAction(new EncounterTriggerAction(encounter));
+            });
+        });
     }
 
     @Override

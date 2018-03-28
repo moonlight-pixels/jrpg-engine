@@ -2,6 +2,7 @@ package com.github.jaystgelais.jrpg.inject;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.github.jaystgelais.jrpg.Game;
+import com.github.jaystgelais.jrpg.combat.BattleSystem;
 import com.github.jaystgelais.jrpg.combat.CombatMode;
 import com.github.jaystgelais.jrpg.frontend.FrontEndMode;
 import com.github.jaystgelais.jrpg.frontend.NewGameLauncher;
@@ -61,7 +62,7 @@ public abstract class JRPGModule extends AbstractModule {
     @Provides
     @Singleton
     public final CombatMode providCombatMode() {
-        return new CombatMode();
+        return new CombatMode(createBattleSystem());
     }
 
     protected void configureGraphicsService(final GraphicsService graphicsService) { }
@@ -77,4 +78,6 @@ public abstract class JRPGModule extends AbstractModule {
     protected abstract NewGameLauncher getNewGameLauncher();
 
     protected abstract MenuDefinition createMainMenu();
+
+    protected abstract BattleSystem createBattleSystem();
 }

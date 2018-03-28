@@ -3,7 +3,6 @@ package com.github.jaystgelais.jrpg.combat.action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.github.jaystgelais.jrpg.combat.Battle;
 import com.github.jaystgelais.jrpg.ui.ScreenRegion;
-import com.github.jaystgelais.jrpg.ui.dialog.SelectListDialog;
 
 import java.util.List;
 
@@ -23,13 +22,7 @@ public abstract class SelectListTargetableChoiceHanlder<T extends Targetable> ex
 
     @Override
     public final void start(final Battle battle) {
-        battle.handleDialog(new SelectListDialog<>(
-                items,
-                columns,
-                region,
-                this::renderListItem,
-                this::provideChoice
-        ));
+
     }
 
     protected abstract Actor renderListItem(T item);

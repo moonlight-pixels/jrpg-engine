@@ -13,7 +13,6 @@ import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
 import com.github.jaystgelais.jrpg.state.Updatable;
-import com.github.jaystgelais.jrpg.ui.dialog.Dialog;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -26,7 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
 
-public final class Battle implements Updatable {
+public final class Battle implements Updatable, PlayerInputHandler {
     private static final String STATE_READY = "ready";
     private static final String STATE_ACTIVE = "active";
     private static final String STATE_PARAM_EVENT = "event";
@@ -46,6 +45,15 @@ public final class Battle implements Updatable {
         this.party = party;
         this.enemies = enemies;
         stateMachine = initStateMachine();
+        battleSystem.configureBattle(this);
+    }
+
+    public Party getParty() {
+        return party;
+    }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
     }
 
     public void addMessageListener(final MesageListener mesageListener) {
@@ -73,17 +81,19 @@ public final class Battle implements Updatable {
         outcomeListeners.forEach(outcomeListener -> outcomeListener.onOutcome(outcome));
     }
 
-    public void handlePlayerInput(final ActionTypeProvider provider) {
+    @Override
+    public void handlePlayerInput(final PlayerCharacter playerCharacter, final ActionTypeProvider provider) {
+        battleSystem.handlePlayerInput(playerCharacter, provider);
     }
 
-    public void handlePlayerInput(final TargetableChoiceProvider provider) {
+    @Override
+    public void handlePlayerInput(final PlayerCharacter playerCharacter, final TargetableChoiceProvider provider) {
+        battleSystem.handlePlayerInput(playerCharacter, provider);
     }
 
-    public void handlePlayerInput(final TargetChoiceProvider provider) {
-    }
-
-    public void handleDialog(final Dialog dialog) {
-
+    @Override
+    public void handlePlayerInput(final PlayerCharacter playerCharacter, final TargetChoiceProvider provider) {
+        battleSystem.handlePlayerInput(playerCharacter, provider);
     }
 
     public Optional<List<? extends Combatant>> getFixedTargetsForAllowedTargets(final Combatant combatant,

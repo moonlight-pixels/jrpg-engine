@@ -14,5 +14,5 @@ public interface Combatant extends StatHolder {
     ActionTypeProvider getActionTypeProvider(Battle battle);
     TargetableChoiceProvider getTargetableChoiceProvider(CombatActionType actionType, Battle battle);
     TargetChoiceProvider getTargetChoiceProvider(AllowedTargets allowedTargets, Battle battle);
-
+    boolean isAlive();
 }

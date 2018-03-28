@@ -1,6 +1,7 @@
 package com.github.jaystgelais.jrpg.party;
 
 import com.github.jaystgelais.jrpg.combat.Battle;
+import com.github.jaystgelais.jrpg.combat.BattleSpriteSet;
 import com.github.jaystgelais.jrpg.combat.Combatant;
 import com.github.jaystgelais.jrpg.combat.action.ActionTypeProvider;
 import com.github.jaystgelais.jrpg.combat.action.AllowedTargets;
@@ -21,17 +22,21 @@ import java.util.Map;
 public class PlayerCharacter implements Combatant {
     private final String name;
     private final SpriteSetDefinition<ActorSpriteSet> spriteSetDefinition;
+    private final SpriteSetDefinition<? extends BattleSpriteSet> battlerSpriteSetDefinition;
     private final CharacterClass characterClass;
     private int currentHp;
     private int currentMp;
     private final Map<Class<? extends Stat>, Stat> stats = new HashMap<>();
     private int level;
     private int xp;
+    private boolean backrow = false;
 
     public PlayerCharacter(final String name, final SpriteSetDefinition<ActorSpriteSet> spriteSetDefinition,
+                           final SpriteSetDefinition<? extends BattleSpriteSet> battlerSpriteSetDefinition,
                            final CharacterClass characterClass, final Stat... stats) {
         this.name = name;
         this.spriteSetDefinition = spriteSetDefinition;
+        this.battlerSpriteSetDefinition = battlerSpriteSetDefinition;
         this.characterClass = characterClass;
         for (Stat stat : stats) {
             this.stats.put(stat.getClass(), stat);
@@ -49,6 +54,10 @@ public class PlayerCharacter implements Combatant {
 
     public final SpriteSetDefinition<ActorSpriteSet> getSpriteSetDefinition() {
         return spriteSetDefinition;
+    }
+
+    public final SpriteSetDefinition<? extends BattleSpriteSet> getBattlerSpriteSetDefinition() {
+        return battlerSpriteSetDefinition;
     }
 
     public final int getCurrentHp() {
@@ -75,7 +84,7 @@ public class PlayerCharacter implements Combatant {
     @Override
     public final ActionTypeProvider getActionTypeProvider(final Battle battle) {
         final ActionTypeProvider provider = new ActionTypeProvider();
-        battle.handlePlayerInput(provider);
+        battle.handlePlayerInput(this, provider);
 
         return provider;
     }
@@ -85,7 +94,7 @@ public class PlayerCharacter implements Combatant {
                                                                 final Battle battle) {
         TargetableChoiceProvider provider = actionType.getTargetableChoiceProvider();
         if (!provider.isComplete()) {
-            battle.handlePlayerInput(provider);
+            battle.handlePlayerInput(this, provider);
         }
 
         return provider;
@@ -95,9 +104,14 @@ public class PlayerCharacter implements Combatant {
     public final TargetChoiceProvider getTargetChoiceProvider(final AllowedTargets allowedTargets,
                                                               final Battle battle) {
         TargetChoiceProvider provider = new TargetChoiceProvider();
-        battle.handlePlayerInput(provider);
+        battle.handlePlayerInput(this, provider);
 
         return provider;
+    }
+
+    @Override
+    public final boolean isAlive() {
+        return currentHp > 0;
     }
 
     public final void setLevel(final int level) {
@@ -110,6 +124,14 @@ public class PlayerCharacter implements Combatant {
 
     public final void setXp(final int xp) {
         this.xp = xp;
+    }
+
+    public final boolean isBackrow() {
+        return backrow;
+    }
+
+    public final void setBackrow(final boolean backrow) {
+        this.backrow = backrow;
     }
 
     @Override

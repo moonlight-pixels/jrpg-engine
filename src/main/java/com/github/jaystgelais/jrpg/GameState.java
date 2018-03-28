@@ -17,7 +17,7 @@ public final class GameState implements Serializable {
     private static TileCoordinate locationOnMap;
     private static Party party;
     private static Inventory inventory;
-    private static long timeplayed = 0;
+    private static long timePlayed = 0;
 
     private GameState() { }
 
@@ -73,11 +73,11 @@ public final class GameState implements Serializable {
         return inventory;
     }
 
-    public static long getTimeplayed() {
-        return timeplayed;
+    public static long getTimePlayed() {
+        return timePlayed;
     }
 
-    public static void incrementTimePLayed(final long timeMs) {
-        timeplayed += timeMs;
+    public static void incrementTimePlayed(final long timeMs) {
+        timePlayed += timeMs;
     }
 }
