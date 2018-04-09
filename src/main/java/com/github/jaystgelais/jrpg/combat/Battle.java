@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 public final class Battle implements Updatable, PlayerInputHandler {
     private static final String STATE_READY = "ready";
@@ -92,8 +93,9 @@ public final class Battle implements Updatable, PlayerInputHandler {
     }
 
     @Override
-    public void handlePlayerInput(final PlayerCharacter playerCharacter, final TargetChoiceProvider provider) {
-        battleSystem.handlePlayerInput(playerCharacter, provider);
+    public void handlePlayerInput(final PlayerCharacter playerCharacter, final TargetChoiceProvider provider,
+                                  final AllowedTargets allowedTargets) {
+        battleSystem.handlePlayerInput(playerCharacter, provider, allowedTargets);
     }
 
     public Optional<List<? extends Combatant>> getFixedTargetsForAllowedTargets(final Combatant combatant,
@@ -156,6 +158,21 @@ public final class Battle implements Updatable, PlayerInputHandler {
             eventQueue.forEach(CombatEvent::tick);
         }
         stateMachine.update(elapsedTime);
+    }
+
+    public boolean isGameOver() {
+        return party.getMembers().stream().allMatch(playerCharacter -> playerCharacter.getCurrentHp() <= 0);
+    }
+
+    public boolean isVictory() {
+        return enemies.isEmpty();
+    }
+
+    private void clearDeadEnemies() {
+        List<Enemy> deadEnemies = enemies.stream()
+                .filter(enemy -> enemy.getCurrentHp() <= 0)
+                .collect(Collectors.toList());
+        enemies.removeAll(deadEnemies);
     }
 
     private StateMachine initStateMachine() {
@@ -229,6 +246,7 @@ public final class Battle implements Updatable, PlayerInputHandler {
 
             @Override
             public void onExit() {
+                clearDeadEnemies();
                 eventListeners.forEach(combatEventListener -> combatEventListener.onComplete(combatEvent));
                 timeSinceLastTurnMs = 0L;
                 combatEvent = null;

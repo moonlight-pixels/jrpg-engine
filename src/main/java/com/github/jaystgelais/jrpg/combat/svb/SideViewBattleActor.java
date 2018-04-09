@@ -1,5 +1,6 @@
 package com.github.jaystgelais.jrpg.combat.svb;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.jaystgelais.jrpg.combat.BattleSpriteSet;
@@ -15,9 +16,10 @@ import com.github.jaystgelais.jrpg.util.TimeUtil;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-public final class SideViewBattleActor implements Updatable, Renderable {
+public final class SideViewBattleActor implements Updatable, Renderable, SelectableActor {
     private static final long DEFAULT_ANIMATION_TIME_MS = 600L;
     private static final long DEFAULT_WALK_TIME_MS = 1000L;
 
@@ -35,6 +37,7 @@ public final class SideViewBattleActor implements Updatable, Renderable {
     private long actionDurationMs;
     private long timeInAnimationMs = 0L;
     private int positionX;
+    private Texture cursor;
 
     public SideViewBattleActor(final BattleSpriteSet spriteSet, final int idlePositionX,
                                final int actionPositionX, final int positionY) {
@@ -93,11 +96,33 @@ public final class SideViewBattleActor implements Updatable, Renderable {
 
     @Override
     public void render(final GraphicsService graphicsService) {
+        final TextureRegion keyFrame = activeAnimation.getKeyFrame(TimeUtil.convertMsToFloatSeconds(timeInAnimationMs));
         graphicsService.drawSprite(
-                activeAnimation.getKeyFrame(TimeUtil.convertMsToFloatSeconds(timeInAnimationMs)),
+                keyFrame,
                 positionX,
                 positionY
         );
+        getCursor().ifPresent(cursor -> {
+            graphicsService.drawSprite(
+                    cursor,
+                    positionX - cursor.getWidth(),
+                    positionY + (keyFrame.getRegionHeight() / 2) - (cursor.getHeight() / 2)
+            );
+        });
+    }
+
+    @Override
+    public void showCursor(final Texture cursor) {
+        this.cursor = cursor;
+    }
+
+    @Override
+    public void hideCursor() {
+        cursor = null;
+    }
+
+    private Optional<Texture> getCursor() {
+        return Optional.ofNullable(cursor);
     }
 
     @Override

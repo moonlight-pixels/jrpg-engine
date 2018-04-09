@@ -3,17 +3,20 @@ package com.github.jaystgelais.jrpg.combat.svb;
 import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.combat.Battle;
 import com.github.jaystgelais.jrpg.combat.BattleSystem;
+import com.github.jaystgelais.jrpg.combat.Combatant;
 import com.github.jaystgelais.jrpg.combat.Encounter;
-import com.github.jaystgelais.jrpg.combat.EnemyLayout;
 import com.github.jaystgelais.jrpg.combat.action.ActionTypeProvider;
+import com.github.jaystgelais.jrpg.combat.action.AllowedTargets;
 import com.github.jaystgelais.jrpg.combat.action.CombatActionType;
 import com.github.jaystgelais.jrpg.combat.action.TargetChoiceProvider;
 import com.github.jaystgelais.jrpg.combat.action.Targetable;
 import com.github.jaystgelais.jrpg.combat.action.TargetableChoiceProvider;
+import com.github.jaystgelais.jrpg.combat.enemy.Enemy;
 import com.github.jaystgelais.jrpg.combat.svb.ui.SVBDialogProviderFactory;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.party.PlayerCharacter;
+import com.github.jaystgelais.jrpg.ui.UserInputHandler;
 import com.github.jaystgelais.jrpg.ui.dialog.Dialog;
 
 import java.util.Map;
@@ -26,9 +29,9 @@ public final class SideViewBattleSystem extends BattleSystem {
     private final TargetableChoiceProviderDialogMapper targetableChoiceProviderDialogMapper;
     private final SideViewPartyLayout partyLayout;
     private Battle battle;
-    private EnemyLayout enemyLayout;
     private Map<PlayerCharacter, SideViewBattleActor> playerActorMap;
-    private Dialog activeDialog;
+    private Map<Enemy, SideViewBattleEnemy> enemyActorMap;
+    private UserInputHandler activeUserInputHandler;
 
     public SideViewBattleSystem(final long turnLengthMs, final long messageDisplayMs,
                                 final SVBDialogProviderFactory<CombatActionType> actionDialogProviderFactory,
@@ -65,37 +68,62 @@ public final class SideViewBattleSystem extends BattleSystem {
 
     @Override
     public void registerEncounter(final Encounter encounter) {
-        enemyLayout = encounter.getLayout();
+        this.enemyActorMap = encounter.getLayout()
+                .getEnemyPositions(battle.getEnemies())
+                .entrySet()
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> new SideViewBattleEnemy(
+                                        entry.getKey().getImage().getTexture(
+                                                Game.getInstance().getGraphicsService().getAssetManager()
+                                        ),
+                                        entry.getValue().getX(),
+                                        entry.getValue().getY()
+                                )
+                        )
+                );
     }
 
     @Override
     public void handlePlayerInput(final PlayerCharacter playerCharacter, final ActionTypeProvider provider) {
-        activeDialog = actionDialogProviderFactory
+        final Dialog<CombatActionType> dialog = actionDialogProviderFactory
                 .getDialogProvider(playerCharacter, provider::setActionType)
                 .getDialog();
-        Game.getInstance().getUserInterface().add(activeDialog.getLayout());
+        activeUserInputHandler = dialog;
+        Game.getInstance().getUserInterface().add(dialog.getLayout());
     }
 
     @Override
     public void handlePlayerInput(final PlayerCharacter playerCharacter,
                                   final TargetableChoiceProvider<? extends Targetable> provider) {
-        activeDialog = targetableChoiceProviderDialogMapper.getDialog(provider, playerCharacter);
-        Game.getInstance().getUserInterface().add(activeDialog.getLayout());
+        final Dialog dialog = targetableChoiceProviderDialogMapper.getDialog(provider, playerCharacter);
+        activeUserInputHandler = dialog;
+        Game.getInstance().getUserInterface().add(dialog.getLayout());
     }
 
     @Override
-    public void handlePlayerInput(final PlayerCharacter playerCharacter, final TargetChoiceProvider provider) {
-        
+    public void handlePlayerInput(final PlayerCharacter playerCharacter, final TargetChoiceProvider provider,
+                                  final AllowedTargets allowedTargets) {
+        battle.getFixedTargetsForAllowedTargets(playerCharacter, allowedTargets).ifPresent(provider::setTargets);
+        if (!provider.isComplete()) {
+            activeUserInputHandler = new TargetSelector(
+                    provider,
+                    this,
+                    battle.getEligibleTargets(playerCharacter, allowedTargets)
+            );
+        }
     }
 
     @Override
     public void handleInput(final InputService inputService) {
-        getActiveDialog().ifPresent(dialog -> dialog.handleInput(inputService));
+        getActiveUserInputHandler().ifPresent(dialog -> dialog.handleInput(inputService));
     }
 
     @Override
     public void render(final GraphicsService graphicsService) {
-        enemyLayout.renderEnemies(graphicsService, battle.getEnemies());
+        battle.getEnemies().forEach(enemy -> enemyActorMap.get(enemy).render(graphicsService));
         battle
                 .getParty()
                 .getMembers()
@@ -109,10 +137,9 @@ public final class SideViewBattleSystem extends BattleSystem {
 
     @Override
     public void update(final long elapsedTime) {
-        getActiveDialog().ifPresent(dialog -> {
+        getActiveUserInputHandler().ifPresent(dialog -> {
             if (dialog.isComplete()) {
-                Game.getInstance().getUserInterface().remove(activeDialog.getLayout());
-                activeDialog = null;
+                activeUserInputHandler = null;
             }
         });
 
@@ -122,7 +149,19 @@ public final class SideViewBattleSystem extends BattleSystem {
                 .forEach(playerCharacter -> playerActorMap.get(playerCharacter).update(elapsedTime));
     }
 
-    private Optional<Dialog> getActiveDialog() {
-        return Optional.ofNullable(activeDialog);
+    private Optional<UserInputHandler> getActiveUserInputHandler() {
+        return Optional.ofNullable(activeUserInputHandler);
+    }
+
+    Optional<SelectableActor> getSelectableActor(final Combatant combatant) {
+        if (combatant instanceof PlayerCharacter) {
+            return Optional.ofNullable(playerActorMap.get(combatant));
+        }
+
+        if (combatant instanceof Enemy) {
+            return Optional.ofNullable(enemyActorMap.get(combatant));
+        }
+
+        return Optional.empty();
     }
 }

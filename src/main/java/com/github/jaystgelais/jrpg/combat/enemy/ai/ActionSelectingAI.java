@@ -7,6 +7,8 @@ import com.github.jaystgelais.jrpg.combat.action.TargetChoiceProvider;
 import com.github.jaystgelais.jrpg.combat.action.TargetableChoiceProvider;
 import com.github.jaystgelais.jrpg.combat.enemy.Enemy;
 
+import java.util.Collections;
+
 public abstract class ActionSelectingAI implements EnemyAI {
     private EnemyAction currentAction;
     private AllowedTargets currentAllowedTargets;
@@ -31,7 +33,13 @@ public abstract class ActionSelectingAI implements EnemyAI {
         provider.setTargets(
                 battle
                         .getFixedTargetsForAllowedTargets(enemy, currentAllowedTargets)
-                        .orElse(battle.getEligibleTargets(enemy, currentAllowedTargets))
+                        .orElse(
+                                Collections.singletonList(
+                                        currentAction
+                                                .getTargetingStrategy()
+                                                .chooseTarget(battle.getEligibleTargets(enemy, currentAllowedTargets))
+                                )
+                        )
         );
     }
 }

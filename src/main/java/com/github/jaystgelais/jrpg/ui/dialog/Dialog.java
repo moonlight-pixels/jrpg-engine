@@ -1,10 +1,11 @@
 package com.github.jaystgelais.jrpg.ui.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import com.github.jaystgelais.jrpg.input.InputHandler;
+import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.ui.ScreenRegion;
+import com.github.jaystgelais.jrpg.ui.UserInputHandler;
 
-public abstract class Dialog<T> implements InputHandler {
+public abstract class Dialog<T> implements UserInputHandler {
     private final Listener<T> listener;
     private final ScreenRegion region;
     private WidgetGroup layout;
@@ -29,12 +30,14 @@ public abstract class Dialog<T> implements InputHandler {
         return layout;
     }
 
+    @Override
     public final boolean isComplete() {
         return complete;
     }
 
     protected final void makeSelection(final T item) {
         listener.onSelect(item);
+        Game.getInstance().getUserInterface().remove(getLayout());
         complete = true;
     }
 

@@ -51,7 +51,14 @@ public final class CombatMode extends GameMode {
 
     private StateMachine initStateMachine() {
         Set<State> states = new HashSet<>();
-        states.add(new StateAdapter() {
+        states.add(createActiveState());
+        states.add(createVictoryState());
+        states.add(createGameOverState());
+        return new StateMachine(states, "active");
+    }
+
+    private State createActiveState() {
+        return new StateAdapter() {
             @Override
             public String getKey() {
                 return "active";
@@ -71,7 +78,24 @@ public final class CombatMode extends GameMode {
             public void render(final GraphicsService graphicsService) {
                 battleSystem.render(graphicsService);
             }
-        });
-        return new StateMachine(states, "active");
+        };
+    }
+
+    private State createVictoryState() {
+        return new StateAdapter() {
+            @Override
+            public String getKey() {
+                return "victory";
+            }
+        };
+    }
+
+    private State createGameOverState() {
+        return new StateAdapter() {
+            @Override
+            public String getKey() {
+                return "gameover";
+            }
+        };
     }
 }

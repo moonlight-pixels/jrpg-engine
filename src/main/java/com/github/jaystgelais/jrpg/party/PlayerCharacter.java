@@ -104,7 +104,7 @@ public class PlayerCharacter implements Combatant {
     public final TargetChoiceProvider getTargetChoiceProvider(final AllowedTargets allowedTargets,
                                                               final Battle battle) {
         TargetChoiceProvider provider = new TargetChoiceProvider();
-        battle.handlePlayerInput(this, provider);
+        battle.handlePlayerInput(this, provider, allowedTargets);
 
         return provider;
     }

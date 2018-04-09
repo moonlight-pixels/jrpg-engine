@@ -22,7 +22,7 @@ public final class SelectList extends WidgetGroup implements InputHandler {
     public static final float DEFAULT_SPACING = 0.05f;
     private final List<SelectItem<? extends Actor>> items;
     private final int columns;
-    private DelayedInput okInput = new DelayedInput(Inputs.OK);
+    private final DelayedInput okInput = new DelayedInput(Inputs.OK);
     private final DelayedInput downInput = new DelayedInput(Inputs.DOWN);
     private final DelayedInput leftInput = new DelayedInput(Inputs.LEFT);
     private final DelayedInput rightInput = new DelayedInput(Inputs.RIGHT);

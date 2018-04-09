@@ -12,7 +12,7 @@ public final class RandomTargetingStrategy implements TargetingStrategy {
     private RandomTargetingStrategy() { }
 
     @Override
-    public Combatant chooseTarget(final List<Combatant> targets) {
+    public Combatant chooseTarget(final List<? extends Combatant> targets) {
         Preconditions.checkNotNull(targets);
         Preconditions.checkArgument(!targets.isEmpty());
 

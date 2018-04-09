@@ -2,11 +2,12 @@ package com.github.jaystgelais.jrpg.combat;
 
 import com.github.jaystgelais.jrpg.combat.enemy.Enemy;
 import com.github.jaystgelais.jrpg.graphics.Coordinate2D;
-import com.github.jaystgelais.jrpg.graphics.GraphicsService;
 import com.google.common.base.Preconditions;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class EnemyLayout {
     private final List<Coordinate2D> locations;
@@ -19,18 +20,16 @@ public final class EnemyLayout {
         return locations.size();
     }
 
-    public void renderEnemies(final GraphicsService graphicsService, final List<Enemy> enemies) {
+    public Map<Enemy, Coordinate2D> getEnemyPositions(final List<Enemy> enemies) {
         Preconditions.checkArgument(enemies.size() <= slots());
+
+        final Map<Enemy, Coordinate2D> enemyPositions = new HashMap<>();
         for (int index = 0; index < enemies.size(); index++) {
             final Enemy enemy = enemies.get(index);
-            if (enemy.isAlive()) {
-                final Coordinate2D location = locations.get(index);
-                graphicsService.drawSprite(
-                        enemy.getImage().getTexture(graphicsService.getAssetManager()),
-                        location.getX(),
-                        location.getY()
-                );
-            }
+            final Coordinate2D location = locations.get(index);
+            enemyPositions.put(enemy, location);
         }
+
+        return enemyPositions;
     }
 }
