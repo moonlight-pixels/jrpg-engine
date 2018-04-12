@@ -1,8 +1,6 @@
 jrpg-engine
 ===========
 *Java RPG Engine*
-*Japanese-style RPG Engine*
-*Jay's RPG Engine*
 
 **jrpg-engine** is intended to be a java library designed to make writing your own SNES era Japanese RPG game 
 (think *Final Fantasy 4-6* or *Chrono Trigger*) easier. **jrpg-engine** is built for Java developers who want to make 
