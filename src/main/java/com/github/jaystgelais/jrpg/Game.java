@@ -68,6 +68,10 @@ public class Game implements ApplicationListener {
         registerInstance(this);
     }
 
+    public final void reset() {
+        gameModes.reset();
+    }
+
     @Override
     public final void render() {
         long timeElapsed = updateRenderTimeAndGetTimeElapsed();

@@ -1,5 +1,7 @@
 package com.github.jaystgelais.jrpg.combat;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.github.jaystgelais.jrpg.Game;
 import com.github.jaystgelais.jrpg.GameMode;
 import com.github.jaystgelais.jrpg.GameState;
 import com.github.jaystgelais.jrpg.graphics.GraphicsService;
@@ -7,6 +9,8 @@ import com.github.jaystgelais.jrpg.input.InputService;
 import com.github.jaystgelais.jrpg.state.State;
 import com.github.jaystgelais.jrpg.state.StateAdapter;
 import com.github.jaystgelais.jrpg.state.StateMachine;
+import com.github.jaystgelais.jrpg.ui.Panel;
+import com.github.jaystgelais.jrpg.ui.UiStyle;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -66,7 +70,13 @@ public final class CombatMode extends GameMode {
 
             @Override
             public void update(final long elapsedTime) {
-                battle.update(elapsedTime);
+                if (battle.isGameOver()) {
+                    stateMachine.change("gameover");
+                } else if (battle.isVictory()) {
+                    stateMachine.change("victory");
+                } else {
+                    battle.update(elapsedTime);
+                }
             }
 
             @Override
@@ -77,6 +87,11 @@ public final class CombatMode extends GameMode {
             @Override
             public void render(final GraphicsService graphicsService) {
                 battleSystem.render(graphicsService);
+            }
+
+            @Override
+            public void onExit() {
+                Game.getInstance().getUserInterface().clear();
             }
         };
     }
@@ -95,6 +110,13 @@ public final class CombatMode extends GameMode {
             @Override
             public String getKey() {
                 return "gameover";
+            }
+
+            @Override
+            public void onEnter(final Map<String, Object> params) {
+                Label label = new Label("Game Over", UiStyle.get(Label.LabelStyle.class));
+                Panel<Label> panel = new Panel<Label>(label, UiStyle.get(Panel.PanelStyle.class));
+                Game.getInstance().getUserInterface().add(panel);
             }
         };
     }

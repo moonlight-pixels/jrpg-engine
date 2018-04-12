@@ -44,6 +44,10 @@ public class StateMachine implements Renderable, InputHandler {
         currentState = state;
     }
 
+    protected final String getInitialState() {
+        return initialState;
+    }
+
     public final void update(final long elapsedTime) {
         getCurrentState().update(elapsedTime);
     }

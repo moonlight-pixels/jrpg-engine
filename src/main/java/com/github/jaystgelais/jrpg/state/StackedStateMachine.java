@@ -21,6 +21,12 @@ public final class StackedStateMachine extends StateMachine {
         setCurrentState(stateHistory.pop());
     }
 
+    public void reset() {
+        stateHistory.clear();
+        change(getInitialState());
+
+    }
+
     @Override
     protected void onChange(final State oldState, final State newState) {
         stateHistory.push(oldState);
