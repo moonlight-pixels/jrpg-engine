@@ -28,6 +28,7 @@ ruleset {
         'UnnecessaryObjectReferences' enabled: false
         'UnnecessaryReturnKeyword' enabled: false
         'UnnecessaryGetter' enabled: false
+        'UnnecessarySetter' enabled: false
     }
     ruleset('rulesets/unused.xml') {
         'UnusedObject'  enabled: false

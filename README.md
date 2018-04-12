@@ -13,10 +13,3 @@ This project is just getting underway and is not yet very useful. If the idea of
 back in as I make progress.
 
 **jrpg-engine** is licensed under the [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0).
-
-###Copyright/Attribution Notice: 
-The demo application uses the following artwork licensed under Creative Commons licenses:
-
-([Cave Tileset](http://opengameart.org/content/cave-tileset-0)) by MrBeast. Commissioned by OpenGameArt.org (http://opengameart.org)
-
-([Warrior Sprite](http://opengameart.org/content/twelve-16x18-rpg-sprites-plus-base)) by Charles Gabriel. Commissioned by OpenGameArt.org (http://opengameart.org)
