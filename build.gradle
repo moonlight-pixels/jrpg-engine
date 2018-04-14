@@ -1,81 +1,41 @@
 plugins {
-    id 'java'
-    id 'groovy'
-    id 'checkstyle'
-    id 'findbugs'
-    id 'pmd'
-    id 'codenarc'
-    id 'jacoco'
     id 'idea'
-    id 'maven-publish'
+    id 'net.researchgate.release' version '2.6.0'
     id 'com.github.ben-manes.versions' version '0.17.0'
+    id 'com.github.spotbugs' version '1.6.1' apply false
+    id 'io.franzbecker.gradle-lombok' version '1.11' apply false
+    id 'com.jfrog.bintray' version '1.7.3' apply false
 }
 
-version = '0.1.1-SNAPSHOT'
-group = 'com.moonlightpixels'
-
-ext {
-    gdxVersion = '1.9.8'
+allprojects {
+    repositories {
+        jcenter()
+    }
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    from sourceSets.main.allSource
-    classifier "sources"
-    extension "jar"
+task build {
+    dependsOn subprojects.findResults { it.tasks.findByName('build') }
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    from javadoc.destinationDir
-    classifier "javadoc"
-    extension "jar"
+task docs(type: Javadoc) {
+    destinationDir = file("$buildDir/docs/all")
+    exclude '**/internal/**'
+    exclude '**/legacy/**'
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
+subprojects {
+    afterEvaluate {
+        if(plugins.hasPlugin(JavaPlugin)) {
+
+            // configuration here
+            rootProject.tasks.docs {
+                source += files(sourceSets.collect { srcSet -> srcSet.allJava })
+                classpath += files(sourceSets*.compileClasspath)
+            }
+
         }
     }
 }
-
-
-checkstyle {
-    sourceSets = [sourceSets.main]
-}
-
-findbugs {
-    sourceSets = [sourceSets.main]
-}
-
-tasks.withType(FindBugs) {
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}
-
-tasks.withType(Checkstyle) {
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}
-
-tasks.withType(Pmd) {
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}
-
-codenarc {
-    configFile = rootProject.file('codenarcrule.groovy')
-    reportFormat = System.properties['codeNarcOutput'] ?: 'html'
-}
-
-test.finalizedBy jacocoTestReport
 
 dependencyUpdates.resolutionStrategy = {
     componentSelection { rules ->
@@ -88,32 +48,4 @@ dependencyUpdates.resolutionStrategy = {
             }
         }
     }
-}
-
-repositories {
-    jcenter()
-}
-
-dependencies {
-    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-ai:1.8.1"
-    compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-    compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-    compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    compile  'com.github.czyzby:gdx-lml:1.9.1.9.6'
-    compile 'com.google.guava:guava:24.1-jre'
-    compile 'com.google.inject:guice:4.2.0'
-
-    testCompile "org.codehaus.groovy:groovy-all:2.4.15"
-    testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
-    testCompile "nl.jqno.equalsverifier:equalsverifier:2.4.5"
-    testRuntime "cglib:cglib-nodep:3.2.6"
-    testRuntime "org.objenesis:objenesis:2.6"
 }

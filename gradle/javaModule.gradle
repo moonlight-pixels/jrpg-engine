@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+apply from: rootProject.file('gradle/dependencies.gradle')
+apply from: rootProject.file('gradle/lombok.gradle')
+apply from: rootProject.file('gradle/checkstyle.gradle')
+apply from: rootProject.file('gradle/pmd.gradle')
+apply from: rootProject.file('gradle/spotbugs.gradle')
+apply from: rootProject.file('gradle/jacoco.gradle')
+apply from: rootProject.file('gradle/spockTesting.gradle')
+apply from: rootProject.file('gradle/publishing.gradle')
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+idea {
+    module.iml.withXml {
+        def mainResources = it.asNode().component.content.sourceFolder.find {
+            it.@url == 'file://$MODULE_DIR$/src/main/resources'
+        }
+
+        if (mainResources) {
+            mainResources.attributes().remove('isSource')
+            mainResources.attributes().put('type', 'java-resource')
+        }
+
+        def testResources = it.asNode().component.content.sourceFolder.find {
+            it.@url == 'file://$MODULE_DIR$/src/test/resources'
+        }
+
+        if (testResources) {
+            testResources.attributes().remove('isTestSource')
+            testResources.attributes().put('type', 'java-test-resource')
+        }
+    }
+}

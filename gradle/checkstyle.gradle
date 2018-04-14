@@ -1,0 +1,18 @@
+apply plugin: 'checkstyle'
+
+dependencies {
+  checkstyle 'com.puppycrawl.tools:checkstyle:8.9'
+}
+
+checkstyle {
+  configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+  sourceSets = [sourceSets.main]
+}
+
+
+tasks.withType(Checkstyle) {
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
+}

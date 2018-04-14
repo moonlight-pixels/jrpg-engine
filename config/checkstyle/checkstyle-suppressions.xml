@@ -8,21 +8,8 @@
       that we don't want to enforce against unit tests.
     -->
 
-    <!-- Don't require Javadoc -->
-    <suppress checks="JavadocPackage"              files="[/\\]src[/\\]test[/\\]java[/\\]" />
-    <suppress checks="JavadocType"                 files="[/\\]src[/\\]test[/\\]java[/\\]" />
-    <suppress checks="JavadocMethod"               files="[/\\]src[/\\]test[/\\]java[/\\]" />
-    <suppress checks="JavadocVariable"             files="[/\\]src[/\\]test[/\\]java[/\\]" />
-    <suppress checks="JavadocStyle"                files="[/\\]src[/\\]test[/\\]java[/\\]" />
-
-    <!-- Relax some code conventions -->
-    <suppress checks="FileLength"                  files="[/\\]src[/\\]test[/\\]java[/\\]" />
-    <suppress checks="MethodLength"                files="[/\\]src[/\\]test[/\\]java[/\\]" />
-    <suppress checks="MethodCount"                 files="[/\\]src[/\\]test[/\\]java[/\\]" />
-    <suppress checks="ExecutableStatementCount"    files="[/\\]src[/\\]test[/\\]java[/\\]" />
-    <suppress checks="ParameterNumber"             files="[/\\]src[/\\]test[/\\]java[/\\]" />
-
-    <!-- Allow for * import of Junit assertions -->
-    <suppress checks="AvoidStarImport"             files="[/\\]src[/\\]test[/\\]java[/\\]" />
+  <!-- Don't require Javadoc for internal packages -->
+  <suppress files="internal" checks="Javadoc*"/>
+  <suppress files="legacy" checks="."/>
 
 </suppressions>

@@ -1,0 +1,17 @@
+apply plugin: 'groovy'
+apply plugin: 'codenarc'
+
+codenarc {
+    configFile = rootProject.file('config/codenarc/codenarcrule.groovy')
+    reportFormat = 'html'
+}
+
+dependencies {
+    testCompile "org.codehaus.groovy:groovy-all:${commonVersions.groovy}"
+    testCompile ("org.spockframework:spock-core:${commonVersions.spock}") {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+    }
+    testCompile "nl.jqno.equalsverifier:equalsverifier:$commonVersions.equalsverifier"
+    testRuntime "cglib:cglib-nodep:$commonVersions.cglib"
+    testRuntime "org.objenesis:objenesis:$commonVersions.objenesis"
+}

@@ -1,0 +1,19 @@
+apply from: rootProject.file('gradle/javaModule.gradle')
+
+jacocoExcludes << '**/legacy/**'
+
+dependencies {
+    compile "com.badlogicgames.gdx:gdx:$commonVersions.gdx"
+    compile "com.badlogicgames.gdx:gdx-ai:$commonVersions.gdx_ai"
+    compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$commonVersions.gdx"
+    compile "com.badlogicgames.gdx:gdx-platform:$commonVersions.gdx:natives-desktop"
+    compile "com.badlogicgames.gdx:gdx-controllers:$commonVersions.gdx"
+    compile "com.badlogicgames.gdx:gdx-controllers-desktop:$commonVersions.gdx"
+    compile "com.badlogicgames.gdx:gdx-controllers-platform:$commonVersions.gdx:natives-desktop"
+    compile "com.badlogicgames.gdx:gdx-freetype:$commonVersions.gdx"
+    compile "com.badlogicgames.gdx:gdx-freetype-platform:$commonVersions.gdx:natives-desktop"
+    compile "com.google.guava:guava:$commonVersions.guava"
+    compile ("com.google.inject:guice:$commonVersions.guice") {
+        exclude group: 'com.google.guava', module: 'guava'
+    }
+}

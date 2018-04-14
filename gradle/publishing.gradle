@@ -1,0 +1,44 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    classifier 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier 'javadoc'
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            // This line is a workaround for a gradle bug that will be fixed in 4.7
+            // https://github.com/gradle/gradle/issues/4760
+            gradleModuleMetadataFile = project.files(".nonexistent_file")
+        }
+    }
+}
+
+bintray {
+    user = project.bintrayUserName
+    key = project.bintrayApiKey
+    publications = ["mavenJava"]
+    pkg {
+        repo = 'main'
+        userOrg = 'moonlight-pixels'
+        licenses = ["Apache-2.0"]
+    }
+}
+
+rootProject.afterReleaseBuild.dependsOn bintrayUpload

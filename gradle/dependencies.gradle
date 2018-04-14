@@ -1,0 +1,13 @@
+ext {
+  commonVersions = [
+    cglib: '3.2.6',
+    equalsverifier: '2.4.5',
+    guava: '24.1-jre',
+    gdx: '1.9.8',
+    gdx_ai: '1.8.1',
+    groovy: '2.4.15',
+    guice: '4.2.0',
+    objenesis: '2.6',
+    spock: '1.1-groovy-2.4'
+  ]
+}

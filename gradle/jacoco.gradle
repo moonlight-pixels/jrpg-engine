@@ -1,0 +1,32 @@
+apply plugin: 'jacoco'
+
+ext {
+    jacocoExcludes = []
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.collect {
+            fileTree(dir: it, exclude: jacocoExcludes)
+        })
+    }
+}
+
+test.finalizedBy jacocoTestReport
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.90
+            }
+        }
+    }
+    afterEvaluate {
+        classDirectories = files(classDirectories.collect {
+            fileTree(dir: it, exclude: jacocoExcludes)
+        })
+    }
+}
+
+jacocoTestReport.finalizedBy jacocoTestCoverageVerification
