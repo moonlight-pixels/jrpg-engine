@@ -5,6 +5,7 @@ import com.google.inject.Provides
 import com.moonlightpixels.jrpg.config.JRPGConfiguration
 import com.moonlightpixels.jrpg.config.LaunchConfig
 import com.moonlightpixels.jrpg.config.internal.DefaultJRPGConfiguration
+import com.moonlightpixels.jrpg.internal.gdx.GdxAIFacade
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade
 import com.moonlightpixels.jrpg.internal.launch.GameLauncherFactory
 
@@ -18,6 +19,7 @@ class TestModule extends AbstractModule {
     )
     GameLauncherFactory gameLauncherFactory
     GdxFacade gdxFacade
+    GdxAIFacade gdxAIFacade
 
     @Provides
     JRPGConfiguration provideJRPGConfiguration() {
@@ -32,5 +34,10 @@ class TestModule extends AbstractModule {
     @Provides
     GdxFacade provideGdxFacade() {
         gdxFacade
+    }
+
+    @Provides
+    GdxAIFacade provideGdxAIFacade() {
+        gdxAIFacade
     }
 }

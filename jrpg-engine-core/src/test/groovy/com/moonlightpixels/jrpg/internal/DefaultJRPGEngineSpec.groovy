@@ -7,6 +7,7 @@ import com.moonlightpixels.jrpg.JRPGEngine
 import com.moonlightpixels.jrpg.config.JRPGConfiguration
 import com.moonlightpixels.jrpg.config.LaunchConfig
 import com.moonlightpixels.jrpg.config.internal.DefaultJRPGConfiguration
+import com.moonlightpixels.jrpg.internal.gdx.GdxAIFacade
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade
 import com.moonlightpixels.jrpg.internal.inject.TestModule
 import com.moonlightpixels.jrpg.internal.launch.GameLauncher
@@ -18,6 +19,7 @@ class DefaultJRPGEngineSpec extends Specification {
     private GameLauncher launcher
     private GameLauncherFactory launcherFactory
     private GdxFacade gdx
+    private GdxAIFacade gdxAI
     private Graphics graphics
     private Injector injector
 
@@ -32,12 +34,14 @@ class DefaultJRPGEngineSpec extends Specification {
         launcher = Mock(GameLauncher)
         launcherFactory = Mock(GameLauncherFactory)
         gdx = Mock(GdxFacade)
+        gdxAI = Mock(GdxAIFacade)
         graphics = Mock(Graphics)
         injector = Guice.createInjector(
             new TestModule(
                 gameLauncherFactory: this.launcherFactory,
                 jrpgConfiguration: jrpgConfiguration,
-                gdxFacade: gdx
+                gdxFacade: gdx,
+                gdxAIFacade: gdxAI
             )
         )
     }
