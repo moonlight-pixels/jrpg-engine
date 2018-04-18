@@ -1,6 +1,10 @@
 package com.moonlightpixels.jrpg;
 
+import com.google.inject.Guice;
+import com.moonlightpixels.jrpg.config.JRPGConfiguration;
+import com.moonlightpixels.jrpg.config.internal.DefaultJRPGConfiguration;
 import com.moonlightpixels.jrpg.internal.DefaultJRPGEngine;
+import com.moonlightpixels.jrpg.internal.inject.JRPGModule;
 
 import java.util.function.Consumer;
 
@@ -20,8 +24,12 @@ public interface JRPGEngine {
      * @param definition  Game Definition
      * @return A JRPGEngine
      */
-    static JRPGEngine of(final Consumer<? super JRPGSpec> definition) {
-        return new DefaultJRPGEngine(definition);
+    static JRPGEngine of(final Consumer<? super JRPGConfiguration> definition) {
+        JRPGConfiguration configuration = new DefaultJRPGConfiguration();
+        definition.accept(configuration);
+        configuration.validate();
+
+        return new DefaultJRPGEngine(Guice.createInjector(new JRPGModule(configuration)));
     }
 
     /**
@@ -29,7 +37,7 @@ public interface JRPGEngine {
      *
      * @param definition Game Definition
      */
-    static void run(final Consumer<? super JRPGSpec> definition) {
+    static void run(final Consumer<? super JRPGConfiguration> definition) {
         of(definition).run();
     }
 

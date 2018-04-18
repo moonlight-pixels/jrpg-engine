@@ -8,8 +8,8 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class GraphicsConfig {
-    private final float resolutionWidth;
-    private final float resolutionHeight;
+public class LaunchConfig {
+    private final int resolutionWidth;
+    private final int resolutionHeight;
     private final boolean fullscreen;
 }

@@ -1,0 +1,11 @@
+apply from: rootProject.file('gradle/javaModule.gradle')
+
+jacocoExcludes << '**/legacy/**'
+
+dependencies {
+    compile project(':jrpg-engine-core')
+    compile "com.badlogicgames.gdx:gdx-platform:$commonVersions.gdx:natives-desktop"
+    compile "com.badlogicgames.gdx:gdx-controllers-desktop:$commonVersions.gdx"
+    compile "com.badlogicgames.gdx:gdx-controllers-platform:$commonVersions.gdx:natives-desktop"
+    compile "com.badlogicgames.gdx:gdx-freetype-platform:$commonVersions.gdx:natives-desktop"
+}

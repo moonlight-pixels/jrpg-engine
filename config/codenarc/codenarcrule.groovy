@@ -5,7 +5,9 @@ ruleset {
     ruleset('rulesets/braces.xml')
     ruleset('rulesets/concurrency.xml')
     ruleset('rulesets/convention.xml')
-    ruleset('rulesets/design.xml')
+    ruleset('rulesets/design.xml') {
+        'BuilderMethodWithSideEffects' enabled: false
+    }
     ruleset('rulesets/exceptions.xml')
     ruleset('rulesets/formatting.xml') {
         'ClassJavadoc' enabled: false
@@ -21,6 +23,7 @@ ruleset {
     ruleset('rulesets/logging.xml')
     ruleset('rulesets/naming.xml') {
         'MethodName' enabled: false
+        'FactoryMethodName' enabled: false
     }
     ruleset('rulesets/security.xml')
     ruleset('rulesets/size.xml')
