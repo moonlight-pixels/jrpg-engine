@@ -1,10 +1,9 @@
 package com.moonlightpixels.jrpg;
 
-import com.google.inject.Guice;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
 import com.moonlightpixels.jrpg.config.internal.DefaultJRPGConfiguration;
-import com.moonlightpixels.jrpg.internal.DefaultJRPGEngine;
-import com.moonlightpixels.jrpg.internal.inject.JRPGModule;
+import com.moonlightpixels.jrpg.internal.inject.BaseModule;
+import com.moonlightpixels.jrpg.internal.inject.InjectionContext;
 
 import java.util.function.Consumer;
 
@@ -29,7 +28,9 @@ public interface JRPGEngine {
         definition.accept(configuration);
         configuration.validate();
 
-        return new DefaultJRPGEngine(Guice.createInjector(new JRPGModule(configuration)));
+        InjectionContext.addModule(new BaseModule(configuration));
+
+        return InjectionContext.get().getInstance(JRPGEngine.class);
     }
 
     /**

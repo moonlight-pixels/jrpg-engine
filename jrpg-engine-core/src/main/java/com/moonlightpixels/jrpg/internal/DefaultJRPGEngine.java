@@ -1,27 +1,36 @@
 package com.moonlightpixels.jrpg.internal;
 
-import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Graphics;
-import com.google.inject.Injector;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
+import com.google.inject.Module;
 import com.moonlightpixels.jrpg.JRPGEngine;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
 import com.moonlightpixels.jrpg.internal.gdx.GdxAIFacade;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
+import com.moonlightpixels.jrpg.internal.inject.InjectionContext;
 import com.moonlightpixels.jrpg.internal.launch.GameLauncherFactory;
 
-public final class DefaultJRPGEngine implements JRPGEngine, ApplicationListener {
-    private final Injector injector;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+public final class DefaultJRPGEngine extends ApplicationAdapter implements JRPGEngine {
     private final JRPGConfiguration configuration;
     private final GameLauncherFactory gameLauncherFactory;
     private final GdxFacade gdx;
     private final GdxAIFacade gdxAI;
+    private final Module graphicsModule;
 
-    public DefaultJRPGEngine(final Injector injector) {
-        this.injector = injector;
-        this.configuration = injector.getInstance(JRPGConfiguration.class);
-        this.gameLauncherFactory = injector.getInstance(GameLauncherFactory.class);
-        this.gdx = injector.getInstance(GdxFacade.class);
-        this.gdxAI = injector.getInstance(GdxAIFacade.class);
+    @Inject
+    public DefaultJRPGEngine(final JRPGConfiguration configuration, final GameLauncherFactory gameLauncherFactory,
+                             final GdxFacade gdx, final GdxAIFacade gdxAI,
+                             @Named("Graphics") final Module graphicsModule) {
+        this.configuration = configuration;
+        this.gameLauncherFactory = gameLauncherFactory;
+        this.gdx = gdx;
+        this.gdxAI = gdxAI;
+        this.graphicsModule = graphicsModule;
     }
 
     @Override
@@ -33,6 +42,7 @@ public final class DefaultJRPGEngine implements JRPGEngine, ApplicationListener 
 
     @Override
     public void create() {
+        InjectionContext.addModule(graphicsModule);
         if (configuration.getLaunchConfig().isFullscreen()) {
             Graphics.Monitor monitor = gdx.getGraphics().getMonitor();
             Graphics.DisplayMode displayMode = gdx.getGraphics().getDisplayMode(monitor);
@@ -41,27 +51,16 @@ public final class DefaultJRPGEngine implements JRPGEngine, ApplicationListener 
     }
 
     @Override
-    public void resize(final int width, final int height) {
-
-    }
-
-    @Override
     public void render() {
+        if (gdx.getInput().isKeyPressed(Input.Keys.ESCAPE)) {
+            gdx.getApp().exit();
+            return;
+        }
         gdxAI.getTimepiece().update(gdx.getGraphics().getDeltaTime());
     }
 
     @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
     public void dispose() {
-
+        InjectionContext.get().getInstance(AssetManager.class).dispose();
     }
 }

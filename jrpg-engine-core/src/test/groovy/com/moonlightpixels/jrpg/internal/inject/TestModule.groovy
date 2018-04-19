@@ -1,43 +1,34 @@
 package com.moonlightpixels.jrpg.internal.inject
 
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.Camera
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.utils.viewport.Viewport
 import com.google.inject.AbstractModule
-import com.google.inject.Provides
 import com.moonlightpixels.jrpg.config.JRPGConfiguration
-import com.moonlightpixels.jrpg.config.LaunchConfig
-import com.moonlightpixels.jrpg.config.internal.DefaultJRPGConfiguration
 import com.moonlightpixels.jrpg.internal.gdx.GdxAIFacade
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade
 import com.moonlightpixels.jrpg.internal.launch.GameLauncherFactory
 
 class TestModule extends AbstractModule {
-    JRPGConfiguration jrpgConfiguration = new DefaultJRPGConfiguration(
-        launchConfig: LaunchConfig.builder()
-            .resolutionWidth(640)
-            .resolutionHeight(480)
-            .fullscreen(true)
-            .build()
-    )
-    GameLauncherFactory gameLauncherFactory
-    GdxFacade gdxFacade
-    GdxAIFacade gdxAIFacade
+    JRPGConfiguration jrpgConfiguration
+    GameLauncherFactory launcherFactory
+    GdxFacade gdx
+    GdxAIFacade gdxAI
+    AssetManager assetManager
+    SpriteBatch spriteBatch
+    Camera camera
+    Viewport viewport
 
-    @Provides
-    JRPGConfiguration provideJRPGConfiguration() {
-        jrpgConfiguration
-    }
-
-    @Provides
-    GameLauncherFactory provideGameLauncherFactory() {
-        gameLauncherFactory
-    }
-
-    @Provides
-    GdxFacade provideGdxFacade() {
-        gdxFacade
-    }
-
-    @Provides
-    GdxAIFacade provideGdxAIFacade() {
-        gdxAIFacade
+    @Override
+    protected void configure() {
+        bind(JRPGConfiguration).toInstance(jrpgConfiguration)
+        bind(GameLauncherFactory).toInstance(launcherFactory)
+        bind(GdxFacade).toInstance(gdx)
+        bind(GdxAIFacade).toInstance(gdxAI)
+        bind(AssetManager).toInstance(assetManager)
+        bind(SpriteBatch).toInstance(spriteBatch)
+        bind(Camera).toInstance(camera)
+        bind(Viewport).toInstance(viewport)
     }
 }
