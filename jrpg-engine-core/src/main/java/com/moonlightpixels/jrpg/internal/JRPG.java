@@ -9,6 +9,7 @@ import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
 import com.moonlightpixels.jrpg.map.internal.MapState;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public final class JRPG {
     private final FrontEndState frontEndState;
@@ -18,7 +19,7 @@ public final class JRPG {
 
     @Inject
     public JRPG(final FrontEndState frontEndState, final MapState mapState,
-                final CombatState combatState, final State<JRPG> initialState) {
+                final CombatState combatState, @Named("initial") final State<JRPG> initialState) {
         this.frontEndState = frontEndState;
         this.mapState = mapState;
         this.combatState = combatState;

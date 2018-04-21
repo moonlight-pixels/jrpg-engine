@@ -33,5 +33,8 @@ public final class BaseModule extends AbstractModule {
                 configuration.getLaunchConfig().getResolutionWidth(),
                 configuration.getLaunchConfig().getResolutionHeight()
             ));
+        bind(Module.class)
+            .annotatedWith(Names.named("Game"))
+            .toInstance(new GameModule(configuration));
     }
 }

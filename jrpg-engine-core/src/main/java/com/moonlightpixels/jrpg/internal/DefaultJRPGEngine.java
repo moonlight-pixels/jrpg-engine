@@ -21,16 +21,20 @@ public final class DefaultJRPGEngine extends ApplicationAdapter implements JRPGE
     private final GdxFacade gdx;
     private final GdxAIFacade gdxAI;
     private final Module graphicsModule;
+    private final Module gameModule;
+    private JRPG jrpg;
 
     @Inject
     public DefaultJRPGEngine(final JRPGConfiguration configuration, final GameLauncherFactory gameLauncherFactory,
                              final GdxFacade gdx, final GdxAIFacade gdxAI,
-                             @Named("Graphics") final Module graphicsModule) {
+                             @Named("Graphics") final Module graphicsModule,
+                             @Named("Game") final Module gameModule) {
         this.configuration = configuration;
         this.gameLauncherFactory = gameLauncherFactory;
         this.gdx = gdx;
         this.gdxAI = gdxAI;
         this.graphicsModule = graphicsModule;
+        this.gameModule = gameModule;
     }
 
     @Override
@@ -43,11 +47,13 @@ public final class DefaultJRPGEngine extends ApplicationAdapter implements JRPGE
     @Override
     public void create() {
         InjectionContext.addModule(graphicsModule);
+        InjectionContext.addModule(gameModule);
         if (configuration.getLaunchConfig().isFullscreen()) {
             Graphics.Monitor monitor = gdx.getGraphics().getMonitor();
             Graphics.DisplayMode displayMode = gdx.getGraphics().getDisplayMode(monitor);
             gdx.getGraphics().setFullscreenMode(displayMode);
         }
+        jrpg = InjectionContext.get().getInstance(JRPG.class);
     }
 
     @Override
@@ -57,6 +63,7 @@ public final class DefaultJRPGEngine extends ApplicationAdapter implements JRPGE
             return;
         }
         gdxAI.getTimepiece().update(gdx.getGraphics().getDeltaTime());
+        jrpg.update();
     }
 
     @Override
