@@ -11,4 +11,7 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$commonVersions.gdx"
     compile "com.badlogicgames.gdx:gdx-controllers:$commonVersions.gdx"
     compile "com.badlogicgames.gdx:gdx-freetype:$commonVersions.gdx"
+
+    testCompile "com.badlogicgames.gdx:gdx-backend-headless:$commonVersions.gdx"
+    testCompile "com.badlogicgames.gdx:gdx-platform:$commonVersions.gdx:natives-desktop"
 }

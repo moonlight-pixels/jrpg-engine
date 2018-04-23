@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.GL20;
 import com.google.inject.Module;
 import com.moonlightpixels.jrpg.JRPGEngine;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
@@ -63,7 +64,12 @@ public final class DefaultJRPGEngine extends ApplicationAdapter implements JRPGE
             return;
         }
         gdxAI.getTimepiece().update(gdx.getGraphics().getDeltaTime());
+        clearScreen();
         jrpg.update();
+    }
+
+    private void clearScreen() {
+        gdx.getGl().glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     }
 
     @Override
