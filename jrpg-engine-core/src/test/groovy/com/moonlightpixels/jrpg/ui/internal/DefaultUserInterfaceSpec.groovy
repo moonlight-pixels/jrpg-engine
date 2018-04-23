@@ -45,7 +45,7 @@ class DefaultUserInterfaceSpec extends Specification {
         1 * stage.draw()
     }
 
-    void 'remove removes only the targetted actor'() {
+    void 'remove() removes only the targetted actor'() {
         setup:
         Actor actor1 = Mock(Actor)
         Actor actor2 = Mock(Actor)
