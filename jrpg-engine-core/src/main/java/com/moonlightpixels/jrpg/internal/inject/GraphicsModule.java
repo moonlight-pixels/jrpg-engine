@@ -8,6 +8,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.moonlightpixels.jrpg.config.JRPGConfiguration;
+import com.moonlightpixels.jrpg.ui.UiStyle;
+import com.moonlightpixels.jrpg.ui.internal.DefaultUiStyleSupplier;
 
 import javax.inject.Singleton;
 
@@ -31,5 +34,14 @@ public class GraphicsModule extends AbstractModule {
     @Singleton
     public final Viewport provideViewport(final Camera camera) {
         return new FitViewport(resolutionWidth, resolutionHeight, camera);
+    }
+
+    @Provides
+    @Singleton
+    public final UiStyle provideUiStyle(final JRPGConfiguration jrpgConfiguration) {
+        UiStyle uiStyle = new DefaultUiStyleSupplier().get();
+        jrpgConfiguration.configure(uiStyle);
+
+        return uiStyle;
     }
 }

@@ -1,5 +1,9 @@
 package com.moonlightpixels.jrpg.config;
 
+import com.moonlightpixels.jrpg.ui.UiStyle;
+
+import java.util.function.Consumer;
+
 /**
  * A buildable specification of a jrpg-engine game.
  */
@@ -25,4 +29,19 @@ public interface JRPGConfiguration {
      * @return Refernce to this configuration
      */
     JRPGConfiguration setLaunchConfig(LaunchConfig launchConfig);
+
+    /**
+     * Configures UI Style.
+     *
+     * @param uiStyleConsumer Consumer that will configure the given Uistyle object.
+     * @return Refernce to this configuration.
+     */
+    JRPGConfiguration uiStyle(Consumer<UiStyle> uiStyleConsumer);
+
+    /**
+     * Configures the uiStyle object passed.
+     *
+     * @param uiStyle UiStyle object to configure.
+     */
+    void configure(UiStyle uiStyle);
 }
