@@ -1,8 +1,9 @@
 package com.moonlightpixels.jrpg.internal
 
 import com.badlogic.gdx.Input
-import com.google.inject.Module
 import com.moonlightpixels.jrpg.config.LaunchConfig
+import com.moonlightpixels.jrpg.internal.inject.GameInitializer
+import com.moonlightpixels.jrpg.internal.inject.GraphicsInitializer
 import com.moonlightpixels.jrpg.internal.inject.InjectionContext
 import com.moonlightpixels.jrpg.internal.inject.TestModule
 import spock.lang.Specification
@@ -14,13 +15,14 @@ class DefaultJRPGEngineSpec extends Specification {
     void setup() {
         InjectionContext.reset()
         testModule.attach(this)
+        InjectionContext.addModule(testModule)
         jrpgEngine = new DefaultJRPGEngine(
             testModule.jrpgConfiguration,
             testModule.launcherFactory,
             testModule.gdx,
             testModule.gdxAI,
-            testModule,
-            Mock(Module)
+            Mock(GraphicsInitializer),
+            Mock(GameInitializer)
         )
     }
 

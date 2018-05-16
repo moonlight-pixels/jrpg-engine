@@ -57,15 +57,15 @@ public final class NinePatchUtil {
         final int centerHeight = height - (top + bottom);
         final int centerWidth = width - (left + right);
 
-        patches[TOP_LEFT] = new TextureRegion(texture, 0, height - top, left, top);
-        patches[TOP_CENTER] = new TextureRegion(texture, left, height - top, centerWidth, top);
-        patches[TOP_RIGHT] = new TextureRegion(texture, width - right, height - top, right, top);
+        patches[TOP_LEFT] = new TextureRegion(texture, 0, 0, left, top);
+        patches[TOP_CENTER] = new TextureRegion(texture, left, 0, centerWidth, top);
+        patches[TOP_RIGHT] = new TextureRegion(texture, width - right, 0, right, top);
         patches[MIDDLE_LEFT] = new TextureRegion(texture, 0, bottom, left, centerHeight);
-        patches[MIDDLE_CENTER] = new TextureRegion(texture, left, bottom, centerWidth, centerHeight);
+        patches[MIDDLE_CENTER] = new TextureRegion(texture, left, top, centerWidth, centerHeight);
         patches[MIDDLE_RIGHT] = new TextureRegion(texture, width - right, right, left, centerHeight);
-        patches[BOTTOM_LEFT] = new TextureRegion(texture, 0, 0, left, bottom);
-        patches[BOTTOM_CENTER] = new TextureRegion(texture, left, 0, centerWidth, bottom);
-        patches[BOTTOM_RIGHT] = new TextureRegion(texture, width - right, 0, right, bottom);
+        patches[BOTTOM_LEFT] = new TextureRegion(texture, 0, height - top, left, bottom);
+        patches[BOTTOM_CENTER] = new TextureRegion(texture, left, height - top, centerWidth, bottom);
+        patches[BOTTOM_RIGHT] = new TextureRegion(texture, width - right, height - top, right, bottom);
 
         return patches;
     }

@@ -1,8 +1,7 @@
 package com.moonlightpixels.jrpg.internal.inject;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Module;
-import com.google.inject.name.Names;
+import com.google.inject.Provides;
 import com.moonlightpixels.jrpg.JRPGEngine;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
 import com.moonlightpixels.jrpg.internal.DefaultJRPGEngine;
@@ -27,14 +26,22 @@ public final class BaseModule extends AbstractModule {
         bind(GdxFacade.class).to(DefaultGdxFacade.class);
         bind(GdxAIFacade.class).to(DefaultGdxAIFacade.class);
         bind(JRPGEngine.class).to(DefaultJRPGEngine.class);
-        bind(Module.class)
-            .annotatedWith(Names.named("Graphics"))
-            .toInstance(new GraphicsModule(
-                configuration.getLaunchConfig().getResolutionWidth(),
-                configuration.getLaunchConfig().getResolutionHeight()
+    }
+
+    @Provides
+    public GraphicsInitializer provideGraphicsInitializer() {
+        return config -> {
+            InjectionContext.addModule(new GraphicsModule(
+                config.getLaunchConfig().getResolutionWidth(),
+                config.getLaunchConfig().getResolutionHeight()
             ));
-        bind(Module.class)
-            .annotatedWith(Names.named("Game"))
-            .toInstance(new GameModule(configuration));
+        };
+    }
+
+    @Provides
+    public GameInitializer provideGameInitializer() {
+        return config -> {
+            InjectionContext.addModule(new GameModule(config));
+        };
     }
 }

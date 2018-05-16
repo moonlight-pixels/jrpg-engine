@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
 import com.moonlightpixels.jrpg.ui.UserInterface;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public final class DefaultUserInterface implements UserInterface {
@@ -16,6 +17,7 @@ public final class DefaultUserInterface implements UserInterface {
     private final GdxFacade gdx;
     private final SpriteBatch spriteBatch;
 
+    @Inject
     public DefaultUserInterface(final Camera camera, final Stage stage,
                                 final GdxFacade gdx, final SpriteBatch spriteBatch) {
         this.camera = camera;

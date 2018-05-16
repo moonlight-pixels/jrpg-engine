@@ -5,12 +5,13 @@ import com.moonlightpixels.jrpg.config.JRPGConfiguration;
 import com.moonlightpixels.jrpg.config.LaunchConfig;
 import com.moonlightpixels.jrpg.ui.UiStyle;
 
-import java.util.Optional;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public final class DefaultJRPGConfiguration implements JRPGConfiguration {
     private LaunchConfig launchConfig;
-    private Consumer<UiStyle> uiStyleConsumer;
+    private final List<Consumer<UiStyle>> uiStyleConsumers = new LinkedList<>();
 
     @Override
     public void validate() throws IllegalStateException {
@@ -30,12 +31,12 @@ public final class DefaultJRPGConfiguration implements JRPGConfiguration {
 
     @Override
     public JRPGConfiguration uiStyle(final Consumer<UiStyle> uiStyleConsumer) {
-        this.uiStyleConsumer = uiStyleConsumer;
+        this.uiStyleConsumers.add(uiStyleConsumer);
         return this;
     }
 
     @Override
     public void configure(final UiStyle uiStyle) {
-        Optional.ofNullable(uiStyleConsumer).ifPresent(consumer -> consumer.accept(uiStyle));
+        uiStyleConsumers.forEach(consumer -> consumer.accept(uiStyle));
     }
 }

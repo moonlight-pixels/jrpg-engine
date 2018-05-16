@@ -23,6 +23,7 @@ import com.moonlightpixels.jrpg.config.JRPGConfiguration
 import com.moonlightpixels.jrpg.config.LaunchConfig
 import com.moonlightpixels.jrpg.config.internal.DefaultJRPGConfiguration
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState
+import com.moonlightpixels.jrpg.internal.DefaultJRPG
 import com.moonlightpixels.jrpg.internal.JRPG
 import com.moonlightpixels.jrpg.internal.gdx.GdxAIFacade
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade
@@ -56,6 +57,7 @@ class TestModule extends AbstractModule {
     SpriteBatch spriteBatch
     Camera camera
     Viewport viewport
+    JRPG jrpg
     FrontEndState frontEndState
     MapState mapState
     CombatState combatState
@@ -153,6 +155,7 @@ class TestModule extends AbstractModule {
         spriteBatch = mockFactory.Mock(SpriteBatch)
         camera = mockFactory.Mock(Camera)
         viewport = mockFactory.Mock(Viewport)
+        jrpg = mockFactory.Mock(JRPG)
         frontEndState = mockFactory.Mock(FrontEndState)
         mapState = mockFactory.Mock(MapState)
         combatState = mockFactory.Mock(CombatState)
@@ -176,6 +179,7 @@ class TestModule extends AbstractModule {
         mockUtil.attachMock(spriteBatch, spec)
         mockUtil.attachMock(camera, spec)
         mockUtil.attachMock(viewport, spec)
+        mockUtil.attachMock(jrpg, spec)
         mockUtil.attachMock(frontEndState, spec)
         mockUtil.attachMock(mapState, spec)
         mockUtil.attachMock(combatState, spec)
@@ -199,6 +203,7 @@ class TestModule extends AbstractModule {
         mockUtil.detachMock(spriteBatch)
         mockUtil.detachMock(camera)
         mockUtil.detachMock(viewport)
+        mockUtil.detachMock(jrpg)
         mockUtil.detachMock(frontEndState)
         mockUtil.detachMock(mapState)
         mockUtil.detachMock(combatState)
@@ -214,6 +219,7 @@ class TestModule extends AbstractModule {
         bind(SpriteBatch).toInstance(spriteBatch)
         bind(Camera).toInstance(camera)
         bind(Viewport).toInstance(viewport)
+        bind(JRPG).toInstance(jrpg)
         bind(FrontEndState).toInstance(frontEndState)
         bind(MapState).toInstance(mapState)
         bind(CombatState).toInstance(combatState)
@@ -221,7 +227,7 @@ class TestModule extends AbstractModule {
 
     @Provides
     @Named('initial')
-    State<JRPG> provideInitialState() {
+    State<DefaultJRPG> provideInitialState() {
         return frontEndState
     }
 }

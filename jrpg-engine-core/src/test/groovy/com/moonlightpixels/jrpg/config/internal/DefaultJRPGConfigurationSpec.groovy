@@ -48,4 +48,23 @@ class DefaultJRPGConfigurationSpec extends Specification {
         then:
         1 * consumer.accept(uiStyle)
     }
+
+    void 'configure(UiStyle) calls configuration consumers in order when more than one is set'() {
+        setup:
+        UiStyle uiStyle = Mock(UiStyle)
+        Consumer<UiStyle> consumer1 = Mock(Consumer)
+        Consumer<UiStyle> consumer2 = Mock(Consumer)
+
+        when:
+        JRPGConfiguration jrpgConfiguration = new DefaultJRPGConfiguration()
+        jrpgConfiguration.uiStyle(consumer1)
+        jrpgConfiguration.uiStyle(consumer2)
+        jrpgConfiguration.configure(uiStyle)
+
+        then:
+        1 * consumer1.accept(uiStyle)
+
+        then:
+        1 * consumer2.accept(uiStyle)
+    }
 }

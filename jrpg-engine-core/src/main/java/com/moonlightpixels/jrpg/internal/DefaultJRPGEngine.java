@@ -5,37 +5,36 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
-import com.google.inject.Module;
 import com.moonlightpixels.jrpg.JRPGEngine;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
 import com.moonlightpixels.jrpg.internal.gdx.GdxAIFacade;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
+import com.moonlightpixels.jrpg.internal.inject.GameInitializer;
+import com.moonlightpixels.jrpg.internal.inject.GraphicsInitializer;
 import com.moonlightpixels.jrpg.internal.inject.InjectionContext;
 import com.moonlightpixels.jrpg.internal.launch.GameLauncherFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public final class DefaultJRPGEngine extends ApplicationAdapter implements JRPGEngine {
     private final JRPGConfiguration configuration;
     private final GameLauncherFactory gameLauncherFactory;
     private final GdxFacade gdx;
     private final GdxAIFacade gdxAI;
-    private final Module graphicsModule;
-    private final Module gameModule;
+    private final GraphicsInitializer graphicsInitializer;
+    private final GameInitializer gameInitializer;
     private JRPG jrpg;
 
     @Inject
     public DefaultJRPGEngine(final JRPGConfiguration configuration, final GameLauncherFactory gameLauncherFactory,
                              final GdxFacade gdx, final GdxAIFacade gdxAI,
-                             @Named("Graphics") final Module graphicsModule,
-                             @Named("Game") final Module gameModule) {
+                             final GraphicsInitializer graphicsInitializer, final GameInitializer gameInitializer) {
         this.configuration = configuration;
         this.gameLauncherFactory = gameLauncherFactory;
         this.gdx = gdx;
         this.gdxAI = gdxAI;
-        this.graphicsModule = graphicsModule;
-        this.gameModule = gameModule;
+        this.graphicsInitializer = graphicsInitializer;
+        this.gameInitializer = gameInitializer;
     }
 
     @Override
@@ -47,8 +46,8 @@ public final class DefaultJRPGEngine extends ApplicationAdapter implements JRPGE
 
     @Override
     public void create() {
-        InjectionContext.addModule(graphicsModule);
-        InjectionContext.addModule(gameModule);
+        graphicsInitializer.initialize(configuration);
+        gameInitializer.initialize(configuration);
         if (configuration.getLaunchConfig().isFullscreen()) {
             Graphics.Monitor monitor = gdx.getGraphics().getMonitor();
             Graphics.DisplayMode displayMode = gdx.getGraphics().getDisplayMode(monitor);
