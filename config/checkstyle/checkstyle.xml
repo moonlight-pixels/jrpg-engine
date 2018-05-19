@@ -49,7 +49,9 @@
             <property name="scope" value="public"/>
             <property name="allowUndeclaredRTE" value="true"/>
         </module>
-        <module name="JavadocType"/>
+        <module name="JavadocType">
+            <property name="excludeScope" value="private"/>
+        </module>
         <module name="JavadocVariable">
             <property name="scope" value="public"/>
         </module>

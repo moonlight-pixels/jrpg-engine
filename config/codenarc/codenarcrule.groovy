@@ -11,12 +11,15 @@ ruleset {
     ruleset('rulesets/exceptions.xml')
     ruleset('rulesets/formatting.xml') {
         'ClassJavadoc' enabled: false
+        'LineLength' enabled: false
         'SpaceAroundMapEntryColon' {
             characterAfterColonRegex = ' '
         }
     }
     ruleset('rulesets/generic.xml')
-    ruleset('rulesets/groovyism.xml')
+    ruleset('rulesets/groovyism.xml') {
+        'GetterMethodCouldBeProperty' enabled: false
+    }
     ruleset('rulesets/imports.xml')
     ruleset('rulesets/jdbc.xml')
     ruleset('rulesets/junit.xml')
