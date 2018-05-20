@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.Net
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.GL30
+import com.moonlightpixels.jrpg.input.ClickEvent
 import com.moonlightpixels.jrpg.input.ControlEvent
 import com.moonlightpixels.jrpg.input.InputScheme
 import com.moonlightpixels.jrpg.input.KeyboardMapping
@@ -29,7 +30,7 @@ class DefaultInputSystemSpec extends Specification {
         inputSystem.useKeyboard(KeyboardMapping.DEFAULT)
 
         then:
-        1 * mockInput.setInputProcessor(new DefaultInputProcessor(inputSystem, KeyboardMapping.DEFAULT))
+        1 * mockInput.setInputProcessor(new DefaultInputProcessor(inputSystem, inputSystem, KeyboardMapping.DEFAULT))
         inputSystem.inputScheme == InputScheme.Keyboard
     }
 
@@ -51,6 +52,26 @@ class DefaultInputSystemSpec extends Specification {
 
         then:
         inputSystem.readControlEvent().orElse(null) == null
+    }
+
+    void 'fireEvent(click) saves last event fired when TouchMouse scheme is active'() {
+        given:
+        inputSystem.useTouchMouse()
+
+        when:
+        inputSystem.fireEvent(new ClickEvent(1, 1))
+        inputSystem.fireEvent(new ClickEvent(2, 2))
+
+        then:
+        inputSystem.readClickEvent().orElse(null) == new ClickEvent(2, 2)
+    }
+
+    void 'fireEvent(click) does nothing when TouchMouse scheme is not active'() {
+        when:
+        inputSystem.fireEvent(new ClickEvent(1, 1))
+
+        then:
+        inputSystem.readClickEvent().orElse(null) == null
     }
 
     private GdxFacade mockGdx() {

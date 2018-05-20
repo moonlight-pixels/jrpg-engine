@@ -26,4 +26,11 @@ public interface InputSystem {
      * @return Last read ControlEvent
      */
     Optional<ControlEvent> readControlEvent();
+
+    /**
+     * Reads (ands removes for future reads) the last ControlEvent registered from active input device.
+     *
+     * @return Last read ControlEvent
+     */
+    Optional<ClickEvent> readClickEvent();
 }

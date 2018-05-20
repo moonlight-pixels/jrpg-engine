@@ -2,17 +2,20 @@ package com.moonlightpixels.jrpg.input.internal
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
+import com.moonlightpixels.jrpg.input.ClickEvent
 import com.moonlightpixels.jrpg.input.ControlEvent
 import com.moonlightpixels.jrpg.input.KeyboardMapping
 import spock.lang.Specification
 
 class DefaultInputProcessorSpec extends Specification {
     private ControlEventGateway controllerEventGateway
+    private ClickEventGateway clickEventGateway
     private KeyboardMapping keyboardMapping
     private InputProcessor inputProcessor
 
     void setup() {
         controllerEventGateway = Mock(ControlEventGateway)
+        clickEventGateway = Mock(ClickEventGateway)
         keyboardMapping = new KeyboardMapping()
             .registerUpKey(Input.Keys.UP)
             .registerDownKey(Input.Keys.DOWN)
@@ -21,7 +24,7 @@ class DefaultInputProcessorSpec extends Specification {
             .registerActionKey(Input.Keys.ENTER)
             .registerCancelKey(Input.Keys.TAB)
             .registerMenuKey(Input.Keys.SPACE)
-        inputProcessor = new DefaultInputProcessor(controllerEventGateway, keyboardMapping)
+        inputProcessor = new DefaultInputProcessor(controllerEventGateway, clickEventGateway, keyboardMapping)
     }
 
     void 'keyDown fires correct event if key is mapped'() {
@@ -37,7 +40,7 @@ class DefaultInputProcessorSpec extends Specification {
         inputProcessor.keyDown(Input.Keys.A)
 
         then:
-        _ * controllerEventGateway.fireEvent(_)
+        0 * controllerEventGateway.fireEvent(_)
     }
 
     void 'keyUp fires correct event if key is mapped'() {
@@ -53,6 +56,14 @@ class DefaultInputProcessorSpec extends Specification {
         inputProcessor.keyUp(Input.Keys.SPACE)
 
         then:
-        _ * controllerEventGateway.fireEvent(_)
+        0 * controllerEventGateway.fireEvent(_)
+    }
+
+    void 'touchDown fires ClickEvent'() {
+        when:
+        inputProcessor.touchDown(1, 1, 1, 1, )
+
+        then:
+        1 * clickEventGateway.fireEvent(new ClickEvent(1, 1))
     }
 }
