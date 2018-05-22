@@ -31,7 +31,7 @@ publishing {
 }
 
 bintray {
-    user = project.bintrayUserName
+    user = project.bintrayUser
     key = project.bintrayApiKey
     publications = ["mavenJava"]
     pkg {
