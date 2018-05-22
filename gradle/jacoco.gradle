@@ -4,6 +4,10 @@ ext {
     jacocoExcludes = []
 }
 
+jacoco {
+    toolVersion = '0.8.1'
+}
+
 jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.collect {

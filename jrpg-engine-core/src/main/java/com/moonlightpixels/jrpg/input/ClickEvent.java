@@ -15,9 +15,6 @@ public final class ClickEvent {
      * @return true if this ClickEvent points to a point inside the actor, false otherwise
      */
     public boolean appliesTo(final Actor actor) {
-        return actor.getX() < screenX
-            && (actor.getX() + actor.getWidth()) > screenX
-            && actor.getY() < screenY
-            && (actor.getY() + actor.getHeight()) > screenY;
+        return actor.hit(screenX, screenY, false) != null;
     }
 }
