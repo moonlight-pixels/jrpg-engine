@@ -28,9 +28,13 @@ final class JRPGMapLayer {
 
     JRPGMapLayer(final int layerIndex, final TiledMapRenderer mapRenderer, final SpriteBatch spriteBatch,
                  final Viewport viewport) {
+        this(layerIndex, mapRenderer, new Stage(viewport, spriteBatch));
+    }
+
+    JRPGMapLayer(final int layerIndex, final TiledMapRenderer mapRenderer, final Stage stage) {
         this.layerIndex = layerIndex;
         this.mapRenderer = mapRenderer;
-        this.stage = new Stage(viewport, spriteBatch);
+        this.stage = stage;
     }
 
     void addBackgroundLayer(final TiledMapTileLayer tileLayer) {
