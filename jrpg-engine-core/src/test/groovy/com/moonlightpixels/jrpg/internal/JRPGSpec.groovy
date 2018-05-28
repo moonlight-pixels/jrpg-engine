@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.internal
 
+import com.moonlightpixels.jrpg.GameState
 import com.moonlightpixels.jrpg.combat.internal.CombatState
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState
 import com.moonlightpixels.jrpg.map.internal.MapState
@@ -10,16 +11,18 @@ class JRPGSpec extends Specification {
     MapState mapState
     CombatState combatState
     DefaultJRPG jrpg
+    GameState gameState
 
     void setup() {
         frontEndState = Mock(FrontEndState)
         mapState = Mock(MapState)
         combatState = Mock(CombatState)
+        gameState = Mock(GameState)
     }
 
     void 'Calls to update are passed to active state'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState)
 
         when:
         jrpg.update()
@@ -30,7 +33,7 @@ class JRPGSpec extends Specification {
 
     void 'toLocation() Changes state to MapState'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState)
 
         when:
         jrpg.toLocation()
@@ -41,7 +44,7 @@ class JRPGSpec extends Specification {
 
     void 'toBattle() Changes state to CombatState'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState)
 
         when:
         jrpg.toBattle()
@@ -52,7 +55,7 @@ class JRPGSpec extends Specification {
 
     void 'toMainMenu() Changes state to FrontEndState'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState, gameState)
 
         when:
         jrpg.toMainMenu()
@@ -63,7 +66,7 @@ class JRPGSpec extends Specification {
 
     void 'exitBattle() returns to previous state'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState, gameState)
 
         when:
         jrpg.toBattle()
@@ -76,7 +79,7 @@ class JRPGSpec extends Specification {
 
     void 'exitBattle() throws IllegalStateException if not in combatState'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState, gameState)
 
         when:
         jrpg.exitBattle()
@@ -87,7 +90,7 @@ class JRPGSpec extends Specification {
 
     void 'exitBattle() throws IllegalStateException if there is no previous state to return to'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, combatState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, combatState, gameState)
 
         when:
         jrpg.exitBattle()

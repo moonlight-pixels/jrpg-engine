@@ -17,4 +17,5 @@ dependencies {
     compile ("com.google.inject:guice:$commonVersions.guice") {
         exclude group: 'com.google.guava', module: 'guava'
     }
+    compile "com.google.inject.extensions:guice-assistedinject:$commonVersions.guice"
 }

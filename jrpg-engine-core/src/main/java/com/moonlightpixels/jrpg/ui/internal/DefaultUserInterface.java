@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.google.common.collect.Lists;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
+import com.moonlightpixels.jrpg.internal.inject.GraphicsModule;
 import com.moonlightpixels.jrpg.ui.UserInterface;
 
 import javax.inject.Inject;
-import java.util.List;
+import javax.inject.Named;
 
 public final class DefaultUserInterface implements UserInterface {
     private final Camera camera;
@@ -18,7 +18,7 @@ public final class DefaultUserInterface implements UserInterface {
     private final SpriteBatch spriteBatch;
 
     @Inject
-    public DefaultUserInterface(final Camera camera, final Stage stage,
+    public DefaultUserInterface(@Named(GraphicsModule.UI_CAMERA) final Camera camera, final Stage stage,
                                 final GdxFacade gdx, final SpriteBatch spriteBatch) {
         this.camera = camera;
         this.stage = stage;
@@ -38,10 +38,7 @@ public final class DefaultUserInterface implements UserInterface {
 
     @Override
     public void remove(final Actor actor) {
-        List<Actor> actors = Lists.newLinkedList(stage.getActors());
-        actors.remove(actor);
-        stage.clear();
-        actors.forEach(stage::addActor);
+        stage.getRoot().removeActor(actor);
     }
 
     @Override

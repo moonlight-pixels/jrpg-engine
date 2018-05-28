@@ -4,6 +4,7 @@ import com.badlogic.gdx.Graphics
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade
 import com.moonlightpixels.jrpg.ui.UserInterface
@@ -12,6 +13,7 @@ import spock.lang.Specification
 class DefaultUserInterfaceSpec extends Specification {
     private Camera camera
     private Stage stage
+    private Group rootGroup
     private GdxFacade gdx
     private Graphics graphics
     private SpriteBatch spriteBatch
@@ -19,6 +21,7 @@ class DefaultUserInterfaceSpec extends Specification {
     void setup() {
         camera = Mock(Camera)
         stage = Mock(Stage)
+        rootGroup = Mock(Group)
         graphics = Mock(Graphics)
         gdx = Mock(GdxFacade) {
             _ * getGraphics() >> graphics
@@ -59,9 +62,7 @@ class DefaultUserInterfaceSpec extends Specification {
         userInterface.remove(actor2)
 
         then:
-        1 * stage.getActors() >> [actor1, actor2, actor3]
-        1 * stage.addActor(actor1)
-        0 * stage.addActor(actor2)
-        1 * stage.addActor(actor3)
+        _ * stage.getRoot() >> rootGroup
+        1 * rootGroup.removeActor(actor2)
     }
 }

@@ -1,0 +1,35 @@
+package com.moonlightpixels.jrpg.map;
+
+import com.badlogic.gdx.math.Vector2;
+
+/**
+ * Interactive Maps in the game.
+ */
+public interface JRPGMap {
+    /**
+     * Returns the coordinate of the lower left corner of the tile at a given TileCoordinate.
+     *
+     * @param tileCoordinate Tile coordinate
+     * @return Pixel coordinate
+     */
+    default Vector2 getTileCoordinateXY(TileCoordinate tileCoordinate) {
+        return new Vector2(
+            tileCoordinate.getX() * getTileWidth(),
+            tileCoordinate.getY() * getTileHeight()
+        );
+    }
+
+    /**
+     * The width of tiles in this map.
+     *
+     * @return tile width
+     */
+    float getTileWidth();
+
+    /**
+     * The height of tiles in this map.
+     *
+     * @return tile height
+     */
+    float getTileHeight();
+}
