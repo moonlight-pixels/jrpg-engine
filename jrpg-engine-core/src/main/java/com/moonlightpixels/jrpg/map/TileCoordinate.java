@@ -40,7 +40,7 @@ public final class TileCoordinate {
      * @return TileCoordinate above this TileCoordinate
      */
     public TileCoordinate getAbove() {
-        return new TileCoordinate(x, y + 1, mapLayer);
+        return new TileCoordinate(x, y, mapLayer + 1);
     }
 
     /**
@@ -49,24 +49,28 @@ public final class TileCoordinate {
      * @return TileCoordinate below this TileCoordinate
      */
     public TileCoordinate getBelow() {
-        return new TileCoordinate(x, y - 1, mapLayer);
+        return new TileCoordinate(x, y, mapLayer - 1);
     }
 
     /**
-     * Returns the TileCoordinate to the left of this TileCoordinate.
+     * Returns the adjacent TileCoordinate in the given direction.
      *
-     * @return TileCoordinate to the left of this TileCoordinate
+     * @param direction Direction of adjacent TileCoordinate
+     * @return TileCoordinate adjacent to this TileCoordiante in a given direction
      */
-    public TileCoordinate getLeft() {
-        return new TileCoordinate(x - 1, y, mapLayer);
-    }
+    public TileCoordinate getAdjacent(final Direction direction) {
+        TileCoordinate adjacent = null;
 
-    /**
-     * Returns the TileCoordinate to the right of this TileCoordinate.
-     *
-     * @return TileCoordinate to the right of this TileCoordinate
-     */
-    public TileCoordinate getRight() {
-        return new TileCoordinate(x + 1, y, mapLayer);
+        if (direction == Direction.UP) {
+            adjacent = new TileCoordinate(x, y + 1, mapLayer);
+        } else if (direction == Direction.DOWN) {
+            adjacent = new TileCoordinate(x, y - 1, mapLayer);
+        } else if (direction == Direction.RIGHT) {
+            adjacent = new TileCoordinate(x + 1, y, mapLayer);
+        } else if (direction == Direction.LEFT) {
+            adjacent = new TileCoordinate(x - 1, y, mapLayer);
+        }
+
+        return adjacent;
     }
 }

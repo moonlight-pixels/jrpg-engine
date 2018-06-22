@@ -19,6 +19,8 @@ public final class CharacterAnimationSet implements AnimationSet<CharacterAnimat
     private final int height;
     @Getter
     private final int width;
+    @Getter
+    private final int tilesCoveredPerWalkCycle;
     private final Map<CharacterAnimation, TextureRegion[]> animationframes = new HashMap<>();
 
     /**
@@ -26,10 +28,12 @@ public final class CharacterAnimationSet implements AnimationSet<CharacterAnimat
      *
      * @param height frame height
      * @param width frame width
+     * @param tilesCoveredPerWalkCycle number of tiles covered during one cycle of walk animation
      */
-    public CharacterAnimationSet(final int height, final int width) {
+    public CharacterAnimationSet(final int height, final int width, final int tilesCoveredPerWalkCycle) {
         this.height = height;
         this.width = width;
+        this.tilesCoveredPerWalkCycle = tilesCoveredPerWalkCycle;
     }
 
     @Override

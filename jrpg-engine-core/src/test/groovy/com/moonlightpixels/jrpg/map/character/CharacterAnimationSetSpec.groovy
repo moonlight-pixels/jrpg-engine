@@ -7,7 +7,7 @@ import spock.lang.Specification
 class CharacterAnimationSetSpec extends Specification {
     void 'validate() raises error if any animations are missing'() {
         when:
-        new CharacterAnimationSet(0, 0).validate()
+        new CharacterAnimationSet(0, 0, 1).validate()
 
         then:
         thrown IllegalStateException
@@ -19,7 +19,7 @@ class CharacterAnimationSetSpec extends Specification {
         TextureRegion[] frames = [frame]
 
         when:
-        CharacterAnimationSet animationSet = new CharacterAnimationSet(0, 0)
+        CharacterAnimationSet animationSet = new CharacterAnimationSet(0, 0, 1)
         CharacterAnimation.values().collect().forEach { type ->
             animationSet.addAnimationFrames(type, frames)
         }
@@ -35,7 +35,7 @@ class CharacterAnimationSetSpec extends Specification {
         TextureRegion[] frames = [frame, frame]
 
         when:
-        CharacterAnimationSet animationSet = new CharacterAnimationSet(0, 0)
+        CharacterAnimationSet animationSet = new CharacterAnimationSet(0, 0, 1)
         animationSet.addAnimationFrames(CharacterAnimation.StandDown, frames)
         Animation<TextureRegion> animation = animationSet.getAnimation(CharacterAnimation.StandDown, 1.0f)
 
