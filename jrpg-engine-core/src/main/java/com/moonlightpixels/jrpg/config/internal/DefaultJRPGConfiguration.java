@@ -3,15 +3,17 @@ package com.moonlightpixels.jrpg.config.internal;
 import com.google.common.base.Preconditions;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
 import com.moonlightpixels.jrpg.config.LaunchConfig;
+import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
 import com.moonlightpixels.jrpg.ui.UiStyle;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public final class DefaultJRPGConfiguration implements JRPGConfiguration {
+public final class DefaultJRPGConfiguration implements JRPGConfiguration, ConfigurationHandler {
     private LaunchConfig launchConfig;
     private final List<Consumer<UiStyle>> uiStyleConsumers = new LinkedList<>();
+    private final List<Consumer<FrontEndConfig>> frontEndConsumers = new LinkedList<>();
 
     @Override
     public void validate() throws IllegalStateException {
@@ -36,7 +38,18 @@ public final class DefaultJRPGConfiguration implements JRPGConfiguration {
     }
 
     @Override
+    public JRPGConfiguration frontEnd(final Consumer<FrontEndConfig> frontEndConsumer) {
+        frontEndConsumers.add(frontEndConsumer);
+        return this;
+    }
+
+    @Override
     public void configure(final UiStyle uiStyle) {
         uiStyleConsumers.forEach(consumer -> consumer.accept(uiStyle));
+    }
+
+    @Override
+    public void configure(final FrontEndConfig frontEnd) {
+        frontEndConsumers.forEach(consumer -> consumer.accept(frontEnd));
     }
 }

@@ -54,6 +54,7 @@ public final class DefaultJRPGEngine extends ApplicationAdapter implements JRPGE
             gdx.getGraphics().setFullscreenMode(displayMode);
         }
         jrpg = InjectionContext.get().getInstance(JRPG.class);
+        jrpg.init();
     }
 
     @Override

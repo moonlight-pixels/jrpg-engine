@@ -1,10 +1,9 @@
 package com.moonlightpixels.jrpg.ui.internal;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
+import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
 import com.moonlightpixels.jrpg.internal.inject.GraphicsModule;
 import com.moonlightpixels.jrpg.ui.UserInterface;
 
@@ -12,17 +11,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public final class DefaultUserInterface implements UserInterface {
-    private final Camera camera;
+    private final GraphicsContext graphicsContext;
     private final Stage stage;
     private final GdxFacade gdx;
-    private final SpriteBatch spriteBatch;
 
     @Inject
-    public DefaultUserInterface(@Named(GraphicsModule.UI_CAMERA) final Camera camera, final Stage stage,
-                                final GdxFacade gdx, final SpriteBatch spriteBatch) {
-        this.camera = camera;
-        this.stage = stage;
-        this.spriteBatch = spriteBatch;
+    public DefaultUserInterface(@Named(GraphicsModule.UI) final GraphicsContext graphicsContext,
+                                final GdxFacade gdx) {
+        this.graphicsContext = graphicsContext;
+        this.stage = graphicsContext.createStage();
         this.gdx = gdx;
     }
 
@@ -44,7 +41,7 @@ public final class DefaultUserInterface implements UserInterface {
     @Override
     public void update() {
         stage.act(gdx.getGraphics().getDeltaTime());
-        spriteBatch.setProjectionMatrix(camera.combined);
+        graphicsContext.activate();
         stage.draw();
     }
 }

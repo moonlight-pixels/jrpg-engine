@@ -22,10 +22,6 @@ publishing {
             from components.java
             artifact sourcesJar
             artifact javadocJar
-
-            // This line is a workaround for a gradle bug that will be fixed in 4.7
-            // https://github.com/gradle/gradle/issues/4760
-            gradleModuleMetadataFile = project.files(".nonexistent_file")
         }
     }
 }

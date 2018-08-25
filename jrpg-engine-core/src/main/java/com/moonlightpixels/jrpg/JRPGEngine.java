@@ -24,9 +24,8 @@ public interface JRPGEngine {
      * @return A JRPGEngine
      */
     static JRPGEngine of(final Consumer<? super JRPGConfiguration> definition) {
-        JRPGConfiguration configuration = new DefaultJRPGConfiguration();
+        DefaultJRPGConfiguration configuration = new DefaultJRPGConfiguration();
         definition.accept(configuration);
-        configuration.validate();
 
         InjectionContext.addModule(new BaseModule(configuration));
 

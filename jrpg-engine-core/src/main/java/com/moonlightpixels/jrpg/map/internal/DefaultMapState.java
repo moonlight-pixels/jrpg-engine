@@ -1,9 +1,9 @@
 package com.moonlightpixels.jrpg.map.internal;
 
 import com.badlogic.gdx.ai.msg.Telegram;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.internal.JRPG;
+import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
 import com.moonlightpixels.jrpg.internal.inject.GraphicsModule;
 import com.moonlightpixels.jrpg.map.JRPGMap;
 import com.moonlightpixels.jrpg.map.JRPGMapFactory;
@@ -12,15 +12,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public final class DefaultMapState implements MapState {
-    private final OrthographicCamera camera;
+    private final GraphicsContext graphicsContext;
     private final JRPGMapFactory mapFactory;
     private final GameState gameState;
     private JRPGMap map;
 
     @Inject
-    public DefaultMapState(@Named(GraphicsModule.MAP_CAMERA) final OrthographicCamera camera,
-                           final JRPGMapFactory mapFactory, final GameState gameState) {
-        this.camera = camera;
+    public DefaultMapState(@Named(GraphicsModule.MAP) final GraphicsContext graphicsContext,
+                           final JRPGMapFactory mapFactory,
+                           final GameState gameState) {
+        this.graphicsContext = graphicsContext;
         this.mapFactory = mapFactory;
         this.gameState = gameState;
     }

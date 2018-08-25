@@ -33,6 +33,11 @@ public final class DefaultJRPG implements JRPG {
         this.gameState = gameState;
     }
 
+    @Override
+    public void init() {
+        stateMachine.getCurrentState().enter(this);
+    }
+
     public void update() {
         stateMachine.update();
     }

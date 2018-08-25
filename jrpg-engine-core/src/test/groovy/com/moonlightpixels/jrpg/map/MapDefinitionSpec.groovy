@@ -9,9 +9,7 @@ class MapDefinitionSpec extends Specification {
         JRPGMapFactory mapFactory = Mock(JRPGMapFactory)
         MapDefinition mapDefinition = Spy(new MapDefinition('pathtomap') {
             @Override
-            protected void configure(final JRPGMap map) {
-
-            }
+            protected void configure(final JRPGMap map) { }
         })
 
         when:

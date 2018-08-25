@@ -1,15 +1,15 @@
 package com.moonlightpixels.jrpg.map.internal;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.inject.assistedinject.Assisted;
+import com.google.inject.name.Named;
+import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
+import com.moonlightpixels.jrpg.internal.inject.GraphicsModule;
 import com.moonlightpixels.jrpg.map.JRPGMap;
 import com.moonlightpixels.jrpg.map.TiledProps;
 
@@ -19,18 +19,16 @@ import java.util.TreeMap;
 
 public final class DefaultJRPGMap implements JRPGMap {
     private final TiledMap tiledMap;
-    private final OrthographicCamera camera;
     private final TiledMapRenderer mapRenderer;
     private final SortedMap<Integer, JRPGMapLayer> mapLayers = new TreeMap<>();
 
     @Inject
-    public DefaultJRPGMap(final OrthographicCamera camera, final AssetManager assetManager,
-                          final SpriteBatch spriteBatch, final Viewport viewport,
+    public DefaultJRPGMap(@Named(GraphicsModule.MAP) final GraphicsContext graphicsContext,
+                          final AssetManager assetManager,
                           @Assisted final String mapPath) {
         this.tiledMap = assetManager.get(mapPath);
-        this.camera = camera;
-        this.mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, spriteBatch);
-        buildMapLayers(spriteBatch, viewport);
+        this.mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, graphicsContext.getSpriteBatch());
+        buildMapLayers(graphicsContext);
     }
 
     void update(final float delta) {
@@ -45,7 +43,7 @@ public final class DefaultJRPGMap implements JRPGMap {
         });
     }
 
-    private void buildMapLayers(final SpriteBatch spriteBatch, final Viewport viewport) {
+    private void buildMapLayers(final GraphicsContext graphicsContext) {
         for (MapLayer mapLayer : tiledMap.getLayers()) {
             TiledMapTileLayer tiledMapLayer = (TiledMapTileLayer) mapLayer;
 
@@ -54,7 +52,7 @@ public final class DefaultJRPGMap implements JRPGMap {
 
                 JRPGMapLayer layer = mapLayers.computeIfAbsent(
                     mapLayerIndex,
-                    i -> new JRPGMapLayer(i, mapRenderer, spriteBatch, viewport)
+                    i -> new JRPGMapLayer(i, mapRenderer, graphicsContext.createStage())
                 );
 
                 switch (tiledMapLayer.getProperties().get(TiledProps.Layer.LAYER_TYPE, String.class)) {

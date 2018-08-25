@@ -1,13 +1,11 @@
 package com.moonlightpixels.jrpg.map.internal
 
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
-import com.badlogic.gdx.utils.viewport.Viewport
 import com.moonlightpixels.jrpg.GdxSpecification
+import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext
 import com.moonlightpixels.jrpg.map.JRPGMap
 import com.moonlightpixels.jrpg.map.TiledProps
 
@@ -15,13 +13,11 @@ class DefaultJRPGMapSpec extends GdxSpecification {
 
     void 'Correctly parses map file'() {
         setup:
-        OrthographicCamera camera = Mock(OrthographicCamera)
+        GraphicsContext graphicsContext = Mock(GraphicsContext)
         AssetManager assetManager = Mock(AssetManager)
-        SpriteBatch spriteBatch = Mock(SpriteBatch)
-        Viewport viewport = Mock(Viewport)
 
         when:
-        JRPGMap map = new DefaultJRPGMap(camera, assetManager, spriteBatch, viewport, 'path/to/map.tmx')
+        JRPGMap map = new DefaultJRPGMap(graphicsContext, assetManager, 'path/to/map.tmx')
 
         then:
         noExceptionThrown()

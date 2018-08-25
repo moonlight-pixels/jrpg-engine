@@ -1,5 +1,8 @@
 package com.moonlightpixels.jrpg.tween;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public abstract class AbstractTween<T> implements Tween<T> {
     private final TweenFunction tweenFunction;
     private final T start;
@@ -7,19 +10,6 @@ public abstract class AbstractTween<T> implements Tween<T> {
     private final float totalTweenTime;
     private final boolean isRepeating;
     private float timeInTween = 0f;
-
-    AbstractTween(final TweenFunction tweenFunction, final T start, final T end, final float totalTweenTime,
-                         final boolean isRepeating) {
-        this.tweenFunction = tweenFunction;
-        this.start = start;
-        this.end = end;
-        this.totalTweenTime = totalTweenTime;
-        this.isRepeating = isRepeating;
-    }
-
-    AbstractTween(final TweenFunction tweenFunction, final T start, final T end, final float totalTweenTime) {
-        this(tweenFunction, start, end, totalTweenTime, false);
-    }
 
     @Override
     public final void update(final float elapsedTime) {

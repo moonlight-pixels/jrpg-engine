@@ -84,17 +84,21 @@ public class CharacterActor extends MapActor<CharacterAnimation> {
                     CharacterAnimation.getWalkingAnimation(entity.direction),
                     entity.getWalkAnimationDuration()
                 );
-                entity.walkingTween = new Vector2Tween(
-                    new Vector2(
-                        entity.calculateXForCenteredOnTile(entity.getPosition()),
-                        entity.getMap().getTileCoordinateXY(entity.getPosition()).y
-                    ),
-                    new Vector2(
-                        entity.calculateXForCenteredOnTile(entity.getPosition().getAdjacent(entity.direction)),
-                        entity.getMap().getTileCoordinateXY(entity.getPosition().getAdjacent(entity.direction)).y
-                    ),
-                    entity.getWalkAnimationDuration()
-                );
+                entity.walkingTween = Vector2Tween.builder()
+                    .start(
+                        new Vector2(
+                            entity.calculateXForCenteredOnTile(entity.getPosition()),
+                            entity.getMap().getTileCoordinateXY(entity.getPosition()).y
+                        )
+                    )
+                    .end(
+                        new Vector2(
+                            entity.calculateXForCenteredOnTile(entity.getPosition().getAdjacent(entity.direction)),
+                            entity.getMap().getTileCoordinateXY(entity.getPosition().getAdjacent(entity.direction)).y
+                        )
+                    )
+                    .totalTweenTime(entity.getWalkAnimationDuration())
+                    .build();
             }
 
             @Override

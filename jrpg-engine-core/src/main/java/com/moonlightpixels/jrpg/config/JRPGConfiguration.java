@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.config;
 
+import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
 import com.moonlightpixels.jrpg.ui.UiStyle;
 
 import java.util.function.Consumer;
@@ -8,13 +9,6 @@ import java.util.function.Consumer;
  * A buildable specification of a jrpg-engine game.
  */
 public interface JRPGConfiguration {
-    /**
-     * Validates configuration.
-     *
-     * @throws IllegalStateException If Configuration is not valid.
-     */
-    void validate() throws IllegalStateException;
-
     /**
      * LaunchConfig for this game.
      *
@@ -39,9 +33,10 @@ public interface JRPGConfiguration {
     JRPGConfiguration uiStyle(Consumer<UiStyle> uiStyleConsumer);
 
     /**
-     * Configures the uiStyle object passed.
+     * Configures game's front end mode.
      *
-     * @param uiStyle UiStyle object to configure.
+     * @param frontEndConsumer Consumer that will configure the given FrontEndConfig object.
+     * @return Refernce to this configuration.
      */
-    void configure(UiStyle uiStyle);
+    JRPGConfiguration frontEnd(Consumer<FrontEndConfig> frontEndConsumer);
 }

@@ -1,12 +1,10 @@
 package com.moonlightpixels.jrpg.map.internal;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -25,11 +23,6 @@ final class JRPGMapLayer {
     private final List<TiledMapTileLayer> backgroundLayers = new LinkedList<>();
     private final List<TiledMapTileLayer> foregroundLayers = new LinkedList<>();
     private TiledMapTileLayer collisionLayer;
-
-    JRPGMapLayer(final int layerIndex, final TiledMapRenderer mapRenderer, final SpriteBatch spriteBatch,
-                 final Viewport viewport) {
-        this(layerIndex, mapRenderer, new Stage(viewport, spriteBatch));
-    }
 
     JRPGMapLayer(final int layerIndex, final TiledMapRenderer mapRenderer, final Stage stage) {
         this.layerIndex = layerIndex;

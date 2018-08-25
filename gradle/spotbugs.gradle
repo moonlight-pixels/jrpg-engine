@@ -1,5 +1,9 @@
 apply plugin: 'com.github.spotbugs'
 
+spotbugs {
+    sourceSets = [sourceSets.main]
+}
+
 spotbugsMain {
     reports {
         xml.enabled = false

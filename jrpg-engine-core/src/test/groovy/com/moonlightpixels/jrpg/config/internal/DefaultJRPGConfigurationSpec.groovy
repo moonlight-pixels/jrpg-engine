@@ -2,6 +2,7 @@ package com.moonlightpixels.jrpg.config.internal
 
 import com.moonlightpixels.jrpg.config.JRPGConfiguration
 import com.moonlightpixels.jrpg.config.LaunchConfig
+import com.moonlightpixels.jrpg.frontend.FrontEndConfig
 import com.moonlightpixels.jrpg.ui.UiStyle
 import spock.lang.Specification
 
@@ -66,5 +67,38 @@ class DefaultJRPGConfigurationSpec extends Specification {
 
         then:
         1 * consumer2.accept(uiStyle)
+    }
+
+    void 'configure(FrontEndConfig) calls configuration consumer when set'() {
+        setup:
+        FrontEndConfig frontEnd = Mock(FrontEndConfig)
+        Consumer<FrontEndConfig> consumer = Mock(Consumer)
+
+        when:
+        JRPGConfiguration jrpgConfiguration = new DefaultJRPGConfiguration()
+        jrpgConfiguration.frontEnd(consumer)
+        jrpgConfiguration.configure(frontEnd)
+
+        then:
+        1 * consumer.accept(frontEnd)
+    }
+
+    void 'configure(FrontEndConfig) calls configuration consumers in order when more than one is set'() {
+        setup:
+        FrontEndConfig frontEnd = Mock(FrontEndConfig)
+        Consumer<FrontEndConfig> consumer1 = Mock(Consumer)
+        Consumer<FrontEndConfig> consumer2 = Mock(Consumer)
+
+        when:
+        JRPGConfiguration jrpgConfiguration = new DefaultJRPGConfiguration()
+        jrpgConfiguration.frontEnd(consumer1)
+        jrpgConfiguration.frontEnd(consumer2)
+        jrpgConfiguration.configure(frontEnd)
+
+        then:
+        1 * consumer1.accept(frontEnd)
+
+        then:
+        1 * consumer2.accept(frontEnd)
     }
 }

@@ -4,11 +4,16 @@ import com.badlogic.gdx.ai.fsm.State;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.combat.internal.CombatState;
 import com.moonlightpixels.jrpg.combat.internal.DefaultCombatState;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
+import com.moonlightpixels.jrpg.config.internal.ConfigurationHandler;
+import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
+import com.moonlightpixels.jrpg.frontend.internal.DefaultFrontEndConfig;
 import com.moonlightpixels.jrpg.frontend.internal.DefaultFrontEndState;
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
+import com.moonlightpixels.jrpg.internal.DefaultGameState;
 import com.moonlightpixels.jrpg.internal.DefaultJRPG;
 import com.moonlightpixels.jrpg.internal.JRPG;
 import com.moonlightpixels.jrpg.map.JRPGMap;
@@ -20,6 +25,7 @@ import com.moonlightpixels.jrpg.ui.UserInterface;
 import com.moonlightpixels.jrpg.ui.internal.DefaultUserInterface;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 public final class GameModule extends AbstractModule {
     public static final String INITIAL_STATE = "initial";
@@ -36,6 +42,7 @@ public final class GameModule extends AbstractModule {
         bind(MapState.class).to(DefaultMapState.class).asEagerSingleton();
         bind(CombatState.class).to(DefaultCombatState.class).asEagerSingleton();
         bind(UserInterface.class).to(DefaultUserInterface.class).asEagerSingleton();
+        bind(GameState.class).to(DefaultGameState.class).asEagerSingleton();
 
         install(
             new FactoryModuleBuilder()
@@ -45,8 +52,17 @@ public final class GameModule extends AbstractModule {
     }
 
     @Provides
+    @Singleton
+    FrontEndConfig provideFrontEndConfig(final ConfigurationHandler configurationHandler) {
+        FrontEndConfig frontEndConfig = new DefaultFrontEndConfig();
+        configurationHandler.configure(frontEndConfig);
+
+        return frontEndConfig;
+    }
+
+    @Provides
     @Named(INITIAL_STATE)
-    public State<JRPG> provideInitialState(final FrontEndState frontEndState) {
+    State<JRPG> provideInitialState(final FrontEndState frontEndState) {
         return frontEndState;
     }
 }

@@ -1,55 +1,12 @@
 package com.moonlightpixels.jrpg.tween;
 
 import com.badlogic.gdx.math.Vector2;
+import lombok.Builder;
 
 public final class Vector2Tween extends AbstractTween<Vector2> {
 
-    /**
-     * Construct a Vector2Tween.
-     *
-     * @param start staring value
-     * @param end ending vale
-     * @param totalTweenTime time (seconds) tween lasts
-     */
-    public Vector2Tween(final Vector2 start, final Vector2 end, final float totalTweenTime) {
-        this(new ConstantVelocityTweenFunction(), start, end, totalTweenTime);
-    }
-
-    /**
-     * Construct a Vector2Tween.
-     *
-     * @param tweenFunction tween function
-     * @param start staring value
-     * @param end ending vale
-     * @param totalTweenTime time (seconds) tween lasts
-     */
-    public Vector2Tween(final TweenFunction tweenFunction, final Vector2 start, final Vector2 end,
-                        final float totalTweenTime) {
-        super(tweenFunction, start, end, totalTweenTime);
-    }
-
-    /**
-     * Construct a Vector2Tween.
-     *
-     * @param start staring value
-     * @param end ending vale
-     * @param totalTweenTime time (seconds) tween lasts
-     * @param isRepeating whether or not the tween repeats/loops
-     */
-    public Vector2Tween(final Vector2 start, final Vector2 end, final float totalTweenTime, final boolean isRepeating) {
-        this(new ConstantVelocityTweenFunction(), start, end, totalTweenTime, isRepeating);
-    }
-
-    /**
-     * Construct a Vector2Tween.
-     *
-     * @param tweenFunction tween function
-     * @param start staring value
-     * @param end ending vale
-     * @param totalTweenTime time (seconds) tween lasts
-     * @param isRepeating whether or not the tween repeats/loops
-     */
-    public Vector2Tween(final TweenFunction tweenFunction, final Vector2 start, final Vector2 end,
+    @Builder
+    private Vector2Tween(final TweenFunction tweenFunction, final Vector2 start, final Vector2 end,
                         final float totalTweenTime, final boolean isRepeating) {
         super(tweenFunction, start, end, totalTweenTime, isRepeating);
     }
@@ -60,5 +17,10 @@ public final class Vector2Tween extends AbstractTween<Vector2> {
             start.x + (percentComplete * (end.x - start.x)),
             start.y + (percentComplete * (end.y - start.y))
         );
+    }
+
+    public static class Vector2TweenBuilder {
+        private TweenFunction tweenFunction = new ConstantVelocityTweenFunction();
+        private boolean isRepeating = false;
     }
 }

@@ -16,6 +16,8 @@ public final class DesktopGameLauncher implements GameLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.width = launchConfig.getResolutionWidth();
         config.height = launchConfig.getResolutionHeight();
+        config.useGL30 = false;
+        config.forceExit = false;
         return config;
     }
 }
