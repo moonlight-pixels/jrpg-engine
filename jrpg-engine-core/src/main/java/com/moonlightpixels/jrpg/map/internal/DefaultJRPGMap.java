@@ -31,13 +31,15 @@ public final class DefaultJRPGMap implements JRPGMap {
         buildMapLayers(graphicsContext);
     }
 
-    void update(final float delta) {
+    @Override
+    public void update(final float delta) {
         mapLayers.keySet().forEach(mapLayerIndex -> {
             mapLayers.get(mapLayerIndex).update(delta);
         });
     }
 
-    void render() {
+    @Override
+    public void render() {
         mapLayers.keySet().forEach(mapLayerIndex -> {
             mapLayers.get(mapLayerIndex).render();
         });

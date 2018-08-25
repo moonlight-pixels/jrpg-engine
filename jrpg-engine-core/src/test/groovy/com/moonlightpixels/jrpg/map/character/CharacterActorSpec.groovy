@@ -22,6 +22,12 @@ class CharacterActorSpec extends Specification {
             float getTileHeight() {
                 return 16
             }
+
+            @Override
+            void update(final float delta) { }
+
+            @Override
+            void render() { }
         }
         animationSet = new CharacterAnimationSet(24, 16, 1)
         animationSet.addAnimationFrames(CharacterAnimation.WalkUp, [Mock(TextureRegion)] as TextureRegion[])

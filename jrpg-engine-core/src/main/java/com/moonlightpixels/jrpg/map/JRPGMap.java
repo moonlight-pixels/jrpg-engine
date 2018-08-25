@@ -32,4 +32,16 @@ public interface JRPGMap {
      * @return tile height
      */
     float getTileHeight();
+
+    /**
+     * Updates Actors in Map.
+     *
+     * @param delta time elapsed (seconds) since last render loop.
+     */
+    void update(float delta);
+
+    /**
+     * Renders map and actors.
+     */
+    void render();
 }

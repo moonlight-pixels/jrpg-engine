@@ -24,7 +24,7 @@ class DefaultUserInterfaceSpec extends Specification {
         rootGroup = Mock(Group)
         graphics = Mock(Graphics)
         gdx = Mock(GdxFacade) {
-            _ * getGraphics() >> graphics
+            getGraphics() >> graphics
         }
     }
 

@@ -1,9 +1,12 @@
 package com.moonlightpixels.jrpg.map.internal
 
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.moonlightpixels.jrpg.GdxSpecification
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext
 import com.moonlightpixels.jrpg.map.JRPGMap
@@ -13,11 +16,20 @@ class DefaultJRPGMapSpec extends GdxSpecification {
 
     void 'Correctly parses map file'() {
         setup:
-        GraphicsContext graphicsContext = Mock(GraphicsContext)
+        GraphicsContext graphicsContext = Mock(GraphicsContext) {
+            createStage() >> Mock(Stage) {
+                getActors() >> []
+            }
+            getSpriteBatch() >> Mock(SpriteBatch) {
+                getColor() >> Color.BLACK
+            }
+        }
         AssetManager assetManager = Mock(AssetManager)
 
         when:
         JRPGMap map = new DefaultJRPGMap(graphicsContext, assetManager, 'path/to/map.tmx')
+        map.update(0.1f)
+        map.render()
 
         then:
         noExceptionThrown()

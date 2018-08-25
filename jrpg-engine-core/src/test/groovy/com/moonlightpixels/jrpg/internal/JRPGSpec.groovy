@@ -20,6 +20,17 @@ class JRPGSpec extends Specification {
         gameState = Mock(GameState)
     }
 
+    void 'Calls to init trigger enter on initial state'() {
+        setup:
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState)
+
+        when:
+        jrpg.init()
+
+        then:
+        1 * frontEndState.enter(jrpg)
+    }
+
     void 'Calls to update are passed to active state'() {
         setup:
         jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState)
