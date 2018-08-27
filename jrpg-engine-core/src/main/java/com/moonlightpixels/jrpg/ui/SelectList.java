@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Select Lists are the backbone of menus. The present a list of rendered choices with associated actions.
+ * Select Lists are the backbone of menus. They present a list of rendered choices with associated actions.
  */
 public final class SelectList extends WidgetGroup implements InputHandler {
     private static final List<InputScheme> SCHEMES_REQUIRING_CURSOR = Lists.newArrayList(

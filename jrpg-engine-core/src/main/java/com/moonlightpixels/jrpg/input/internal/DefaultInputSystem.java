@@ -7,6 +7,7 @@ import com.moonlightpixels.jrpg.input.InputSystem;
 import com.moonlightpixels.jrpg.input.KeyboardMapping;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
 
+import javax.inject.Inject;
 import java.util.Optional;
 
 public final class DefaultInputSystem implements InputSystem, ControlEventGateway, ClickEventGateway {
@@ -15,6 +16,7 @@ public final class DefaultInputSystem implements InputSystem, ControlEventGatewa
     private ControlEvent lastControlEvent;
     private ClickEvent lastClickEvent;
 
+    @Inject
     public DefaultInputSystem(final GdxFacade gdx) {
         this.gdx = gdx;
     }
