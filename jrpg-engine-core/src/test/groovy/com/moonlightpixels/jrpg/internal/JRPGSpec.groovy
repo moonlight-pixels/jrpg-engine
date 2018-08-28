@@ -3,6 +3,7 @@ package com.moonlightpixels.jrpg.internal
 import com.moonlightpixels.jrpg.GameState
 import com.moonlightpixels.jrpg.combat.internal.CombatState
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState
+import com.moonlightpixels.jrpg.input.InputSystem
 import com.moonlightpixels.jrpg.map.internal.MapState
 import spock.lang.Specification
 
@@ -12,17 +13,19 @@ class JRPGSpec extends Specification {
     CombatState combatState
     DefaultJRPG jrpg
     GameState gameState
+    InputSystem inputSystem
 
     void setup() {
         frontEndState = Mock(FrontEndState)
         mapState = Mock(MapState)
         combatState = Mock(CombatState)
         gameState = Mock(GameState)
+        inputSystem = Mock(InputSystem)
     }
 
     void 'Calls to init trigger enter on initial state'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState, inputSystem)
 
         when:
         jrpg.init()
@@ -33,7 +36,7 @@ class JRPGSpec extends Specification {
 
     void 'Calls to update are passed to active state'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState, inputSystem)
 
         when:
         jrpg.update()
@@ -44,7 +47,7 @@ class JRPGSpec extends Specification {
 
     void 'toLocation() Changes state to MapState'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState, inputSystem)
 
         when:
         jrpg.toLocation()
@@ -55,7 +58,7 @@ class JRPGSpec extends Specification {
 
     void 'toBattle() Changes state to CombatState'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, frontEndState, gameState, inputSystem)
 
         when:
         jrpg.toBattle()
@@ -66,7 +69,7 @@ class JRPGSpec extends Specification {
 
     void 'toMainMenu() Changes state to FrontEndState'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState, gameState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState, gameState, inputSystem)
 
         when:
         jrpg.toMainMenu()
@@ -77,7 +80,7 @@ class JRPGSpec extends Specification {
 
     void 'exitBattle() returns to previous state'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState, gameState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState, gameState, inputSystem)
 
         when:
         jrpg.toBattle()
@@ -90,7 +93,7 @@ class JRPGSpec extends Specification {
 
     void 'exitBattle() throws IllegalStateException if not in combatState'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState, gameState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, mapState, gameState, inputSystem)
 
         when:
         jrpg.exitBattle()
@@ -101,7 +104,7 @@ class JRPGSpec extends Specification {
 
     void 'exitBattle() throws IllegalStateException if there is no previous state to return to'() {
         setup:
-        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, combatState, gameState)
+        jrpg = new DefaultJRPG(frontEndState, mapState, combatState, combatState, gameState, inputSystem)
 
         when:
         jrpg.exitBattle()

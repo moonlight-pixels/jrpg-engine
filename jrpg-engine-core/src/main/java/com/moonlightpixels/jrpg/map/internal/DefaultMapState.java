@@ -2,6 +2,9 @@ package com.moonlightpixels.jrpg.map.internal;
 
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.moonlightpixels.jrpg.GameState;
+import com.moonlightpixels.jrpg.input.ClickEvent;
+import com.moonlightpixels.jrpg.input.ControlEvent;
+import com.moonlightpixels.jrpg.input.InputScheme;
 import com.moonlightpixels.jrpg.internal.JRPG;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
@@ -50,5 +53,20 @@ public final class DefaultMapState implements MapState {
     @Override
     public boolean onMessage(final JRPG entity, final Telegram telegram) {
         return false;
+    }
+
+    @Override
+    public boolean handleControlEvent(final ControlEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean handleClickEvent(final ClickEvent event) {
+        return false;
+    }
+
+    @Override
+    public void setInputScheme(final InputScheme inputScheme) {
+
     }
 }

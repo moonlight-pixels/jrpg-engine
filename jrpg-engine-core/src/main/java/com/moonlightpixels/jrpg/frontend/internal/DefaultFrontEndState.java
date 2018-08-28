@@ -4,6 +4,9 @@ import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
+import com.moonlightpixels.jrpg.input.ClickEvent;
+import com.moonlightpixels.jrpg.input.ControlEvent;
+import com.moonlightpixels.jrpg.input.InputScheme;
 import com.moonlightpixels.jrpg.internal.JRPG;
 import com.moonlightpixels.jrpg.internal.gdx.AssetUtil;
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
@@ -64,5 +67,20 @@ public final class DefaultFrontEndState implements FrontEndState {
 
     private Optional<Texture> getBackground() {
         return Optional.ofNullable(background);
+    }
+
+    @Override
+    public boolean handleControlEvent(final ControlEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean handleClickEvent(final ClickEvent event) {
+        return false;
+    }
+
+    @Override
+    public void setInputScheme(final InputScheme inputScheme) {
+
     }
 }

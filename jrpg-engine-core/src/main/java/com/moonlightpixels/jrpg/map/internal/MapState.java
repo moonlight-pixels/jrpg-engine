@@ -1,7 +1,6 @@
 package com.moonlightpixels.jrpg.map.internal;
 
-import com.badlogic.gdx.ai.fsm.State;
-import com.moonlightpixels.jrpg.internal.JRPG;
+import com.moonlightpixels.jrpg.internal.GameMode;
 
-public interface MapState extends State<JRPG> {
+public interface MapState extends GameMode {
 }

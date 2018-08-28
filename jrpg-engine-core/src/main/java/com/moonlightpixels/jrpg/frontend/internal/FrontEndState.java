@@ -1,8 +1,7 @@
 package com.moonlightpixels.jrpg.frontend.internal;
 
-import com.badlogic.gdx.ai.fsm.State;
-import com.moonlightpixels.jrpg.internal.JRPG;
+import com.moonlightpixels.jrpg.internal.GameMode;
 
-public interface FrontEndState extends State<JRPG> {
+public interface FrontEndState extends GameMode {
 
 }

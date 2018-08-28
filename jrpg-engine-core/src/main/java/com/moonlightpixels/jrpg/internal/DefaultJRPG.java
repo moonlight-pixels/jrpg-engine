@@ -1,12 +1,12 @@
 package com.moonlightpixels.jrpg.internal;
 
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
-import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.google.common.base.Preconditions;
 import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.combat.internal.CombatState;
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
+import com.moonlightpixels.jrpg.input.InputSystem;
 import com.moonlightpixels.jrpg.map.Location;
 import com.moonlightpixels.jrpg.map.internal.MapState;
 
@@ -19,18 +19,23 @@ public final class DefaultJRPG implements JRPG {
     private final FrontEndState frontEndState;
     private final MapState mapState;
     private final CombatState combatState;
-    private final StateMachine<JRPG, State<JRPG>> stateMachine;
+    private final StateMachine<JRPG, GameMode> stateMachine;
     private final GameState gameState;
+    private final InputSystem inputSystem;
 
     @Inject
-    public DefaultJRPG(final FrontEndState frontEndState, final MapState mapState,
-                       final CombatState combatState, @Named(INITIAL_STATE) final State<JRPG> initialState,
-                       final GameState gameState) {
+    public DefaultJRPG(final FrontEndState frontEndState,
+                       final MapState mapState,
+                       final CombatState combatState,
+                       @Named(INITIAL_STATE) final GameMode initialState,
+                       final GameState gameState,
+                       final InputSystem inputSystem) {
         this.frontEndState = frontEndState;
         this.mapState = mapState;
         this.combatState = combatState;
         this.stateMachine = new DefaultStateMachine<>(this, initialState);
         this.gameState = gameState;
+        this.inputSystem = inputSystem;
     }
 
     @Override
@@ -39,6 +44,7 @@ public final class DefaultJRPG implements JRPG {
     }
 
     public void update() {
+        inputSystem.passEventsToHandler(stateMachine.getCurrentState());
         stateMachine.update();
     }
 

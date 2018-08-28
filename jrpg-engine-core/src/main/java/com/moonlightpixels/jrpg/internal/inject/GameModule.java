@@ -1,6 +1,5 @@
 package com.moonlightpixels.jrpg.internal.inject;
 
-import com.badlogic.gdx.ai.fsm.State;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
@@ -13,8 +12,11 @@ import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
 import com.moonlightpixels.jrpg.frontend.internal.DefaultFrontEndConfig;
 import com.moonlightpixels.jrpg.frontend.internal.DefaultFrontEndState;
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
+import com.moonlightpixels.jrpg.input.InputSystem;
+import com.moonlightpixels.jrpg.input.internal.DefaultInputSystem;
 import com.moonlightpixels.jrpg.internal.DefaultGameState;
 import com.moonlightpixels.jrpg.internal.DefaultJRPG;
+import com.moonlightpixels.jrpg.internal.GameMode;
 import com.moonlightpixels.jrpg.internal.JRPG;
 import com.moonlightpixels.jrpg.map.JRPGMap;
 import com.moonlightpixels.jrpg.map.JRPGMapFactory;
@@ -43,6 +45,7 @@ public final class GameModule extends AbstractModule {
         bind(CombatState.class).to(DefaultCombatState.class).asEagerSingleton();
         bind(UserInterface.class).to(DefaultUserInterface.class).asEagerSingleton();
         bind(GameState.class).to(DefaultGameState.class).asEagerSingleton();
+        bind(InputSystem.class).to(DefaultInputSystem.class).asEagerSingleton();
 
         install(
             new FactoryModuleBuilder()
@@ -62,7 +65,7 @@ public final class GameModule extends AbstractModule {
 
     @Provides
     @Named(INITIAL_STATE)
-    State<JRPG> provideInitialState(final FrontEndState frontEndState) {
+    GameMode provideInitialState(final FrontEndState frontEndState) {
         return frontEndState;
     }
 }

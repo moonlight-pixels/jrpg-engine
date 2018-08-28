@@ -1,5 +1,7 @@
 package com.moonlightpixels.jrpg.input;
 
+import com.moonlightpixels.jrpg.ui.InputHandler;
+
 import java.util.Optional;
 
 /**
@@ -33,4 +35,17 @@ public interface InputSystem {
      * @return Last read ControlEvent
      */
     Optional<ClickEvent> readClickEvent();
+
+    /**
+     * Passes click/control events to input handler depending on curent input scheme.
+     *
+     * @param inputHandler Input handler to receive events
+     */
+    default void passEventsToHandler(final InputHandler inputHandler) {
+        if (getInputScheme() == InputScheme.TouchMouse) {
+            readClickEvent().ifPresent(inputHandler::handleClickEvent);
+        } else {
+            readControlEvent().ifPresent(inputHandler::handleControlEvent);
+        }
+    }
 }
