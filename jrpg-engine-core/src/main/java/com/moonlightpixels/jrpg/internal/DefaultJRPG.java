@@ -7,6 +7,7 @@ import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.combat.internal.CombatState;
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
 import com.moonlightpixels.jrpg.input.InputSystem;
+import com.moonlightpixels.jrpg.input.KeyboardMapping;
 import com.moonlightpixels.jrpg.map.Location;
 import com.moonlightpixels.jrpg.map.internal.MapState;
 
@@ -40,10 +41,12 @@ public final class DefaultJRPG implements JRPG {
 
     @Override
     public void init() {
+        inputSystem.useKeyboard(KeyboardMapping.DEFAULT);
         stateMachine.getCurrentState().enter(this);
     }
 
     public void update() {
+        stateMachine.getCurrentState().setInputScheme(inputSystem.getInputScheme());
         inputSystem.passEventsToHandler(stateMachine.getCurrentState());
         stateMachine.update();
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.moonlightpixels.jrpg.ui.Panel;
@@ -14,12 +15,18 @@ import com.moonlightpixels.jrpg.ui.UiStyle;
 import java.util.function.Supplier;
 
 public final class DefaultUiStyleSupplier implements Supplier<UiStyle> {
+    private final UiStyle uiStyle;
+
+    public DefaultUiStyleSupplier(final UiStyle uiStyle) {
+        this.uiStyle = uiStyle;
+    }
+
     @Override
     public UiStyle get() {
-        UiStyle uiStyle = new DefaultUiStyle();
         uiStyle.set(UiStyle.DEFAULT_STYLE, new BitmapFont());
         uiStyle.set(UiStyle.DEFAULT_STYLE, new Panel.PanelStyle(getDefaultPanelBackground()));
         uiStyle.set(UiStyle.DEFAULT_STYLE, new SelectList.SelectListStyle(getSelectListCursor()));
+        uiStyle.set(UiStyle.DEFAULT_STYLE, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         return uiStyle;
     }
 

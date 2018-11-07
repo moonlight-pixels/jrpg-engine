@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext
+import com.moonlightpixels.jrpg.ui.UiStyle
 import com.moonlightpixels.jrpg.ui.UserInterface
 import spock.lang.Specification
 
@@ -15,22 +16,24 @@ class DefaultUserInterfaceSpec extends Specification {
     private Group rootGroup
     private GdxFacade gdx
     private Graphics graphics
+    private UiStyle uiStyle
 
     void setup() {
-        stage = Mock(Stage)
+        stage = Mock()
         graphicsContext = Mock(GraphicsContext) {
             createStage() >> stage
         }
-        rootGroup = Mock(Group)
-        graphics = Mock(Graphics)
+        rootGroup = Mock()
+        graphics = Mock()
         gdx = Mock(GdxFacade) {
             getGraphics() >> graphics
         }
+        uiStyle = Mock()
     }
 
     void 'clear() calls clear on Stage'() {
         when:
-        new DefaultUserInterface(graphicsContext, gdx).clear()
+        new DefaultUserInterface(graphicsContext, gdx, uiStyle).clear()
 
         then:
         1 * stage.clear()
@@ -38,12 +41,11 @@ class DefaultUserInterfaceSpec extends Specification {
 
     void 'update() updates and draws the stage, using the stage camera'() {
         when:
-        new DefaultUserInterface(graphicsContext, gdx).update()
+        new DefaultUserInterface(graphicsContext, gdx, uiStyle).update()
 
         then:
         1 * graphics.getDeltaTime() >> 0.1f
         1 * stage.act(0.1f)
-        // 1 * spriteBatch.setProjectionMatrix(camera.projection)
         1 * stage.draw()
     }
 
@@ -52,7 +54,7 @@ class DefaultUserInterfaceSpec extends Specification {
         Actor actor1 = Mock(Actor)
         Actor actor2 = Mock(Actor)
         Actor actor3 = Mock(Actor)
-        UserInterface userInterface = new DefaultUserInterface(graphicsContext, gdx)
+        UserInterface userInterface = new DefaultUserInterface(graphicsContext, gdx, uiStyle)
         userInterface.add(actor1)
         userInterface.add(actor2)
         userInterface.add(actor3)

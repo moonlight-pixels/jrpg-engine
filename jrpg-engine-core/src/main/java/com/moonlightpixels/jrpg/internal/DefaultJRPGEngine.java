@@ -26,9 +26,11 @@ public final class DefaultJRPGEngine extends ApplicationAdapter implements JRPGE
     private JRPG jrpg;
 
     @Inject
-    public DefaultJRPGEngine(final JRPGConfiguration configuration, final GameLauncherFactory gameLauncherFactory,
+    public DefaultJRPGEngine(final JRPGConfiguration configuration,
+                             final GameLauncherFactory gameLauncherFactory,
                              final GdxFacade gdx, final GdxAIFacade gdxAI,
-                             final GraphicsInitializer graphicsInitializer, final GameInitializer gameInitializer) {
+                             final GraphicsInitializer graphicsInitializer,
+                             final GameInitializer gameInitializer) {
         this.configuration = configuration;
         this.gameLauncherFactory = gameLauncherFactory;
         this.gdx = gdx;

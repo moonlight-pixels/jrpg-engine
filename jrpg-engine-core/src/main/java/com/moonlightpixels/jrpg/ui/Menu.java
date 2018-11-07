@@ -27,11 +27,24 @@ public final class Menu implements InputHandler {
     private StateMachine<Menu, MenuState> stateMachine = null;
     private InputScheme inputScheme;
 
-    Menu(final UserInterface userInterface, final MenuState initialState) {
+    /**
+     * Constructs new Menu with the given initial state.
+     *
+     * @param userInterface Game's UserInterface
+     * @param initialState Menu's initial state
+     */
+    public Menu(final UserInterface userInterface, final MenuState initialState) {
         this(userInterface, initialState, null);
     }
 
-    Menu(final UserInterface userInterface, final MenuState initialState, final Consumer<Menu> onClose) {
+    /**
+     * Constructs new Menu with the given initial state and on-close action.
+     *
+     * @param userInterface Game's UserInterface
+     * @param initialState Menu's initial state
+     * @param onClose Menu's on-close action
+     */
+    public Menu(final UserInterface userInterface, final MenuState initialState, final Consumer<Menu> onClose) {
         this.userInterface = userInterface;
         this.initialState = initialState;
         this.onClose = onClose;
@@ -125,6 +138,15 @@ public final class Menu implements InputHandler {
     @SuppressWarnings("unchecked")
     public <T> Optional<T> getFromStore(final String key, final Class<T> type) {
         return Optional.ofNullable((T) store.get(new StoreKey(type, key)));
+    }
+
+    /**
+     * UserInterface tis Menu's actors need to join.
+     *
+     * @return UserInterface
+     */
+    public UserInterface getUserInterface() {
+        return userInterface;
     }
 
     @Override

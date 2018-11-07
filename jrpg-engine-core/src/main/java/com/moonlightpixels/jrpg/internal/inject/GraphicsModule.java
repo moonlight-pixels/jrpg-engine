@@ -9,9 +9,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.moonlightpixels.jrpg.config.internal.ConfigurationHandler;
+import com.moonlightpixels.jrpg.internal.gdx.factory.LabelFactory;
 import com.moonlightpixels.jrpg.internal.graphics.DefaultGraphicsContext;
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
 import com.moonlightpixels.jrpg.ui.UiStyle;
+import com.moonlightpixels.jrpg.ui.internal.DefaultUiStyle;
 import com.moonlightpixels.jrpg.ui.internal.DefaultUiStyleSupplier;
 
 import javax.inject.Named;
@@ -91,8 +93,9 @@ public final class GraphicsModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public UiStyle provideUiStyle(final ConfigurationHandler configurationHandler) {
-        UiStyle uiStyle = new DefaultUiStyleSupplier().get();
+    public UiStyle provideUiStyle(final ConfigurationHandler configurationHandler,
+                                  final LabelFactory labelFactory) {
+        UiStyle uiStyle = new DefaultUiStyleSupplier(new DefaultUiStyle(labelFactory)).get();
         configurationHandler.configure(uiStyle);
 
         return uiStyle;

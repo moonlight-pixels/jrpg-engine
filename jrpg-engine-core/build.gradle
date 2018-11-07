@@ -1,10 +1,12 @@
 apply from: rootProject.file('gradle/javaModule.gradle')
 
 jacocoExcludes << '**/legacy/**'
+jacocoExcludes << '**/gdx/factory/**'
 jacocoExcludes << 'com/moonlightpixels/jrpg/JRPGEngine.class'
 jacocoExcludes << 'com/moonlightpixels/jrpg/internal/graphics/DefaultGraphicsContext.class'
 jacocoExcludes << 'com/moonlightpixels/jrpg/internal/inject/*'
 jacocoExcludes << 'com/moonlightpixels/jrpg/internal/launch/ServiceLoaderGameLauncherFactory.class'
+jacocoExcludes << 'com/moonlightpixels/jrpg/ui/util/FontUtil.class'
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$commonVersions.gdx"

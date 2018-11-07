@@ -8,7 +8,7 @@ import com.moonlightpixels.jrpg.ui.UiStyle
 class DefaultUiStyleSupplierSpec extends GdxSpecification {
     void 'Supplied UiStyle has required defaults'() {
         when:
-        UiStyle uiStyle = new DefaultUiStyleSupplier().get()
+        UiStyle uiStyle = new DefaultUiStyleSupplier(new DefaultUiStyle(null)).get()
 
         then:
         uiStyle.get(BitmapFont)

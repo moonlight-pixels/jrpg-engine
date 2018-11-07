@@ -13,18 +13,24 @@ import com.moonlightpixels.jrpg.internal.gdx.GdxAIFacade;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
 import com.moonlightpixels.jrpg.internal.launch.GameLauncherFactory;
 import com.moonlightpixels.jrpg.internal.launch.ServiceLoaderGameLauncherFactory;
+import com.moonlightpixels.jrpg.ui.standard.internal.DefaultMenuConfiguration;
+import com.moonlightpixels.jrpg.ui.standard.internal.MenuConfigurationHandler;
 
 public final class BaseModule extends AbstractModule {
     private final DefaultJRPGConfiguration configuration;
+    private final DefaultMenuConfiguration menuConfiguration;
 
     public BaseModule(final DefaultJRPGConfiguration configuration) {
         configuration.validate();
         this.configuration = configuration;
+        this.menuConfiguration = new DefaultMenuConfiguration();
+        configuration.configure(menuConfiguration);
     }
 
     @Override
     protected void configure() {
         bind(ConfigurationHandler.class).toInstance(configuration);
+        bind(MenuConfigurationHandler.class).toInstance(menuConfiguration);
         bind(JRPGConfiguration.class).toInstance(configuration);
         bind(GameLauncherFactory.class).to(ServiceLoaderGameLauncherFactory.class);
         bind(GdxFacade.class).to(DefaultGdxFacade.class);

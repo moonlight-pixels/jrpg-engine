@@ -1,5 +1,7 @@
 package com.moonlightpixels.jrpg.ui;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
 /**
  * Wrapper around scene2d.ui Skin that allows for fallback styles.
  */
@@ -36,4 +38,13 @@ public interface UiStyle {
      * @param <T> Styled type.
      */
     <T> void set(String style, T value);
+
+    /**
+     * Create a new Label using a style from this UiStyle.
+     *
+     * @param text label text
+     * @param style label style
+     * @return Label
+     */
+    Label createLabel(String text, String style);
 }

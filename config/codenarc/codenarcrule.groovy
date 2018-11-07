@@ -9,6 +9,7 @@ ruleset {
     }
     ruleset('rulesets/design.xml') {
         'BuilderMethodWithSideEffects' enabled: false
+        'Instanceof' enabled: false
     }
     ruleset('rulesets/exceptions.xml')
     ruleset('rulesets/formatting.xml') {

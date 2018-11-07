@@ -11,7 +11,9 @@ import com.moonlightpixels.jrpg.config.internal.ConfigurationHandler;
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
 import com.moonlightpixels.jrpg.frontend.internal.DefaultFrontEndConfig;
 import com.moonlightpixels.jrpg.frontend.internal.DefaultFrontEndState;
+import com.moonlightpixels.jrpg.ui.standard.action.ExitGameAction;
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
+import com.moonlightpixels.jrpg.ui.standard.action.NewGameAction;
 import com.moonlightpixels.jrpg.input.InputSystem;
 import com.moonlightpixels.jrpg.input.internal.DefaultInputSystem;
 import com.moonlightpixels.jrpg.internal.DefaultGameState;
@@ -23,11 +25,16 @@ import com.moonlightpixels.jrpg.map.JRPGMapFactory;
 import com.moonlightpixels.jrpg.map.internal.DefaultJRPGMap;
 import com.moonlightpixels.jrpg.map.internal.DefaultMapState;
 import com.moonlightpixels.jrpg.map.internal.MapState;
+import com.moonlightpixels.jrpg.ui.Menu;
 import com.moonlightpixels.jrpg.ui.UserInterface;
 import com.moonlightpixels.jrpg.ui.internal.DefaultUserInterface;
+import com.moonlightpixels.jrpg.ui.standard.FrontEndMenu;
+import com.moonlightpixels.jrpg.ui.standard.internal.MenuConfigurationHandler;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+
+import static com.moonlightpixels.jrpg.internal.inject.GraphicsModule.FRONTEND;
 
 public final class GameModule extends AbstractModule {
     public static final String INITIAL_STATE = "initial";
@@ -46,6 +53,10 @@ public final class GameModule extends AbstractModule {
         bind(UserInterface.class).to(DefaultUserInterface.class).asEagerSingleton();
         bind(GameState.class).to(DefaultGameState.class).asEagerSingleton();
         bind(InputSystem.class).to(DefaultInputSystem.class).asEagerSingleton();
+
+        // standard front end actions
+        bind(ExitGameAction.class);
+        bind(NewGameAction.class);
 
         install(
             new FactoryModuleBuilder()
@@ -67,5 +78,19 @@ public final class GameModule extends AbstractModule {
     @Named(INITIAL_STATE)
     GameMode provideInitialState(final FrontEndState frontEndState) {
         return frontEndState;
+    }
+
+    @Provides
+    @Named(FRONTEND)
+    Menu provideFrontEndMenu(final UserInterface userInterface,
+                             final MenuConfigurationHandler configurationHandler,
+                             final NewGameAction newGameAction,
+                             final ExitGameAction exitGameAction) {
+        final FrontEndMenu frontEndMenu = FrontEndMenu.builder()
+            .newGameAction(newGameAction)
+            .exitGameAction(exitGameAction)
+            .build();
+        configurationHandler.configureFrontEndMenu(frontEndMenu);
+        return frontEndMenu.getMenu(userInterface);
     }
 }

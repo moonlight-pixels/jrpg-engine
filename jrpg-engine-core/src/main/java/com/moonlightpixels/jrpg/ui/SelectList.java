@@ -7,11 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.moonlightpixels.jrpg.input.ClickEvent;
 import com.moonlightpixels.jrpg.input.ControlEvent;
 import com.moonlightpixels.jrpg.input.InputScheme;
+import lombok.Getter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,8 +28,11 @@ public final class SelectList extends WidgetGroup implements InputHandler {
         InputScheme.Keyboard
     );
 
+    @Getter
     private final List<Item> items = new LinkedList<>();
+    @Getter
     private final SelectListStyle style;
+    @Getter
     private final int columns;
     private InputScheme inputScheme;
     private int currentSelectionIndex = 0;
@@ -109,12 +114,14 @@ public final class SelectList extends WidgetGroup implements InputHandler {
 
     @Override
     public void layout() {
+        if (layout != null) {
+            removeActor(layout);
+        }
         final int totalRows = ((items.size() - 1) / columns)  + 1;
 
         layout = new Table();
         layout.setFillParent(true);
         layout.defaults().space(style.getCursor().getWidth() / 2f);
-        addActor(layout);
 
         for (int rowIndex = 0; rowIndex < totalRows; rowIndex++) {
             for (int colIndex = 0; colIndex < columns; colIndex++) {
@@ -122,15 +129,22 @@ public final class SelectList extends WidgetGroup implements InputHandler {
                 final Item item = items.get(itemIndex);
                 final boolean isSelected = (currentSelectionIndex == itemIndex);
 
-                if (isCursorUsed() && isActive() && isSelected) {
-                    final Image cursor = new Image(style.getCursor());
-                    layout.add(cursor).padLeft(style.getCursor().getWidth());
+                if (isCursorUsed()) {
+                    if (isActive() && isSelected) {
+                        final Image cursor = new Image(style.getCursor());
+                        cursor.setScaling(Scaling.none);
+                        layout.add(cursor);
+                    } else {
+                        layout.add().width(style.getCursor().getWidth());
+                    }
                 }
 
                 layout.add(wrapDisplay(item.getDisplay())).fillX().expand();
             }
             layout.row();
         }
+
+        addActor(layout);
     }
 
     private boolean isCursorUsed() {

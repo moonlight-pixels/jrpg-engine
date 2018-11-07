@@ -2,6 +2,7 @@ package com.moonlightpixels.jrpg.config;
 
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
 import com.moonlightpixels.jrpg.ui.UiStyle;
+import com.moonlightpixels.jrpg.ui.standard.MenuConfiguration;
 
 import java.util.function.Consumer;
 
@@ -39,4 +40,12 @@ public interface JRPGConfiguration {
      * @return Refernce to this configuration.
      */
     JRPGConfiguration frontEnd(Consumer<FrontEndConfig> frontEndConsumer);
+
+    /**
+     * Configures standard game menus.
+     *
+     * @param menuConsumer Consumer that will configure the given MenuConfiguration object.
+     * @return Refernce to this configuration.
+     */
+    JRPGConfiguration menu(Consumer<MenuConfiguration> menuConsumer);
 }

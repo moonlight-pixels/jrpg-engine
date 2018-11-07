@@ -29,4 +29,11 @@ public interface UserInterface {
      * Updates all UI Objects and renders stage.
      */
     void update();
+
+    /**
+     * Returns reference to the style store.
+     *
+     * @return UiStyle store
+     */
+    UiStyle getUiStyle();
 }
