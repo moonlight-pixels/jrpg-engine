@@ -3,12 +3,12 @@ package com.moonlightpixels.jrpg.ui
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.moonlightpixels.jrpg.GdxSpecification
 import com.moonlightpixels.jrpg.input.ClickEvent
 import com.moonlightpixels.jrpg.input.ControlEvent
 import com.moonlightpixels.jrpg.input.InputScheme
-import spock.lang.Specification
 
-class SelectListSpec extends Specification {
+class SelectListSpec extends GdxSpecification {
     void 'Constructor throws IllegalArgumentException when item list is empty'() {
         when:
         new SelectList(Collections.emptyList(), new SelectList.SelectListStyle(Mock(Texture)))
