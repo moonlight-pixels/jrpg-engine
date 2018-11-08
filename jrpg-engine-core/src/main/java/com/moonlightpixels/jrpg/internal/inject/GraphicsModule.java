@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.moonlightpixels.jrpg.config.internal.ConfigurationHandler;
+import com.moonlightpixels.jrpg.internal.gdx.factory.DefaultLabelFactory;
 import com.moonlightpixels.jrpg.internal.gdx.factory.LabelFactory;
 import com.moonlightpixels.jrpg.internal.graphics.DefaultGraphicsContext;
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
@@ -36,6 +37,7 @@ public final class GraphicsModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(SpriteBatch.class).asEagerSingleton();
+        bind(LabelFactory.class).to(DefaultLabelFactory.class);
     }
 
     @Provides
