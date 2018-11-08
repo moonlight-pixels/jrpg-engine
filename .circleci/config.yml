@@ -41,5 +41,14 @@ jobs:
       # run tests!
       - run: ./gradlew check
 
+      - store_artifacts:
+          path: jrpg-engine-core/build/reports
+          destination: core
+
+      - store_artifacts:
+          path: jrpg-engine-desktop/build/reports
+          destination: desktop
+
+
 
 
