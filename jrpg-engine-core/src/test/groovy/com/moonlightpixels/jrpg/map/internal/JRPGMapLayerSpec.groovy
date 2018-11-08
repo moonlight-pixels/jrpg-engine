@@ -62,4 +62,17 @@ class JRPGMapLayerSpec extends Specification {
         _ * stage.getActors() >> root.children
         actor2.getZIndex() > actor1.getZIndex()
     }
+
+    void 'removeActor() removes actor from stage'() {
+        setup:
+        Group root = Mock()
+        stage.getRoot() >> root
+        Actor actor = new Actor()
+
+        when:
+        mapLayer.removeActor(actor)
+
+        then:
+        1 * root.removeActor(actor)
+    }
 }

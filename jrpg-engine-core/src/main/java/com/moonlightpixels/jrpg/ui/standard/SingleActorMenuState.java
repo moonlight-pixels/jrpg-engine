@@ -19,11 +19,6 @@ public final class SingleActorMenuState implements MenuState {
     }
 
     @Override
-    public boolean isDismissible() {
-        return dismissible;
-    }
-
-    @Override
     public void enter(final Menu menu) {
         providedActor = singleActorMenuProvider.getActor(menu.getUserInterface().getUiStyle());
         menu.addActor(providedActor);
