@@ -10,3 +10,8 @@ spotbugsMain {
         html.enabled = true
     }
 }
+
+
+dependencies {
+    compileOnly 'com.github.spotbugs:spotbugs-annotations:3.1.8'
+}

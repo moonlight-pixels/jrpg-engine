@@ -1,6 +1,7 @@
 package com.moonlightpixels.jrpg;
 
 import com.moonlightpixels.jrpg.map.Location;
+import com.moonlightpixels.jrpg.player.Cast;
 
 /**
  * Stores current Game state.
@@ -19,4 +20,11 @@ public interface GameState {
      * @param location player location
      */
     void setLocation(Location location);
+
+    /**
+     * Returns the games Cast of player characters.
+     *
+     * @return Cast
+     */
+    Cast getCast();
 }
