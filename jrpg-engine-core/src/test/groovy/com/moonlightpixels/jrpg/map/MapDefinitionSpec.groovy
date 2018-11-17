@@ -7,10 +7,7 @@ class MapDefinitionSpec extends Specification {
         setup:
         JRPGMap jrpgMap = Mock(JRPGMap)
         JRPGMapFactory mapFactory = Mock(JRPGMapFactory)
-        MapDefinition mapDefinition = Spy(new MapDefinition('pathtomap') {
-            @Override
-            protected void configure(final JRPGMap map) { }
-        })
+        MapDefinition mapDefinition = Spy(TestMapDefinition)
 
         when:
         mapDefinition.load(mapFactory)
@@ -18,5 +15,14 @@ class MapDefinitionSpec extends Specification {
         then:
         1 * mapFactory.create(_) >> jrpgMap
         1 * mapDefinition.configure(jrpgMap)
+    }
+
+    static class TestMapDefinition extends MapDefinition {
+        TestMapDefinition() {
+            super('id', 'mapPath')
+        }
+
+        @Override
+        protected void configure(final JRPGMap map) { }
     }
 }

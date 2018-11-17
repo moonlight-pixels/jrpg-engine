@@ -29,7 +29,7 @@ class CharacterActorSpec extends Specification {
             @Override
             void render() { }
         }
-        animationSet = new CharacterAnimationSet(24, 16, 1)
+        animationSet = new CharacterAnimationSet('id', 24, 16, 1)
         animationSet.addAnimationFrames(CharacterAnimation.WalkUp, [Mock(TextureRegion)] as TextureRegion[])
         animationSet.addAnimationFrames(CharacterAnimation.StandUp, [Mock(TextureRegion)] as TextureRegion[])
         characterActor = new CharacterActor(

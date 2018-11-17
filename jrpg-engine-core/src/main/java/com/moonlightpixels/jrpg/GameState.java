@@ -3,10 +3,26 @@ package com.moonlightpixels.jrpg;
 import com.moonlightpixels.jrpg.map.Location;
 import com.moonlightpixels.jrpg.player.Cast;
 
+import java.util.Optional;
+
 /**
  * Stores current Game state.
  */
 public interface GameState {
+    /**
+     * The saveId this GameState was loaded from, or the last saveId it was saved to.
+     *
+     * @return default saveId
+     */
+    Optional<String> getDefaultSaveId();
+
+    /**
+     * Sets a new default saveId.
+     *
+     * @param saveId new default saveId
+     */
+    void setDefaultSaveId(String saveId);
+
     /**
      * Returns the current location of the player in the game world.
      *
@@ -27,4 +43,15 @@ public interface GameState {
      * @return Cast
      */
     Cast getCast();
+
+    /**
+     * Validates that the GameState meets all requirements of a valid state. Requirements include:
+     *
+     * <ul>
+     *     <li>There is a valid active Party</li>
+     * </ul>
+     *
+     * @return true is Gamestate is valid.
+     */
+    boolean isValid();
 }

@@ -38,4 +38,21 @@ class DefaultGameStateSpec extends Specification {
         then:
         gameState.cast.activeParty.location == newLocation
     }
+
+    void 'isValid() returns true if all validaiton requirements have been met'() {
+        setup:
+        GameState gameState = new DefaultGameState()
+        Location location = new Location(Mock(MapDefinition), new TileCoordinate(1, 1))
+        Party party = new Party(1, 1, location)
+        party.addMember(new PlayerCharacter(Mock(PlayerCharacter.Key)))
+        gameState.cast.configureParties(party)
+
+        expect:
+        gameState.isValid()
+    }
+
+    void 'isValid() returns false if active party hasnt been configured'() {
+        expect:
+        !new DefaultGameState().isValid()
+    }
 }

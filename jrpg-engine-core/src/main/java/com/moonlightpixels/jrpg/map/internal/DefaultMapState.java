@@ -5,6 +5,7 @@ import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.input.ClickEvent;
 import com.moonlightpixels.jrpg.input.ControlEvent;
 import com.moonlightpixels.jrpg.input.InputScheme;
+import com.moonlightpixels.jrpg.internal.GameStateHolder;
 import com.moonlightpixels.jrpg.internal.JRPG;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
@@ -19,22 +20,24 @@ public final class DefaultMapState implements MapState {
     private final GraphicsContext graphicsContext;
     private final GdxFacade gdx;
     private final JRPGMapFactory mapFactory;
-    private final GameState gameState;
+    private final GameStateHolder gameStateHolder;
+    private GameState gameState;
     private JRPGMap map;
 
     @Inject
     public DefaultMapState(@Named(GraphicsModule.MAP) final GraphicsContext graphicsContext,
                            final GdxFacade gdx,
                            final JRPGMapFactory mapFactory,
-                           final GameState gameState) {
+                           final GameStateHolder gameStateHolder) {
         this.graphicsContext = graphicsContext;
         this.gdx = gdx;
         this.mapFactory = mapFactory;
-        this.gameState = gameState;
+        this.gameStateHolder = gameStateHolder;
     }
 
     @Override
     public void enter(final JRPG entity) {
+        gameState = gameStateHolder.getGameState();
         map = gameState.getLocation().getMap().load(mapFactory);
     }
 

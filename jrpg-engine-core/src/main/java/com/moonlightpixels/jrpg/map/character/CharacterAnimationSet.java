@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.moonlightpixels.jrpg.animation.AnimationSet;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,7 +15,10 @@ import java.util.stream.Collectors;
 /**
  * Set of animations for characters on a map.
  */
+@RequiredArgsConstructor
 public final class CharacterAnimationSet implements AnimationSet<CharacterAnimation> {
+    @Getter
+    private final String id;
     @Getter
     private final int height;
     @Getter
@@ -22,19 +26,6 @@ public final class CharacterAnimationSet implements AnimationSet<CharacterAnimat
     @Getter
     private final int tilesCoveredPerWalkCycle;
     private final Map<CharacterAnimation, TextureRegion[]> animationframes = new HashMap<>();
-
-    /**
-     * Creates a CharacterAnimationSet with the given height and width.
-     *
-     * @param height frame height
-     * @param width frame width
-     * @param tilesCoveredPerWalkCycle number of tiles covered during one cycle of walk animation
-     */
-    public CharacterAnimationSet(final int height, final int width, final int tilesCoveredPerWalkCycle) {
-        this.height = height;
-        this.width = width;
-        this.tilesCoveredPerWalkCycle = tilesCoveredPerWalkCycle;
-    }
 
     @Override
     public Animation<TextureRegion> getAnimation(final CharacterAnimation type, final float animationDuration) {

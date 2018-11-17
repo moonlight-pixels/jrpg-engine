@@ -1,6 +1,9 @@
 package com.moonlightpixels.jrpg.player;
 
 import com.google.common.base.Preconditions;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,6 +17,9 @@ import java.util.stream.Collectors;
 /**
  * Game state object that holds infomraiton on all PlayerCharacters.
  */
+@EqualsAndHashCode
+@ToString
+@SuppressFBWarnings(justification = "Generated code")
 public final class Cast {
     private Party activeParty;
     private final List<Party> currentParties = new LinkedList<>();

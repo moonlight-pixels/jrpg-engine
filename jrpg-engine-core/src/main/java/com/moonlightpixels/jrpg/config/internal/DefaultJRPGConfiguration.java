@@ -1,6 +1,7 @@
 package com.moonlightpixels.jrpg.config.internal;
 
 import com.google.common.base.Preconditions;
+import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
 import com.moonlightpixels.jrpg.config.LaunchConfig;
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
@@ -16,6 +17,7 @@ public final class DefaultJRPGConfiguration implements JRPGConfiguration, Config
     private final List<Consumer<UiStyle>> uiStyleConsumers = new LinkedList<>();
     private final List<Consumer<FrontEndConfig>> frontEndConsumers = new LinkedList<>();
     private final List<Consumer<MenuConfiguration>> menuConsumers = new LinkedList<>();
+    private final List<Consumer<GameState>> gameStateConsumers = new LinkedList<>();
 
     @Override
     public void validate() throws IllegalStateException {
@@ -52,6 +54,12 @@ public final class DefaultJRPGConfiguration implements JRPGConfiguration, Config
     }
 
     @Override
+    public JRPGConfiguration newGame(final Consumer<GameState> gameStateConsumer) {
+        gameStateConsumers.add(gameStateConsumer);
+        return this;
+    }
+
+    @Override
     public void configure(final UiStyle uiStyle) {
         uiStyleConsumers.forEach(consumer -> consumer.accept(uiStyle));
     }
@@ -64,5 +72,10 @@ public final class DefaultJRPGConfiguration implements JRPGConfiguration, Config
     @Override
     public void configure(final MenuConfiguration menuConfiguration) {
         menuConsumers.forEach(consumer -> consumer.accept(menuConfiguration));
+    }
+
+    @Override
+    public void configureNewGame(final GameState gameState) {
+        gameStateConsumers.forEach(consumer -> consumer.accept(gameState));
     }
 }

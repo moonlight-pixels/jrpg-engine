@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.config.internal
 
+import com.moonlightpixels.jrpg.GameState
 import com.moonlightpixels.jrpg.config.JRPGConfiguration
 import com.moonlightpixels.jrpg.config.LaunchConfig
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig
@@ -134,5 +135,38 @@ class DefaultJRPGConfigurationSpec extends Specification {
 
         then:
         1 * consumer2.accept(menu)
+    }
+
+    void 'configureNewGame(GameState) calls configuration consumer when set'() {
+        setup:
+        GameState gameState = Mock()
+        Consumer<GameState> consumer = Mock()
+
+        when:
+        JRPGConfiguration jrpgConfiguration = new DefaultJRPGConfiguration()
+        jrpgConfiguration.newGame(consumer)
+        jrpgConfiguration.configureNewGame(gameState)
+
+        then:
+        1 * consumer.accept(gameState)
+    }
+
+    void 'configureNewGame(GameState) calls configuration consumers in order when more than one is set'() {
+        setup:
+        GameState gameState = Mock()
+        Consumer<GameState> consumer1 = Mock()
+        Consumer<GameState> consumer2 = Mock()
+
+        when:
+        JRPGConfiguration jrpgConfiguration = new DefaultJRPGConfiguration()
+        jrpgConfiguration.newGame(consumer1)
+        jrpgConfiguration.newGame(consumer2)
+        jrpgConfiguration.configureNewGame(gameState)
+
+        then:
+        1 * consumer1.accept(gameState)
+
+        then:
+        1 * consumer2.accept(gameState)
     }
 }

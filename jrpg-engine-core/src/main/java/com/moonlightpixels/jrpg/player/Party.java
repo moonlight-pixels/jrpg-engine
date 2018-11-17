@@ -18,7 +18,9 @@ import java.util.List;
 @ToString
 @SuppressFBWarnings(justification = "Generated code")
 public final class Party {
+    @Getter
     private final int minimumSize;
+    @Getter
     private final int maximumSize;
     private final List<PlayerCharacter> members;
 

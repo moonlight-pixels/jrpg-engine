@@ -11,17 +11,16 @@ import com.moonlightpixels.jrpg.config.internal.ConfigurationHandler;
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
 import com.moonlightpixels.jrpg.frontend.internal.DefaultFrontEndConfig;
 import com.moonlightpixels.jrpg.frontend.internal.DefaultFrontEndState;
-import com.moonlightpixels.jrpg.ui.standard.action.ExitGameAction;
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
-import com.moonlightpixels.jrpg.ui.standard.action.NewGameAction;
 import com.moonlightpixels.jrpg.input.InputSystem;
 import com.moonlightpixels.jrpg.input.internal.DefaultInputSystem;
-import com.moonlightpixels.jrpg.internal.DefaultGameState;
 import com.moonlightpixels.jrpg.internal.DefaultJRPG;
 import com.moonlightpixels.jrpg.internal.GameMode;
+import com.moonlightpixels.jrpg.internal.GameStateHolder;
 import com.moonlightpixels.jrpg.internal.JRPG;
 import com.moonlightpixels.jrpg.map.JRPGMap;
 import com.moonlightpixels.jrpg.map.JRPGMapFactory;
+import com.moonlightpixels.jrpg.map.internal.MapRegistry;
 import com.moonlightpixels.jrpg.map.internal.DefaultJRPGMap;
 import com.moonlightpixels.jrpg.map.internal.DefaultMapState;
 import com.moonlightpixels.jrpg.map.internal.MapState;
@@ -29,6 +28,8 @@ import com.moonlightpixels.jrpg.ui.Menu;
 import com.moonlightpixels.jrpg.ui.UserInterface;
 import com.moonlightpixels.jrpg.ui.internal.DefaultUserInterface;
 import com.moonlightpixels.jrpg.ui.standard.FrontEndMenu;
+import com.moonlightpixels.jrpg.ui.standard.action.ExitGameAction;
+import com.moonlightpixels.jrpg.ui.standard.action.NewGameAction;
 import com.moonlightpixels.jrpg.ui.standard.internal.MenuConfigurationHandler;
 
 import javax.inject.Named;
@@ -51,8 +52,9 @@ public final class GameModule extends AbstractModule {
         bind(MapState.class).to(DefaultMapState.class).asEagerSingleton();
         bind(CombatState.class).to(DefaultCombatState.class).asEagerSingleton();
         bind(UserInterface.class).to(DefaultUserInterface.class).asEagerSingleton();
-        bind(GameState.class).to(DefaultGameState.class).asEagerSingleton();
+        bind(GameStateHolder.class).asEagerSingleton();
         bind(InputSystem.class).to(DefaultInputSystem.class).asEagerSingleton();
+        bind(MapRegistry.class).asEagerSingleton();
 
         // standard front end actions
         bind(ExitGameAction.class);
@@ -92,5 +94,10 @@ public final class GameModule extends AbstractModule {
             .build();
         configurationHandler.configureFrontEndMenu(frontEndMenu);
         return frontEndMenu.getMenu(userInterface);
+    }
+
+    @Provides
+    GameState provideGameState(final GameStateHolder gameStateHolder) {
+        return gameStateHolder.getGameState();
     }
 }

@@ -7,6 +7,7 @@ import lombok.Data;
  */
 @Data
 public abstract class MapDefinition {
+    private final String id;
     private final String mapPath;
 
     /**

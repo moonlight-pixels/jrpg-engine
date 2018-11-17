@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.config;
 
+import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
 import com.moonlightpixels.jrpg.ui.UiStyle;
 import com.moonlightpixels.jrpg.ui.standard.MenuConfiguration;
@@ -48,4 +49,12 @@ public interface JRPGConfiguration {
      * @return Refernce to this configuration.
      */
     JRPGConfiguration menu(Consumer<MenuConfiguration> menuConsumer);
+
+    /**
+     * Configures "New Game" GameState.
+     *
+     * @param gameStateConsumer Consumer that will configure GameState for a new game
+     * @return a refernece to this FrontEndConfig
+     */
+    JRPGConfiguration newGame(Consumer<GameState> gameStateConsumer);
 }

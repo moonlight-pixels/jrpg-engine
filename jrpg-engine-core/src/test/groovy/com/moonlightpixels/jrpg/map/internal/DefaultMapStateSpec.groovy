@@ -2,6 +2,7 @@ package com.moonlightpixels.jrpg.map.internal
 
 import com.badlogic.gdx.Graphics
 import com.moonlightpixels.jrpg.GameState
+import com.moonlightpixels.jrpg.internal.GameStateHolder
 import com.moonlightpixels.jrpg.internal.JRPG
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext
@@ -19,6 +20,7 @@ class DefaultMapStateSpec extends Specification {
     GdxFacade gdx
     JRPGMapFactory mapFactory
     GameState gameState
+    GameStateHolder gameStateHolder
     JRPG jrpg
     MapState mapState
 
@@ -29,9 +31,13 @@ class DefaultMapStateSpec extends Specification {
             getGraphics() >> graphics
         }
         mapFactory = Mock(JRPGMapFactory)
-        gameState = Mock(GameState)
+        gameState = Mock(GameState) {
+            isValid() >> true
+        }
+        GameStateHolder gameStateHolder = new GameStateHolder()
+        gameStateHolder.setGameState(gameState)
         jrpg = Mock(JRPG)
-        mapState = new DefaultMapState(graphicsContext, gdx, mapFactory, gameState)
+        mapState = new DefaultMapState(graphicsContext, gdx, mapFactory, gameStateHolder)
     }
 
     void 'update() updates and renders map'() {

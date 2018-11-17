@@ -14,6 +14,8 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$commonVersions.gdx"
     compile "com.badlogicgames.gdx:gdx-controllers:$commonVersions.gdx"
     compile "com.badlogicgames.gdx:gdx-freetype:$commonVersions.gdx"
+    compile "com.fasterxml.jackson.core:jackson-core:$commonVersions.jackson"
+    compile "com.fasterxml.jackson.core:jackson-databind:$commonVersions.jackson"
 
     testCompile "com.badlogicgames.gdx:gdx-backend-headless:$commonVersions.gdx"
     testCompile "com.badlogicgames.gdx:gdx-platform:$commonVersions.gdx:natives-desktop"
