@@ -43,6 +43,7 @@ public final class DefaultMapState implements MapState {
 
     @Override
     public void update(final JRPG entity) {
+        gameState.update(gdx.getGraphics().getDeltaTime());
         map.update(gdx.getGraphics().getDeltaTime());
         graphicsContext.activate();
         map.render();

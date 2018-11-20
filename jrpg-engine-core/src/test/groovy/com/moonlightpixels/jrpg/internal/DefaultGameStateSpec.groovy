@@ -8,6 +8,8 @@ import com.moonlightpixels.jrpg.player.Party
 import com.moonlightpixels.jrpg.player.PlayerCharacter
 import spock.lang.Specification
 
+import java.time.Duration
+
 class DefaultGameStateSpec extends Specification {
     void 'getLocation() returns location of the active party'() {
         setup:
@@ -54,5 +56,16 @@ class DefaultGameStateSpec extends Specification {
     void 'isValid() returns false if active party hasnt been configured'() {
         expect:
         !new DefaultGameState().isValid()
+    }
+
+    void 'update() increments the time played'() {
+        setup:
+        GameState gameState = new DefaultGameState()
+
+        when:
+        gameState.update(0.15f)
+
+        then:
+        gameState.timePlayed == Duration.ofMillis(150)
     }
 }

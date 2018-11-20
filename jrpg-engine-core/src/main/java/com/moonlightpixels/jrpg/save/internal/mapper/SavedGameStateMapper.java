@@ -17,13 +17,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class SavedGameStateMapper {
-    private final PlayerCharacterKeyLoader playerCharacterKeyLoader;
+    private final KeyLoader<PlayerCharacter.Key> playerCharacterKeyLoader;
     private final MapRegistry mapRegistry;
     private final SavedPlayerCharacterMapper savedPlayerCharacterMapper;
     private final SavedPartyMapper savedPartyMapper;
 
     @Inject
-    public SavedGameStateMapper(final PlayerCharacterKeyLoader playerCharacterKeyLoader,
+    public SavedGameStateMapper(final KeyLoader<PlayerCharacter.Key> playerCharacterKeyLoader,
                                 final MapRegistry mapRegistry,
                                 final SavedPlayerCharacterMapper savedPlayerCharacterMapper,
                                 final SavedPartyMapper savedPartyMapper) {

@@ -4,12 +4,14 @@ import com.moonlightpixels.jrpg.player.PlayerCharacter
 import com.moonlightpixels.jrpg.save.internal.SavedStateLoadExcpetion
 import spock.lang.Specification
 
-class PlayerCharacterKeyEnumLoaderSpec extends Specification {
+class EnumKeyLoaderSpec extends Specification {
+    KeyLoader<PlayerCharacter.Key> loader
+
+    void setup() {
+        loader = new EnumKeyLoader<PlayerCharacter.Key>(Players, PlayerCharacter.Key)
+    }
 
     void 'Can load enum value from ID'() {
-        setup:
-        PlayerCharacterKeyLoader loader = new PlayerCharacterKeyEnumLoader(Players)
-
         when:
         PlayerCharacter.Key key = loader.load(Players.GALUF.toString())
 
@@ -18,9 +20,6 @@ class PlayerCharacterKeyEnumLoaderSpec extends Specification {
     }
 
     void 'Throws SavedStateLoadExcpetion if key doesnt exist in enum'() {
-        setup:
-        PlayerCharacterKeyLoader loader = new PlayerCharacterKeyEnumLoader(Players)
-
         when:
         loader.load('KRILE')
 

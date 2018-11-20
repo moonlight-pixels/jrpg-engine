@@ -12,14 +12,14 @@ import com.moonlightpixels.jrpg.map.internal.MapRegistry
 import com.moonlightpixels.jrpg.player.Cast
 import com.moonlightpixels.jrpg.player.Party
 import com.moonlightpixels.jrpg.player.PlayerCharacter
-import com.moonlightpixels.jrpg.save.internal.mapper.PlayerCharacterKeyEnumLoader
-import com.moonlightpixels.jrpg.save.internal.mapper.PlayerCharacterKeyLoader
+import com.moonlightpixels.jrpg.save.internal.mapper.EnumKeyLoader
+import com.moonlightpixels.jrpg.save.internal.mapper.KeyLoader
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedGameStateMapper
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedPartyMapper
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedPlayerCharacterMapper
 
 class GameStateDataProvider {
-    static final PlayerCharacterKeyLoader KEY_LOADER = new PlayerCharacterKeyEnumLoader(Players)
+    static final KeyLoader<PlayerCharacter.Key> KEY_LOADER = new EnumKeyLoader(Players, PlayerCharacter.Key)
 
     final MapRegistry mapRegistry = new MapRegistry()
     final CharacterAnimationSetRegistry animationSetRegistry = new CharacterAnimationSetRegistry()

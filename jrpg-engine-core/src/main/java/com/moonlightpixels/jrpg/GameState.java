@@ -3,6 +3,7 @@ package com.moonlightpixels.jrpg;
 import com.moonlightpixels.jrpg.map.Location;
 import com.moonlightpixels.jrpg.player.Cast;
 
+import java.time.Duration;
 import java.util.Optional;
 
 /**
@@ -22,6 +23,13 @@ public interface GameState {
      * @param saveId new default saveId
      */
     void setDefaultSaveId(String saveId);
+
+    /**
+     * Time game has been played.
+     *
+     * @return duration of time played
+     */
+    Duration getTimePlayed();
 
     /**
      * Returns the current location of the player in the game world.
@@ -54,4 +62,11 @@ public interface GameState {
      * @return true is Gamestate is valid.
      */
     boolean isValid();
+
+    /**
+     * Called each game loop iteration.
+     *
+     * @param delta time elapsed since last game loop iteration
+     */
+    void update(float delta);
 }

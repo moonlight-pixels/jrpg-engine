@@ -8,11 +8,11 @@ import com.moonlightpixels.jrpg.player.PlayerCharacter;
 import javax.inject.Inject;
 
 public final class SavedPlayerCharacterMapper {
-    private final PlayerCharacterKeyLoader playerCharacterKeyLoader;
+    private final KeyLoader<PlayerCharacter.Key> playerCharacterKeyLoader;
     private final CharacterAnimationSetRegistry characterAnimationSetRegistry;
 
     @Inject
-    public SavedPlayerCharacterMapper(final PlayerCharacterKeyLoader playerCharacterKeyLoader,
+    public SavedPlayerCharacterMapper(final KeyLoader<PlayerCharacter.Key> playerCharacterKeyLoader,
                                       final CharacterAnimationSetRegistry characterAnimationSetRegistry) {
         this.playerCharacterKeyLoader = playerCharacterKeyLoader;
         this.characterAnimationSetRegistry = characterAnimationSetRegistry;
