@@ -19,10 +19,12 @@ class MapDefinitionSpec extends Specification {
 
     static class TestMapDefinition extends MapDefinition {
         TestMapDefinition() {
-            super('id', 'mapPath')
+            super(MapKeys.THE_MAP, 'mapPath')
         }
 
         @Override
         protected void configure(final JRPGMap map) { }
     }
+
+    static enum MapKeys implements MapDefinition.Key { THE_MAP }
 }

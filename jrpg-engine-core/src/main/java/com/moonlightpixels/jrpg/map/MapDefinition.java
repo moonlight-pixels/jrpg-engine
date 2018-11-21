@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.map;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 
 /**
@@ -7,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public abstract class MapDefinition {
-    private final String id;
+    private final Key key;
     private final String mapPath;
 
     /**
@@ -29,4 +30,7 @@ public abstract class MapDefinition {
 
         return map;
     }
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
+    public interface Key { }
 }

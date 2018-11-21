@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class CharacterAnimationSetRegistry {
-    private final Map<String, CharacterAnimationSet> animationSets = new HashMap<>();
+    private final Map<CharacterAnimationSet.Key, CharacterAnimationSet> animationSets = new HashMap<>();
 
     public void register(final CharacterAnimationSet characterAnimationSet) {
-        animationSets.put(characterAnimationSet.getId(), characterAnimationSet);
+        animationSets.put(characterAnimationSet.getKey(), characterAnimationSet);
     }
 
-    public CharacterAnimationSet getCharacterAnimationSet(final String animationSetId) {
-        return animationSets.get(animationSetId);
+    public CharacterAnimationSet getCharacterAnimationSet(final CharacterAnimationSet.Key key) {
+        return animationSets.get(key);
     }
 }

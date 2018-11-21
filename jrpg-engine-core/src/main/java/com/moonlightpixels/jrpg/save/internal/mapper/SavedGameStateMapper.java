@@ -17,17 +17,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class SavedGameStateMapper {
-    private final KeyLoader<PlayerCharacter.Key> playerCharacterKeyLoader;
     private final MapRegistry mapRegistry;
     private final SavedPlayerCharacterMapper savedPlayerCharacterMapper;
     private final SavedPartyMapper savedPartyMapper;
 
     @Inject
-    public SavedGameStateMapper(final KeyLoader<PlayerCharacter.Key> playerCharacterKeyLoader,
-                                final MapRegistry mapRegistry,
+    public SavedGameStateMapper(final MapRegistry mapRegistry,
                                 final SavedPlayerCharacterMapper savedPlayerCharacterMapper,
                                 final SavedPartyMapper savedPartyMapper) {
-        this.playerCharacterKeyLoader = playerCharacterKeyLoader;
         this.mapRegistry = mapRegistry;
         this.savedPlayerCharacterMapper = savedPlayerCharacterMapper;
         this.savedPartyMapper = savedPartyMapper;
@@ -44,7 +41,6 @@ public final class SavedGameStateMapper {
         savedGameState.setRoster(
             gameState.getCast().getRoster().stream()
                 .map(PlayerCharacter::getKey)
-                .map(PlayerCharacter.Key::toString)
                 .collect(Collectors.toList())
         );
         savedGameState.setParties(
@@ -71,14 +67,14 @@ public final class SavedGameStateMapper {
 
     private void mapCastFromSavedData(final SavedGameState savedGameState,
                                       final Cast cast) throws SavedStateLoadExcpetion {
-        Map<String, PlayerCharacter> playerCharacterMap = new HashMap<>();
+        Map<PlayerCharacter.Key, PlayerCharacter> playerCharacterMap = new HashMap<>();
         for (SavedPlayerCharacter savedPlayerCharacter : savedGameState.getCast()) {
             final PlayerCharacter playerCharacter = savedPlayerCharacterMapper.map(savedPlayerCharacter);
             playerCharacterMap.put(savedPlayerCharacter.getKey(), playerCharacter);
             cast.addToCast(playerCharacter);
         }
-        for (String key : savedGameState.getRoster()) {
-            cast.addToRoster(playerCharacterKeyLoader.load(key));
+        for (PlayerCharacter.Key key : savedGameState.getRoster()) {
+            cast.addToRoster(key);
         }
         List<Party> parties = savedGameState.getParties().stream()
             .map(savedParty -> savedPartyMapper.map(savedParty, playerCharacterMap))

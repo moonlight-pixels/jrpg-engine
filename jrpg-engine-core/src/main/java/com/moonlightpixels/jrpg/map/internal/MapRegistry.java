@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class MapRegistry {
-    private final Map<String, MapDefinition> maps = new HashMap<>();
+    private final Map<MapDefinition.Key, MapDefinition> maps = new HashMap<>();
 
     public void register(final MapDefinition map) {
-        maps.put(map.getId(), map);
+        maps.put(map.getKey(), map);
     }
 
-    public MapDefinition getMap(final String mapId) {
-        return maps.get(mapId);
+    public MapDefinition getMap(final MapDefinition.Key key) {
+        return maps.get(key);
     }
 }

@@ -12,15 +12,11 @@ import com.moonlightpixels.jrpg.map.internal.MapRegistry
 import com.moonlightpixels.jrpg.player.Cast
 import com.moonlightpixels.jrpg.player.Party
 import com.moonlightpixels.jrpg.player.PlayerCharacter
-import com.moonlightpixels.jrpg.save.internal.mapper.EnumKeyLoader
-import com.moonlightpixels.jrpg.save.internal.mapper.KeyLoader
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedGameStateMapper
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedPartyMapper
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedPlayerCharacterMapper
 
 class GameStateDataProvider {
-    static final KeyLoader<PlayerCharacter.Key> KEY_LOADER = new EnumKeyLoader(Players, PlayerCharacter.Key)
-
     final MapRegistry mapRegistry = new MapRegistry()
     final CharacterAnimationSetRegistry animationSetRegistry = new CharacterAnimationSetRegistry()
     final SavedPlayerCharacterMapper savedPlayerCharacterMapper
@@ -28,18 +24,14 @@ class GameStateDataProvider {
     final SavedGameStateMapper mapper
 
     GameStateDataProvider() {
-        savedPlayerCharacterMapper = new SavedPlayerCharacterMapper(
-            KEY_LOADER,
-            animationSetRegistry
-        )
+        savedPlayerCharacterMapper = new SavedPlayerCharacterMapper(animationSetRegistry)
         savedPartyMapper = new SavedPartyMapper(mapRegistry)
         mapper = new SavedGameStateMapper(
-            KEY_LOADER,
             mapRegistry,
             savedPlayerCharacterMapper,
             savedPartyMapper
         )
-        MapDefinition mapDefinition = new MapDefinition('mapId', 'path') {
+        MapDefinition mapDefinition = new MapDefinition(Maps.NARSHE_EXTERIOR, 'path') {
             @Override
             protected void configure(final JRPGMap map) { }
         }
@@ -66,7 +58,7 @@ class GameStateDataProvider {
     private PlayerCharacter createPlayerCharacter(final Players key) {
         PlayerCharacter playerCharacter = new PlayerCharacter(key)
         playerCharacter.setName(key.toString())
-        playerCharacter.setAnimationSet(new CharacterAnimationSet(key.toString(), 16, 16, 2))
+        playerCharacter.setAnimationSet(new CharacterAnimationSet(new AnimationKey(id: key.toString()), 16, 16, 2))
 
         animationSetRegistry.register(playerCharacter.animationSet)
 
@@ -77,7 +69,7 @@ class GameStateDataProvider {
         Party party = new Party(
             1,
             players.size(),
-            new Location(mapRegistry.getMap('mapId'), new TileCoordinate(1, 1))
+            new Location(mapRegistry.getMap(Maps.NARSHE_EXTERIOR), new TileCoordinate(1, 1))
         )
         players.each {
             cast.getPlayerCharacter(it).ifPresent { party.addMember(it) }
@@ -101,5 +93,22 @@ class GameStateDataProvider {
         RELM,
         UMARO,
         GOGO
+    }
+
+    static enum Maps implements MapDefinition.Key {
+        NARSHE_EXTERIOR,
+        NARSHE_CAVES
+    }
+
+    static class AnimationKey implements CharacterAnimationSet.Key {
+        String id
+
+        boolean equals(final Object o) {
+            return (o instanceof AnimationKey) ? id == ((AnimationKey) o).id : false
+        }
+
+        int hashCode() {
+            return (id != null ? id.hashCode() : 0)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.story;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.common.graph.Traverser;
 import lombok.Data;
 
@@ -32,5 +33,6 @@ public abstract class GoalContainer {
         );
     }
 
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
     public interface Key { }
 }

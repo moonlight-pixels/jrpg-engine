@@ -2,6 +2,7 @@ package com.moonlightpixels.jrpg.map.character;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.moonlightpixels.jrpg.animation.AnimationSet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public final class CharacterAnimationSet implements AnimationSet<CharacterAnimation> {
     @Getter
-    private final String id;
+    private final Key key;
     @Getter
     private final int height;
     @Getter
@@ -55,4 +56,7 @@ public final class CharacterAnimationSet implements AnimationSet<CharacterAnimat
             throw new IllegalStateException(String.format("Missing animations: %s.", missingAnimations));
         }
     }
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
+    public interface Key { }
 }

@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.story;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.common.base.Preconditions;
 import com.google.common.graph.SuccessorsFunction;
 import com.google.common.graph.Traverser;
@@ -67,6 +68,7 @@ public abstract class Task {
         }
     };
 
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
     public interface Key {
         /**
          * Key identifying the goal this task belongs to.
