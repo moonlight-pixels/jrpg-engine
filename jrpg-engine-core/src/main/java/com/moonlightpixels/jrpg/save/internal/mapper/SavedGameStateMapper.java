@@ -2,13 +2,12 @@ package com.moonlightpixels.jrpg.save.internal.mapper;
 
 import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.internal.DefaultGameState;
-import com.moonlightpixels.jrpg.save.internal.SavedGameState;
-import com.moonlightpixels.jrpg.save.internal.SavedPlayerCharacter;
-import com.moonlightpixels.jrpg.save.internal.SavedStateLoadExcpetion;
-import com.moonlightpixels.jrpg.map.internal.MapRegistry;
 import com.moonlightpixels.jrpg.player.Cast;
 import com.moonlightpixels.jrpg.player.Party;
 import com.moonlightpixels.jrpg.player.PlayerCharacter;
+import com.moonlightpixels.jrpg.save.internal.SavedGameState;
+import com.moonlightpixels.jrpg.save.internal.SavedPlayerCharacter;
+import com.moonlightpixels.jrpg.save.internal.SavedStateLoadExcpetion;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -17,15 +16,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class SavedGameStateMapper {
-    private final MapRegistry mapRegistry;
     private final SavedPlayerCharacterMapper savedPlayerCharacterMapper;
     private final SavedPartyMapper savedPartyMapper;
 
     @Inject
-    public SavedGameStateMapper(final MapRegistry mapRegistry,
-                                final SavedPlayerCharacterMapper savedPlayerCharacterMapper,
+    public SavedGameStateMapper(final SavedPlayerCharacterMapper savedPlayerCharacterMapper,
                                 final SavedPartyMapper savedPartyMapper) {
-        this.mapRegistry = mapRegistry;
         this.savedPlayerCharacterMapper = savedPlayerCharacterMapper;
         this.savedPartyMapper = savedPartyMapper;
     }

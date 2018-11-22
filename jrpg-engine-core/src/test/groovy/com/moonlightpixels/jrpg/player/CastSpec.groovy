@@ -11,9 +11,9 @@ class CastSpec extends Specification {
     private PlayerCharacter player2
 
     void setup() {
-        location = new Location(Mock(MapDefinition), new TileCoordinate(1, 1))
-        player1 = new PlayerCharacter(Mock(PlayerCharacter.Key))
-        player2 = new PlayerCharacter(Mock(PlayerCharacter.Key))
+        location = new Location(Mock(MapDefinition.Key), new TileCoordinate(1, 1))
+        player1 = PlayerCharacter.builder().key(Mock(PlayerCharacter.Key)).build()
+        player2 = PlayerCharacter.builder().key(Mock(PlayerCharacter.Key)).build()
     }
 
     void 'isValid() checks for an active party'() {

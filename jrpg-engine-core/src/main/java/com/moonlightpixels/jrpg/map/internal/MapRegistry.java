@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.map.internal;
 
+import com.google.common.base.Preconditions;
 import com.moonlightpixels.jrpg.map.MapDefinition;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public final class MapRegistry {
     }
 
     public MapDefinition getMap(final MapDefinition.Key key) {
+        Preconditions.checkState(maps.containsKey(key), String.format("Map with key {%s} does not exist", key));
         return maps.get(key);
     }
 }

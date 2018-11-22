@@ -2,13 +2,11 @@ package com.moonlightpixels.jrpg.save.internal
 
 import com.moonlightpixels.jrpg.GameState
 import com.moonlightpixels.jrpg.internal.DefaultGameState
-import com.moonlightpixels.jrpg.map.JRPGMap
 import com.moonlightpixels.jrpg.map.Location
 import com.moonlightpixels.jrpg.map.MapDefinition
 import com.moonlightpixels.jrpg.map.TileCoordinate
 import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet
 import com.moonlightpixels.jrpg.map.character.internal.CharacterAnimationSetRegistry
-import com.moonlightpixels.jrpg.map.internal.MapRegistry
 import com.moonlightpixels.jrpg.player.Cast
 import com.moonlightpixels.jrpg.player.Party
 import com.moonlightpixels.jrpg.player.PlayerCharacter
@@ -17,7 +15,6 @@ import com.moonlightpixels.jrpg.save.internal.mapper.SavedPartyMapper
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedPlayerCharacterMapper
 
 class GameStateDataProvider {
-    final MapRegistry mapRegistry = new MapRegistry()
     final CharacterAnimationSetRegistry animationSetRegistry = new CharacterAnimationSetRegistry()
     final SavedPlayerCharacterMapper savedPlayerCharacterMapper
     final SavedPartyMapper savedPartyMapper
@@ -25,17 +22,11 @@ class GameStateDataProvider {
 
     GameStateDataProvider() {
         savedPlayerCharacterMapper = new SavedPlayerCharacterMapper(animationSetRegistry)
-        savedPartyMapper = new SavedPartyMapper(mapRegistry)
+        savedPartyMapper = new SavedPartyMapper()
         mapper = new SavedGameStateMapper(
-            mapRegistry,
             savedPlayerCharacterMapper,
             savedPartyMapper
         )
-        MapDefinition mapDefinition = new MapDefinition(Maps.NARSHE_EXTERIOR, 'path') {
-            @Override
-            protected void configure(final JRPGMap map) { }
-        }
-        mapRegistry.register(mapDefinition)
     }
 
     GameState createGameState() {
@@ -56,20 +47,22 @@ class GameStateDataProvider {
     }
 
     private PlayerCharacter createPlayerCharacter(final Players key) {
-        PlayerCharacter playerCharacter = new PlayerCharacter(key)
-        playerCharacter.setName(key.toString())
-        playerCharacter.setAnimationSet(new CharacterAnimationSet(new AnimationKey(id: key.toString()), 16, 16, 2))
+        PlayerCharacter playerCharacter = PlayerCharacter.builder()
+            .key(key)
+            .name(key.toString())
+            .animationSet(new CharacterAnimationSet(new AnimationKey(id: key.toString()), 16, 16, 2))
+            .build()
 
         animationSetRegistry.register(playerCharacter.animationSet)
 
         return playerCharacter
     }
 
-    private Party createParty(final Cast cast, final Players ...players) {
+    private static Party createParty(final Cast cast, final Players ...players) {
         Party party = new Party(
             1,
             players.size(),
-            new Location(mapRegistry.getMap(Maps.NARSHE_EXTERIOR), new TileCoordinate(1, 1))
+            new Location(Maps.NARSHE_EXTERIOR, new TileCoordinate(1, 1))
         )
         players.each {
             cast.getPlayerCharacter(it).ifPresent { party.addMember(it) }

@@ -25,11 +25,13 @@ public final class SavedPlayerCharacterMapper {
     }
 
     public PlayerCharacter map(final SavedPlayerCharacter savedPlayerCharacter) throws SavedStateLoadExcpetion {
-        PlayerCharacter playerCharacter = new PlayerCharacter(savedPlayerCharacter.getKey());
-        playerCharacter.setName(savedPlayerCharacter.getName());
-        playerCharacter.setAnimationSet(
-            characterAnimationSetRegistry.getCharacterAnimationSet(savedPlayerCharacter.getAnimationSetKey())
-        );
+        PlayerCharacter playerCharacter = PlayerCharacter.builder()
+            .key(savedPlayerCharacter.getKey())
+            .name(savedPlayerCharacter.getName())
+            .animationSet(
+                characterAnimationSetRegistry.getCharacterAnimationSet(savedPlayerCharacter.getAnimationSetKey())
+            )
+            .build();
 
         return playerCharacter;
     }

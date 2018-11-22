@@ -19,6 +19,7 @@ import javax.inject.Named;
 public final class DefaultMapState implements MapState {
     private final GraphicsContext graphicsContext;
     private final GdxFacade gdx;
+    private final MapRegistry mapRegistry;
     private final JRPGMapFactory mapFactory;
     private final GameStateHolder gameStateHolder;
     private GameState gameState;
@@ -27,10 +28,12 @@ public final class DefaultMapState implements MapState {
     @Inject
     public DefaultMapState(@Named(GraphicsModule.MAP) final GraphicsContext graphicsContext,
                            final GdxFacade gdx,
+                           final MapRegistry mapRegistry,
                            final JRPGMapFactory mapFactory,
                            final GameStateHolder gameStateHolder) {
         this.graphicsContext = graphicsContext;
         this.gdx = gdx;
+        this.mapRegistry = mapRegistry;
         this.mapFactory = mapFactory;
         this.gameStateHolder = gameStateHolder;
     }
@@ -38,7 +41,7 @@ public final class DefaultMapState implements MapState {
     @Override
     public void enter(final JRPG entity) {
         gameState = gameStateHolder.getGameState();
-        map = gameState.getLocation().getMap().load(mapFactory);
+        map = mapRegistry.getMap(gameState.getLocation().getMap()).load(mapFactory);
     }
 
     @Override
