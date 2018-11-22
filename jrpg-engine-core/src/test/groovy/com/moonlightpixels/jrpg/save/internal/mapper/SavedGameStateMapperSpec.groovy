@@ -12,9 +12,7 @@ class SavedGameStateMapperSpec extends Specification {
 
     void setup() {
         gameStateDataProvider = new GameStateDataProvider()
-        savedPlayerCharacterMapper = new SavedPlayerCharacterMapper(
-            gameStateDataProvider.animationSetRegistry
-        )
+        savedPlayerCharacterMapper = new SavedPlayerCharacterMapper()
         savedPartyMapper = new SavedPartyMapper()
         mapper = new SavedGameStateMapper(
             savedPlayerCharacterMapper,

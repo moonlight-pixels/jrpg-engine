@@ -10,7 +10,7 @@ import lombok.Data;
 public final class PlayerCharacter {
     private final Key key;
     private String name;
-    private CharacterAnimationSet animationSet;
+    private CharacterAnimationSet.Key animationSet;
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
     public interface Key { }

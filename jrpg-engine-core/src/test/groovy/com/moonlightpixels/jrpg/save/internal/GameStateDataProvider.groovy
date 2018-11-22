@@ -6,7 +6,6 @@ import com.moonlightpixels.jrpg.map.Location
 import com.moonlightpixels.jrpg.map.MapDefinition
 import com.moonlightpixels.jrpg.map.TileCoordinate
 import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet
-import com.moonlightpixels.jrpg.map.character.internal.CharacterAnimationSetRegistry
 import com.moonlightpixels.jrpg.player.Cast
 import com.moonlightpixels.jrpg.player.Party
 import com.moonlightpixels.jrpg.player.PlayerCharacter
@@ -15,13 +14,12 @@ import com.moonlightpixels.jrpg.save.internal.mapper.SavedPartyMapper
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedPlayerCharacterMapper
 
 class GameStateDataProvider {
-    final CharacterAnimationSetRegistry animationSetRegistry = new CharacterAnimationSetRegistry()
     final SavedPlayerCharacterMapper savedPlayerCharacterMapper
     final SavedPartyMapper savedPartyMapper
     final SavedGameStateMapper mapper
 
     GameStateDataProvider() {
-        savedPlayerCharacterMapper = new SavedPlayerCharacterMapper(animationSetRegistry)
+        savedPlayerCharacterMapper = new SavedPlayerCharacterMapper()
         savedPartyMapper = new SavedPartyMapper()
         mapper = new SavedGameStateMapper(
             savedPlayerCharacterMapper,
@@ -46,14 +44,12 @@ class GameStateDataProvider {
         return mapper.map(createGameState())
     }
 
-    private PlayerCharacter createPlayerCharacter(final Players key) {
+    private static PlayerCharacter createPlayerCharacter(final Players key) {
         PlayerCharacter playerCharacter = PlayerCharacter.builder()
             .key(key)
             .name(key.toString())
-            .animationSet(new CharacterAnimationSet(new AnimationKey(id: key.toString()), 16, 16, 2))
+            .animationSet(new AnimationKey(id: key.toString()))
             .build()
-
-        animationSetRegistry.register(playerCharacter.animationSet)
 
         return playerCharacter
     }
