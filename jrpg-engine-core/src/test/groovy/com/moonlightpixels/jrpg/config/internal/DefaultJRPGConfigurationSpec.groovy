@@ -1,6 +1,7 @@
 package com.moonlightpixels.jrpg.config.internal
 
 import com.moonlightpixels.jrpg.GameState
+import com.moonlightpixels.jrpg.config.ContentRegistry
 import com.moonlightpixels.jrpg.config.JRPGConfiguration
 import com.moonlightpixels.jrpg.config.LaunchConfig
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig
@@ -168,5 +169,38 @@ class DefaultJRPGConfigurationSpec extends Specification {
 
         then:
         1 * consumer2.accept(gameState)
+    }
+
+    void 'configureNewGame(ContentRegistry) calls configuration consumer when set'() {
+        setup:
+        ContentRegistry contentRegistry = Mock()
+        Consumer<ContentRegistry> consumer = Mock()
+
+        when:
+        JRPGConfiguration jrpgConfiguration = new DefaultJRPGConfiguration()
+        jrpgConfiguration.content(consumer)
+        jrpgConfiguration.configureContent(contentRegistry)
+
+        then:
+        1 * consumer.accept(contentRegistry)
+    }
+
+    void 'configureNewGame(ContentRegistry) calls configuration consumers in order when more than one is set'() {
+        setup:
+        ContentRegistry contentRegistry = Mock()
+        Consumer<ContentRegistry> consumer1 = Mock()
+        Consumer<ContentRegistry> consumer2 = Mock()
+
+        when:
+        JRPGConfiguration jrpgConfiguration = new DefaultJRPGConfiguration()
+        jrpgConfiguration.content(consumer1)
+        jrpgConfiguration.content(consumer2)
+        jrpgConfiguration.configureContent(contentRegistry)
+
+        then:
+        1 * consumer1.accept(contentRegistry)
+
+        then:
+        1 * consumer2.accept(contentRegistry)
     }
 }

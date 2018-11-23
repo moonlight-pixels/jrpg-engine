@@ -54,7 +54,15 @@ public interface JRPGConfiguration {
      * Configures "New Game" GameState.
      *
      * @param gameStateConsumer Consumer that will configure GameState for a new game
-     * @return a refernece to this FrontEndConfig
+     * @return Refernce to this configuration.
      */
     JRPGConfiguration newGame(Consumer<GameState> gameStateConsumer);
+
+    /**
+     * Configures Content Registry.
+     *
+     * @param contentRegistryConsumer ContentRegistry
+     * @return Refernce to this configuration.
+     */
+    JRPGConfiguration content(Consumer<ContentRegistry> contentRegistryConsumer);
 }
