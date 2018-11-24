@@ -1,7 +1,11 @@
 package com.moonlightpixels.jrpg.map.internal
 
 import com.badlogic.gdx.Graphics
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Vector2
 import com.moonlightpixels.jrpg.GameState
+import com.moonlightpixels.jrpg.animation.AnimationSetProvider
 import com.moonlightpixels.jrpg.internal.GameStateHolder
 import com.moonlightpixels.jrpg.internal.JRPG
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade
@@ -11,14 +15,19 @@ import com.moonlightpixels.jrpg.map.JRPGMapFactory
 import com.moonlightpixels.jrpg.map.Location
 import com.moonlightpixels.jrpg.map.MapDefinition
 import com.moonlightpixels.jrpg.map.TileCoordinate
+import com.moonlightpixels.jrpg.map.character.CharacterAnimation
+import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet
+import com.moonlightpixels.jrpg.map.character.internal.CharacterAnimationSetRegistry
 import spock.lang.Specification
 
 class DefaultMapStateSpec extends Specification {
     GraphicsContext graphicsContext
 
-    private Graphics graphics
+    Graphics graphics
     GdxFacade gdx
+    JRPGMap map
     MapRegistry mapRegistry
+    CharacterAnimationSetRegistry characterAnimationSetRegistry
     JRPGMapFactory mapFactory
     GameState gameState
     GameStateHolder gameStateHolder
@@ -31,22 +40,46 @@ class DefaultMapStateSpec extends Specification {
         gdx = Mock(GdxFacade) {
             getGraphics() >> graphics
         }
+        map = Mock(JRPGMap) {
+            getTileCoordinateXY(_) >> new Vector2(10, 10)
+        }
         mapRegistry = new MapRegistry()
-        mapFactory = Mock(JRPGMapFactory)
+        characterAnimationSetRegistry = new CharacterAnimationSetRegistry(Mock(AssetManager))
+        CharacterAnimationSet.Key animationKey = Mock()
+        CharacterAnimationSet characterAnimationSet = new CharacterAnimationSet(animationKey, 10, 10, 2)
+        characterAnimationSet.addAnimationFrames(
+            CharacterAnimation.StandDown,
+            [ Mock(TextureRegion) ].toArray(new TextureRegion[0])
+        )
+        characterAnimationSetRegistry.register(animationKey, new AnimationSetProvider<CharacterAnimationSet>() {
+            @Override
+            CharacterAnimationSet get(final AssetManager assetManager) {
+                return characterAnimationSet
+            }
+        })
+        mapFactory = Mock(JRPGMapFactory) {
+            create(_) >> map
+        }
         gameState = Mock(GameState) {
             isValid() >> true
+            getHeroAnimationSet() >> animationKey
         }
-        GameStateHolder gameStateHolder = new GameStateHolder()
+        gameStateHolder = new GameStateHolder()
         gameStateHolder.setGameState(gameState)
         jrpg = Mock(JRPG)
-        mapState = new DefaultMapState(graphicsContext, gdx, mapRegistry, mapFactory, gameStateHolder)
+        mapState = new DefaultMapState(
+            graphicsContext,
+            gdx,
+            mapRegistry,
+            characterAnimationSetRegistry,
+            mapFactory,
+            gameStateHolder
+        )
     }
 
     void 'update() updates and renders map'() {
         setup:
-        JRPGMap map = Mock(JRPGMap)
         mapRegistry.register(new MyMapDefinition())
-        mapFactory.create(_) >> map
         graphics.getDeltaTime() >> 0.1f
         gameState.getLocation() >> new Location(Maps.MYMAP, new TileCoordinate(0, 0))
 

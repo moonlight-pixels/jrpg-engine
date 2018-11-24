@@ -2,6 +2,7 @@ package com.moonlightpixels.jrpg.internal;
 
 import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.map.Location;
+import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet;
 import com.moonlightpixels.jrpg.player.Cast;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -44,6 +45,11 @@ public final class DefaultGameState implements GameState {
     @Override
     public Cast getCast() {
         return cast;
+    }
+
+    @Override
+    public CharacterAnimationSet.Key getHeroAnimationSet() {
+        return getCast().getActiveParty().getMembers().get(0).getAnimationSet();
     }
 
     @Override

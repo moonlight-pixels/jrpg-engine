@@ -1,6 +1,7 @@
 package com.moonlightpixels.jrpg;
 
 import com.moonlightpixels.jrpg.map.Location;
+import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet;
 import com.moonlightpixels.jrpg.player.Cast;
 
 import java.time.Duration;
@@ -51,6 +52,13 @@ public interface GameState {
      * @return Cast
      */
     Cast getCast();
+
+    /**
+     * Get the Animation set used to display the players curent party lead on the map.
+     *
+     * @return Key Referencing AnimationSet
+     */
+    CharacterAnimationSet.Key getHeroAnimationSet();
 
     /**
      * Validates that the GameState meets all requirements of a valid state. Requirements include:

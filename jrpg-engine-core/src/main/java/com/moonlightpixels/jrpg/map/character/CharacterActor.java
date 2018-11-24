@@ -28,8 +28,18 @@ public class CharacterActor extends MapActor<CharacterAnimation> {
     private float timeToTraverseTile = DEFAULT_SPEED;
     private Vector2Tween walkingTween;
 
-    protected CharacterActor(final JRPGMap map, final CharacterAnimationSet animationSet,
-                             final TileCoordinate position, final Direction initialDirection) {
+    /**
+     * Creates a new CharacterActor.
+     *
+     * @param map Reference to the Map this actor is being placed on.
+     * @param animationSet AnimationSet used by ths actor
+     * @param position Position on the Map
+     * @param initialDirection Direction this character is initially facing
+     */
+    public CharacterActor(final JRPGMap map,
+                          final CharacterAnimationSet animationSet,
+                          final TileCoordinate position,
+                          final Direction initialDirection) {
         super(map, animationSet, position);
         direction = initialDirection;
         x = calculateXForCenteredOnTile(position);

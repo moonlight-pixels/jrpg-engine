@@ -10,8 +10,11 @@ import com.moonlightpixels.jrpg.internal.JRPG;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
 import com.moonlightpixels.jrpg.internal.inject.GraphicsModule;
+import com.moonlightpixels.jrpg.map.Direction;
 import com.moonlightpixels.jrpg.map.JRPGMap;
 import com.moonlightpixels.jrpg.map.JRPGMapFactory;
+import com.moonlightpixels.jrpg.map.character.CharacterActor;
+import com.moonlightpixels.jrpg.map.character.internal.CharacterAnimationSetRegistry;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,6 +23,7 @@ public final class DefaultMapState implements MapState {
     private final GraphicsContext graphicsContext;
     private final GdxFacade gdx;
     private final MapRegistry mapRegistry;
+    private final CharacterAnimationSetRegistry characterAnimationSetRegistry;
     private final JRPGMapFactory mapFactory;
     private final GameStateHolder gameStateHolder;
     private GameState gameState;
@@ -29,11 +33,13 @@ public final class DefaultMapState implements MapState {
     public DefaultMapState(@Named(GraphicsModule.MAP) final GraphicsContext graphicsContext,
                            final GdxFacade gdx,
                            final MapRegistry mapRegistry,
+                           final CharacterAnimationSetRegistry characterAnimationSetRegistry,
                            final JRPGMapFactory mapFactory,
                            final GameStateHolder gameStateHolder) {
         this.graphicsContext = graphicsContext;
         this.gdx = gdx;
         this.mapRegistry = mapRegistry;
+        this.characterAnimationSetRegistry = characterAnimationSetRegistry;
         this.mapFactory = mapFactory;
         this.gameStateHolder = gameStateHolder;
     }
@@ -42,6 +48,12 @@ public final class DefaultMapState implements MapState {
     public void enter(final JRPG entity) {
         gameState = gameStateHolder.getGameState();
         map = mapRegistry.getMap(gameState.getLocation().getMap()).load(mapFactory);
+        CharacterActor hero = new CharacterActor(map,
+            characterAnimationSetRegistry.getCharacterAnimationSet(gameState.getHeroAnimationSet()),
+            gameState.getLocation().getTileCoordinate(),
+            Direction.DOWN
+        );
+        map.addActor(hero);
     }
 
     @Override

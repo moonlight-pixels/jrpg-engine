@@ -1,6 +1,7 @@
 package com.moonlightpixels.jrpg.map;
 
 import com.badlogic.gdx.math.Vector2;
+import com.moonlightpixels.jrpg.map.internal.MapActor;
 
 /**
  * Interactive Maps in the game.
@@ -44,4 +45,11 @@ public interface JRPGMap {
      * Renders map and actors.
      */
     void render();
+
+    /**
+     * Adds an actor to the map.
+     *
+     * @param actor MapActor to add
+     */
+    void addActor(MapActor<?> actor);
 }

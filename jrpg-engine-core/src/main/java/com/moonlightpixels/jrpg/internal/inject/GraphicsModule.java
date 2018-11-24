@@ -54,7 +54,7 @@ public final class GraphicsModule extends AbstractModule {
         return new DefaultGraphicsContext(
             new OrthographicCamera(resolutionWidth, resolutionHeight),
             spriteBatch,
-            true
+            false
         );
     }
 

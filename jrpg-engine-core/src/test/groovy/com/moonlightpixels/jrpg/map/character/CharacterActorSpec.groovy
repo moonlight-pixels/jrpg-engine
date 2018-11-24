@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.moonlightpixels.jrpg.map.Direction
 import com.moonlightpixels.jrpg.map.JRPGMap
 import com.moonlightpixels.jrpg.map.TileCoordinate
+import com.moonlightpixels.jrpg.map.internal.MapActor
 import spock.lang.Specification
 
 class CharacterActorSpec extends Specification {
@@ -28,6 +29,9 @@ class CharacterActorSpec extends Specification {
 
             @Override
             void render() { }
+
+            @Override
+            void addActor(final MapActor<?> actor) { }
         }
         animationSet = new CharacterAnimationSet(Mock(CharacterAnimationSet.Key), 24, 16, 1)
         animationSet.addAnimationFrames(CharacterAnimation.WalkUp, [Mock(TextureRegion)] as TextureRegion[])

@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.google.common.base.Preconditions;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
 import com.moonlightpixels.jrpg.internal.gdx.AssetUtil;
@@ -47,6 +48,19 @@ public final class DefaultJRPGMap implements JRPGMap {
         mapLayers.keySet().forEach(mapLayerIndex -> {
             mapLayers.get(mapLayerIndex).render(graphicsContext);
         });
+    }
+
+    @Override
+    public void addActor(final MapActor<?> actor) {
+        Preconditions.checkArgument(
+            mapLayers.containsKey(actor.getPosition().getMapLayer()),
+            String.format(
+                "Attempted to add an actor to map layer {%d}, which doesn't exist in this map.",
+                actor.getPosition().getMapLayer()
+            )
+        );
+        JRPGMapLayer mapLayer = mapLayers.get(actor.getPosition().getMapLayer());
+        mapLayer.addActor(actor);
     }
 
     private void buildMapLayers() {
