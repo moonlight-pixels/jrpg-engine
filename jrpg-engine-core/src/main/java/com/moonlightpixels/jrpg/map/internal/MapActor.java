@@ -42,6 +42,14 @@ public abstract class MapActor<T extends AnimationSet.Type> extends Actor {
         animation = animationSet.getAnimation(animationType, animationDuration);
     }
 
+    public final float getCenterX() {
+        return getX() + (animationSet.getWidth() / 2.0f);
+    }
+
+    public final float getCenterY() {
+        return getY() + (animationSet.getHeight() / 2.0f);
+    }
+
     protected abstract float calculateX();
 
     protected abstract float calculateY();
