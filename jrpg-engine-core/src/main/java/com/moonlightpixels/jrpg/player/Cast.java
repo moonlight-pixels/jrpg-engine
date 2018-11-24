@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 @EqualsAndHashCode
 @ToString
-@SuppressFBWarnings(justification = "Generated code")
+@SuppressFBWarnings
 public final class Cast {
     private Party activeParty;
     private final List<Party> currentParties = new LinkedList<>();

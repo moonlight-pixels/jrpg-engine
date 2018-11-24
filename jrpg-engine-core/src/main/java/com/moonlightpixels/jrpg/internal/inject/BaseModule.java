@@ -1,7 +1,12 @@
 package com.moonlightpixels.jrpg.internal.inject;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.moonlightpixels.jrpg.JRPGEngine;
 import com.moonlightpixels.jrpg.config.ContentRegistry;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
@@ -58,9 +63,20 @@ public final class BaseModule extends AbstractModule {
     }
 
     @Provides
-    public GameInitializer provideGameInitializer() {
+    public GameInitializer provideGameInitializer(final ConfigurationHandler configurationHandler,
+                                                  final ContentRegistry contentRegistry) {
         return config -> {
+            configurationHandler.configureContent(contentRegistry);
             InjectionContext.addModule(new GameModule(config));
         };
+    }
+
+    @Provides
+    @Singleton
+    public AssetManager provideAssetManager() {
+        final AssetManager assetManager = new AssetManager();
+        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+
+        return assetManager;
     }
 }

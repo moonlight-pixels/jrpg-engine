@@ -20,7 +20,7 @@ public final class TiledProps {
          * <br>
          * The type of layer this layer is.
          */
-        public static final String LAYER_TYPE = "jrpg-laye-typer";
+        public static final String LAYER_TYPE = "jrpg-layer-type";
 
         /**
          * <b>Layer Type Property value</b>: background.<br>

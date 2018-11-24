@@ -1,18 +1,27 @@
 package com.moonlightpixels.jrpg.map.internal
 
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext
 import spock.lang.Specification
 
 class JRPGMapLayerSpec extends Specification {
+    private GraphicsContext graphicsContext
     private TiledMapRenderer mapRenderer
     private Stage stage
     private JRPGMapLayer mapLayer
 
     void setup() {
+        graphicsContext = Mock(GraphicsContext) {
+            getSpriteBatch() >> Mock(SpriteBatch) {
+                getColor() >> Color.BLACK
+            }
+        }
         mapRenderer = Mock(TiledMapRenderer)
         stage = Mock(Stage)
         mapLayer = new JRPGMapLayer(0, this.mapRenderer, this.stage)
@@ -28,7 +37,7 @@ class JRPGMapLayerSpec extends Specification {
         mapLayer.setCollisionLayer(collisionLayer)
 
         when:
-        mapLayer.render()
+        mapLayer.render(graphicsContext)
 
         then:
         1 * mapRenderer.renderTileLayer(backgroundLayer)

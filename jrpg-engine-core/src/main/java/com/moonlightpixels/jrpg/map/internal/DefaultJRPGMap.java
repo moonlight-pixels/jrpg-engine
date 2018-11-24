@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
+import com.moonlightpixels.jrpg.internal.gdx.AssetUtil;
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
 import com.moonlightpixels.jrpg.internal.inject.GraphicsModule;
 import com.moonlightpixels.jrpg.map.JRPGMap;
@@ -20,19 +21,22 @@ import java.util.TreeMap;
 public final class DefaultJRPGMap implements JRPGMap {
     private final TiledMap tiledMap;
     private final TiledMapRenderer mapRenderer;
+    private final GraphicsContext graphicsContext;
     private final SortedMap<Integer, JRPGMapLayer> mapLayers = new TreeMap<>();
 
     @Inject
     public DefaultJRPGMap(@Named(GraphicsModule.MAP) final GraphicsContext graphicsContext,
                           final AssetManager assetManager,
                           @Assisted final String mapPath) {
-        this.tiledMap = assetManager.get(mapPath);
+        this.graphicsContext = graphicsContext;
+        this.tiledMap = AssetUtil.onDemand(assetManager, mapPath, TiledMap.class);
         this.mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, graphicsContext.getSpriteBatch());
-        buildMapLayers(graphicsContext);
+        buildMapLayers();
     }
 
     @Override
     public void update(final float delta) {
+        mapRenderer.setView(graphicsContext.getCamera());
         mapLayers.keySet().forEach(mapLayerIndex -> {
             mapLayers.get(mapLayerIndex).update(delta);
         });
@@ -41,11 +45,11 @@ public final class DefaultJRPGMap implements JRPGMap {
     @Override
     public void render() {
         mapLayers.keySet().forEach(mapLayerIndex -> {
-            mapLayers.get(mapLayerIndex).render();
+            mapLayers.get(mapLayerIndex).render(graphicsContext);
         });
     }
 
-    private void buildMapLayers(final GraphicsContext graphicsContext) {
+    private void buildMapLayers() {
         for (MapLayer mapLayer : tiledMap.getLayers()) {
             TiledMapTileLayer tiledMapLayer = (TiledMapTileLayer) mapLayer;
 

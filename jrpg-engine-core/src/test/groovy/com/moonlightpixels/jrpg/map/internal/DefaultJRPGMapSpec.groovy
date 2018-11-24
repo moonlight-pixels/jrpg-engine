@@ -2,6 +2,7 @@ package com.moonlightpixels.jrpg.map.internal
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMap
@@ -23,6 +24,7 @@ class DefaultJRPGMapSpec extends GdxSpecification {
             getSpriteBatch() >> Mock(SpriteBatch) {
                 getColor() >> Color.BLACK
             }
+            getCamera() >> new OrthographicCamera()
         }
         AssetManager assetManager = Mock(AssetManager)
 
@@ -33,7 +35,7 @@ class DefaultJRPGMapSpec extends GdxSpecification {
 
         then:
         noExceptionThrown()
-        1 * assetManager.get('path/to/map.tmx') >> getTestMap()
+        1 * assetManager.get('path/to/map.tmx', TiledMap) >> getTestMap()
         map.tileHeight == 16
         map.tileWidth == 16
     }
@@ -52,7 +54,7 @@ class DefaultJRPGMapSpec extends GdxSpecification {
         return tiledMap
     }
 
-    private MapLayer createMapLayer(int index, String type) {
+    private static MapLayer createMapLayer(int index, String type) {
         MapLayer mapLayer = new TiledMapTileLayer(100, 100, 16, 16)
         mapLayer.properties.put(TiledProps.Layer.MAP_LAYER, index)
         mapLayer.properties.put(TiledProps.Layer.LAYER_TYPE, type)

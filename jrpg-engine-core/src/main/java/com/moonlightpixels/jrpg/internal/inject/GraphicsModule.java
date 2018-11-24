@@ -1,11 +1,7 @@
 package com.moonlightpixels.jrpg.internal.inject;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.moonlightpixels.jrpg.config.internal.ConfigurationHandler;
@@ -42,15 +38,6 @@ public final class GraphicsModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public AssetManager provideAssetManager() {
-        final AssetManager assetManager = new AssetManager();
-        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-
-        return assetManager;
-    }
-
-    @Provides
-    @Singleton
     @Named(FRONTEND)
     public GraphicsContext provideFrontEndGraphicsContext(final SpriteBatch spriteBatch) {
         return new DefaultGraphicsContext(
@@ -67,7 +54,7 @@ public final class GraphicsModule extends AbstractModule {
         return new DefaultGraphicsContext(
             new OrthographicCamera(resolutionWidth, resolutionHeight),
             spriteBatch,
-            false
+            true
         );
     }
 

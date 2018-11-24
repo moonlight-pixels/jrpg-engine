@@ -16,7 +16,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-@SuppressFBWarnings(justification = "Generated code")
+@SuppressFBWarnings
 public final class Party {
     @Getter
     private final int minimumSize;

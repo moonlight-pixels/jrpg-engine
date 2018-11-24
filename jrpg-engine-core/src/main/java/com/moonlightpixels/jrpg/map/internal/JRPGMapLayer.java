@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -59,10 +60,16 @@ final class JRPGMapLayer {
         sortActors();
     }
 
-    void render() {
+    void render(final GraphicsContext graphicsContext) {
+        graphicsContext.getSpriteBatch().begin();
         backgroundLayers.forEach(mapRenderer::renderTileLayer);
+        graphicsContext.getSpriteBatch().end();
+
         stage.draw();
+
+        graphicsContext.getSpriteBatch().begin();
         foregroundLayers.forEach(mapRenderer::renderTileLayer);
+        graphicsContext.getSpriteBatch().end();
     }
 
     private void sortActors() {
