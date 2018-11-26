@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.moonlightpixels.jrpg.map.Direction;
 import com.moonlightpixels.jrpg.map.JRPGMap;
 import com.moonlightpixels.jrpg.map.TileCoordinate;
+import com.moonlightpixels.jrpg.map.character.internal.CharacterCommand;
+import com.moonlightpixels.jrpg.map.character.internal.CharacterController;
 import com.moonlightpixels.jrpg.map.internal.MapActor;
 import com.moonlightpixels.jrpg.tween.Vector2Tween;
 import lombok.Getter;
@@ -19,6 +21,7 @@ public class CharacterActor extends MapActor<CharacterAnimation> {
     private static final float DEFAULT_SPEED = 0.3f;
 
     private final StateMachine<CharacterActor, CharacterState> stateMachine;
+    private CharacterController controller;
     private Direction direction;
     private final int tilesCoveredPerWalkCycle;
     private float x;
@@ -26,21 +29,24 @@ public class CharacterActor extends MapActor<CharacterAnimation> {
     @Getter
     @Setter
     private float timeToTraverseTile = DEFAULT_SPEED;
+    @Getter
+    private TileCoordinate destination;
     private Vector2Tween walkingTween;
 
     /**
      * Creates a new CharacterActor.
-     *
+     *  @param position Position on the Map
      * @param map Reference to the Map this actor is being placed on.
      * @param animationSet AnimationSet used by ths actor
-     * @param position Position on the Map
+     * @param controller Controller for character
      * @param initialDirection Direction this character is initially facing
      */
-    public CharacterActor(final JRPGMap map,
+    public CharacterActor(final TileCoordinate position, final JRPGMap map,
                           final CharacterAnimationSet animationSet,
-                          final TileCoordinate position,
+                          final CharacterController controller,
                           final Direction initialDirection) {
         super(map, animationSet, position);
+        this.controller = controller;
         direction = initialDirection;
         x = calculateXForCenteredOnTile(position);
         y = map.getTileCoordinateXY(position).y;
@@ -59,10 +65,6 @@ public class CharacterActor extends MapActor<CharacterAnimation> {
         return y;
     }
 
-    protected final void walk() {
-        stateMachine.changeState(CharacterState.Walking);
-    }
-
     @Override
     protected final void actInternal(final float delta) {
         getWalkingTween().ifPresent(tween -> tween.update(delta));
@@ -77,6 +79,37 @@ public class CharacterActor extends MapActor<CharacterAnimation> {
         return Optional.ofNullable(walkingTween);
     }
 
+    private boolean nextDestination() {
+        if (!getMap().isOpen(getPosition().getAdjacent(direction))) {
+            return false;
+        }
+        destination = getPosition().getAdjacent(direction);
+        walkingTween = Vector2Tween.builder()
+            .start(
+                new Vector2(
+                    calculateXForCenteredOnTile(getPosition()),
+                    getMap().getTileCoordinateXY(getPosition()).y
+                )
+            )
+            .end(
+                new Vector2(
+                    calculateXForCenteredOnTile(destination),
+                    getMap().getTileCoordinateXY(destination).y
+                )
+            )
+            .totalTweenTime(timeToTraverseTile)
+            .build();
+        return true;
+    }
+
+    private void arriveAtDestination() {
+        setPosition(destination);
+        x = calculateXForCenteredOnTile(getPosition());
+        y = getMap().getTileCoordinateXY(getPosition()).y;
+        destination = null;
+        walkingTween = null;
+    }
+
     private enum CharacterState implements State<CharacterActor> {
         Standing {
             @Override
@@ -86,47 +119,53 @@ public class CharacterActor extends MapActor<CharacterAnimation> {
                     1.0f
                 );
             }
+
+            @Override
+            public void update(final CharacterActor entity) {
+                CharacterCommand command = entity.controller.getNextCommand(entity);
+                if (command != CharacterCommand.Stand) {
+                    entity.direction = CharacterCommand.getDirectionForWalkCommand(command);
+                    entity.stateMachine.changeState(Walking);
+                }
+            }
         },
         Walking {
             @Override
             public void enter(final CharacterActor entity) {
-                entity.setAnimation(
-                    CharacterAnimation.getWalkingAnimation(entity.direction),
-                    entity.getWalkAnimationDuration()
-                );
-                entity.walkingTween = Vector2Tween.builder()
-                    .start(
-                        new Vector2(
-                            entity.calculateXForCenteredOnTile(entity.getPosition()),
-                            entity.getMap().getTileCoordinateXY(entity.getPosition()).y
-                        )
-                    )
-                    .end(
-                        new Vector2(
-                            entity.calculateXForCenteredOnTile(entity.getPosition().getAdjacent(entity.direction)),
-                            entity.getMap().getTileCoordinateXY(entity.getPosition().getAdjacent(entity.direction)).y
-                        )
-                    )
-                    .totalTweenTime(entity.getWalkAnimationDuration())
-                    .build();
+                if (attemptNextTile(entity)) {
+                    entity.setAnimation(
+                        CharacterAnimation.getWalkingAnimation(entity.direction),
+                        entity.getWalkAnimationDuration()
+                    );
+                }
             }
 
             @Override
             public void update(final CharacterActor entity) {
                 if (entity.walkingTween.isComplete()) {
-                    entity.stateMachine.changeState(Standing);
+                    entity.arriveAtDestination();
+
+                    CharacterCommand command = entity.controller.getNextCommand(entity);
+                    if (command == CharacterCommand.Stand) {
+                        entity.stateMachine.changeState(Standing);
+                    } else if (command == CharacterCommand.getWalkByDirection(entity.direction)) {
+                        attemptNextTile(entity);
+                    } else {
+                        entity.direction = CharacterCommand.getDirectionForWalkCommand(command);
+                        entity.stateMachine.changeState(Walking);
+                    }
                 } else {
                     entity.x = entity.walkingTween.getValue().x;
                     entity.y = entity.walkingTween.getValue().y;
                 }
             }
 
-            @Override
-            public void exit(final CharacterActor entity) {
-                entity.setPosition(entity.getPosition().getAdjacent(entity.direction));
-                entity.x = entity.calculateXForCenteredOnTile(entity.getPosition());
-                entity.y = entity.getMap().getTileCoordinateXY(entity.getPosition()).y;
-                entity.walkingTween = null;
+            private boolean attemptNextTile(final CharacterActor entity) {
+                if (!entity.nextDestination()) {
+                    entity.stateMachine.changeState(CharacterState.Standing);
+                    return false;
+                }
+                return true;
             }
         };
 

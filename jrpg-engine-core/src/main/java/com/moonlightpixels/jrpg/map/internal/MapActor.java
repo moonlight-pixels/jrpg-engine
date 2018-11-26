@@ -40,6 +40,7 @@ public abstract class MapActor<T extends AnimationSet.Type> extends Actor {
 
     protected final void setAnimation(final T animationType, final float animationDuration) {
         animation = animationSet.getAnimation(animationType, animationDuration);
+        timeInAnimation = 0f;
     }
 
     public final float getCenterX() {

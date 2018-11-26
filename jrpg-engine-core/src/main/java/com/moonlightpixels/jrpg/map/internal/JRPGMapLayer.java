@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
+import com.moonlightpixels.jrpg.map.TileCoordinate;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -78,6 +79,12 @@ final class JRPGMapLayer {
        for (int i = 0; i < actors.size; i++) {
             actors.get(i).setZIndex(i);
        }
+    }
+
+    boolean isOpen(final TileCoordinate tileCoordinate) {
+        return getCollisionLayer()
+            .map(tiledMapTileLayer -> tiledMapTileLayer.getCell(tileCoordinate.getX(), tileCoordinate.getY()) == null)
+            .orElse(true);
     }
 
     private static class ActorRenderOrderComparator implements Comparator<Actor>, Serializable {

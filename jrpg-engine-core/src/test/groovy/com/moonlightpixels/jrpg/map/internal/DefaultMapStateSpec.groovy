@@ -18,6 +18,7 @@ import com.moonlightpixels.jrpg.map.TileCoordinate
 import com.moonlightpixels.jrpg.map.character.CharacterAnimation
 import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet
 import com.moonlightpixels.jrpg.map.character.internal.CharacterAnimationSetRegistry
+import com.moonlightpixels.jrpg.map.character.internal.PlayerInputCharacterController
 import spock.lang.Specification
 
 class DefaultMapStateSpec extends Specification {
@@ -73,7 +74,8 @@ class DefaultMapStateSpec extends Specification {
             mapRegistry,
             characterAnimationSetRegistry,
             mapFactory,
-            gameStateHolder
+            gameStateHolder,
+            new PlayerInputCharacterController()
         )
     }
 

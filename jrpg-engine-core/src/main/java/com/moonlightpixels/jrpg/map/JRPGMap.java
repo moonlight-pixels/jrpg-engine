@@ -52,4 +52,12 @@ public interface JRPGMap {
      * @param actor MapActor to add
      */
     void addActor(MapActor<?> actor);
+
+    /**
+     * Returns true if the Tile is currently passable and unoccupied.
+     *
+     * @param tileCoordinate Coordinate of tile to check
+     * @return true if the Tile is currently passable and unoccupied
+     */
+    boolean isOpen(TileCoordinate tileCoordinate);
 }

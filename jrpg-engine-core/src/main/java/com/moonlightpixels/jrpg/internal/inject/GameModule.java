@@ -20,6 +20,7 @@ import com.moonlightpixels.jrpg.internal.GameStateHolder;
 import com.moonlightpixels.jrpg.internal.JRPG;
 import com.moonlightpixels.jrpg.map.JRPGMap;
 import com.moonlightpixels.jrpg.map.JRPGMapFactory;
+import com.moonlightpixels.jrpg.map.character.internal.PlayerInputCharacterController;
 import com.moonlightpixels.jrpg.map.internal.DefaultJRPGMap;
 import com.moonlightpixels.jrpg.map.internal.DefaultMapState;
 import com.moonlightpixels.jrpg.map.internal.MapState;
@@ -53,6 +54,7 @@ public final class GameModule extends AbstractModule {
         bind(UserInterface.class).to(DefaultUserInterface.class).asEagerSingleton();
         bind(GameStateHolder.class).asEagerSingleton();
         bind(InputSystem.class).to(DefaultInputSystem.class).asEagerSingleton();
+        bind(PlayerInputCharacterController.class).asEagerSingleton();
 
         // standard front end actions
         bind(ExitGameAction.class);

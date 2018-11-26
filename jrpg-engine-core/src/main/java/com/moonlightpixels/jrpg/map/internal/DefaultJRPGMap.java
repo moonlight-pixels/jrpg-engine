@@ -13,6 +13,7 @@ import com.moonlightpixels.jrpg.internal.gdx.AssetUtil;
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext;
 import com.moonlightpixels.jrpg.internal.inject.GraphicsModule;
 import com.moonlightpixels.jrpg.map.JRPGMap;
+import com.moonlightpixels.jrpg.map.TileCoordinate;
 import com.moonlightpixels.jrpg.map.TiledProps;
 
 import javax.inject.Inject;
@@ -61,6 +62,11 @@ public final class DefaultJRPGMap implements JRPGMap {
         );
         JRPGMapLayer mapLayer = mapLayers.get(actor.getPosition().getMapLayer());
         mapLayer.addActor(actor);
+    }
+
+    @Override
+    public boolean isOpen(final TileCoordinate tileCoordinate) {
+        return mapLayers.get(tileCoordinate.getMapLayer()).isOpen(tileCoordinate);
     }
 
     private void buildMapLayers() {

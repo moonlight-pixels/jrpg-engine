@@ -15,6 +15,7 @@ import com.moonlightpixels.jrpg.map.JRPGMap;
 import com.moonlightpixels.jrpg.map.JRPGMapFactory;
 import com.moonlightpixels.jrpg.map.character.CharacterActor;
 import com.moonlightpixels.jrpg.map.character.internal.CharacterAnimationSetRegistry;
+import com.moonlightpixels.jrpg.map.character.internal.PlayerInputCharacterController;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,6 +27,7 @@ public final class DefaultMapState implements MapState {
     private final CharacterAnimationSetRegistry characterAnimationSetRegistry;
     private final JRPGMapFactory mapFactory;
     private final GameStateHolder gameStateHolder;
+    private final PlayerInputCharacterController playerInputCharacterController;
     private GameState gameState;
     private JRPGMap map;
 
@@ -35,22 +37,26 @@ public final class DefaultMapState implements MapState {
                            final MapRegistry mapRegistry,
                            final CharacterAnimationSetRegistry characterAnimationSetRegistry,
                            final JRPGMapFactory mapFactory,
-                           final GameStateHolder gameStateHolder) {
+                           final GameStateHolder gameStateHolder,
+                           final PlayerInputCharacterController playerInputCharacterController) {
         this.graphicsContext = graphicsContext;
         this.gdx = gdx;
         this.mapRegistry = mapRegistry;
         this.characterAnimationSetRegistry = characterAnimationSetRegistry;
         this.mapFactory = mapFactory;
         this.gameStateHolder = gameStateHolder;
+        this.playerInputCharacterController = playerInputCharacterController;
     }
 
     @Override
     public void enter(final JRPG entity) {
         gameState = gameStateHolder.getGameState();
         map = mapRegistry.getMap(gameState.getLocation().getMap()).load(mapFactory);
-        CharacterActor hero = new CharacterActor(map,
-            characterAnimationSetRegistry.getCharacterAnimationSet(gameState.getHeroAnimationSet()),
+        CharacterActor hero = new CharacterActor(
             gameState.getLocation().getTileCoordinate(),
+            map,
+            characterAnimationSetRegistry.getCharacterAnimationSet(gameState.getHeroAnimationSet()),
+            playerInputCharacterController,
             Direction.DOWN
         );
         map.addActor(hero);
@@ -76,16 +82,16 @@ public final class DefaultMapState implements MapState {
 
     @Override
     public boolean handleControlEvent(final ControlEvent event) {
-        return false;
+        return playerInputCharacterController.handleControlEvent(event);
     }
 
     @Override
     public boolean handleClickEvent(final ClickEvent event) {
-        return false;
+        return playerInputCharacterController.handleClickEvent(event);
     }
 
     @Override
     public void setInputScheme(final InputScheme inputScheme) {
-
+        playerInputCharacterController.setInputScheme(inputScheme);
     }
 }
