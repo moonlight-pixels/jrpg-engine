@@ -4,14 +4,14 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
     }
-    dependencies { classpath 'io.franzbecker:gradle-lombok:1.11' }
+    dependencies { classpath 'io.franzbecker:gradle-lombok:1.14' }
 }
 import io.franzbecker.gradle.lombok.task.DelombokTask
 
 apply plugin: 'io.franzbecker.gradle-lombok'
 
 lombok {
-    version = '1.18.0'
+    version = '1.18.4'
     sha256 = ''
 }
 
@@ -21,6 +21,9 @@ lombok {
 //    sourceSets.main.java.srcDirs.each {
 //        inputs.dir(it)
 //        args(it, "-d", outputDir)
+//    }
+//    doFirst {
+//        outputDir.deleteDir()
 //    }
 //}
 //
