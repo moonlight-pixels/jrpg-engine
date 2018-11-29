@@ -1,9 +1,8 @@
 package com.moonlightpixels.jrpg.combat.stats;
 
-import lombok.EqualsAndHashCode;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.SuperBuilder;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -12,8 +11,7 @@ import java.util.function.Function;
  * A Stat is a property of a combat entity (players and enemies) required for the combat simulation. Stats come in two
  * types, {@link BaseStat}s and {@link CompositeStat}s.
  */
-@SuperBuilder
-@EqualsAndHashCode
+@Data
 public abstract class Stat {
     @Getter
     @NonNull
@@ -60,7 +58,7 @@ public abstract class Stat {
     private int calculateModifiedValue(final StatHolder subject) {
         return subject.getStatModifiers(key).stream()
             .reduce(Function.identity(), Function::andThen)
-            .apply(subject.getBaseValue(key));
+            .apply(getBaseValue(subject));
     }
 
     public interface Key { }
