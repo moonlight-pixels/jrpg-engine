@@ -22,9 +22,10 @@ public final class CompositeStat extends Stat {
                           final String name,
                           final String shortName,
                           final Integer cap,
+                          final Integer minValue,
                           @Singular final List<Stat> inputs,
                           @NonNull final Function<Map<Key, Integer>, Integer> statFunction) {
-        super(key, name, shortName, cap);
+        super(key, name, shortName, cap, minValue);
         this.inputs = inputs;
         this.statFunction = statFunction;
     }

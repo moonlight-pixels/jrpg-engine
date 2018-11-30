@@ -54,17 +54,11 @@ class CompositeStatSpec extends Specification {
 
     void 'getValue() correctly applies modifiers'() {
         setup:
-        Function<Integer, Integer> modifier = new Function<Integer, Integer>() {
-            @Override
-            Integer apply(final Integer a) {
-                return a + 10
-            }
-        }
         statHolder.getBaseValue(TestStats.STR) >> 10
         statHolder.getBaseValue(TestStats.SPD) >> 12
         statHolder.getStatModifiers(TestStats.STR) >> []
         statHolder.getStatModifiers(TestStats.SPD) >> []
-        statHolder.getStatModifiers(TestStats.ATH) >> [ modifier ]
+        statHolder.getStatModifiers(TestStats.ATH) >> [ new StatAdditon(TestStats.ATH, 10) ]
 
         expect:
         athleticismStat.getValue(statHolder) == 32

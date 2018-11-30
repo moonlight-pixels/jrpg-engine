@@ -4,7 +4,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import java.util.List;
-import java.util.function.Function;
 
 public interface StatHolder {
     /**
@@ -38,7 +37,7 @@ public interface StatHolder {
      * @param stat identiying requested stat
      * @return List of modifiers to this stat.
      */
-    default List<Function<Integer, Integer>> getStatModifiers(Stat.Key stat) {
+    default List<StatModifier> getStatModifiers(Stat.Key stat) {
         return Lists.newLinkedList(Iterables.concat(getStatAdditions(stat), getStatMultipliers(stat)));
     }
 }

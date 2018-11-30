@@ -11,8 +11,9 @@ public final class BaseStat extends Stat {
     private BaseStat(final Key key,
                      final String name,
                      final String shortName,
-                     final Integer cap) {
-        super(key, name, shortName, cap);
+                     final Integer cap,
+                     final Integer minValue) {
+        super(key, name, shortName, cap, minValue);
     }
 
     @Override

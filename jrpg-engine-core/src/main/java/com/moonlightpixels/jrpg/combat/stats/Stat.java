@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -26,6 +27,8 @@ public abstract class Stat {
     private final String shortName;
 
     private final Integer cap;
+
+    private final Integer minValue;
 
     /**
      * Returns the base value of this Stat, before applying modifiers.
@@ -56,7 +59,7 @@ public abstract class Stat {
     }
 
     private int calculateModifiedValue(final StatHolder subject) {
-        return subject.getStatModifiers(key).stream()
+        return new LinkedList<Function<Integer, Integer>>(subject.getStatModifiers(key)).stream()
             .reduce(Function.identity(), Function::andThen)
             .apply(getBaseValue(subject));
     }

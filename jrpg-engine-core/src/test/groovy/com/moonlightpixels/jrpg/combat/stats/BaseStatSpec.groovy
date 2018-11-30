@@ -2,8 +2,6 @@ package com.moonlightpixels.jrpg.combat.stats
 
 import spock.lang.Specification
 
-import java.util.function.Function
-
 class BaseStatSpec extends Specification {
     StatHolder statHolder
 
@@ -27,14 +25,8 @@ class BaseStatSpec extends Specification {
 
     void 'getValue() correctly applies modifiers'() {
         setup:
-        Function<Integer, Integer> modifier = new Function<Integer, Integer>() {
-            @Override
-            Integer apply(final Integer a) {
-                return a + 10
-            }
-        }
         statHolder.getBaseValue(TestStats.STR) >> 10
-        statHolder.getStatModifiers(TestStats.STR) >> [ modifier ]
+        statHolder.getStatModifiers(TestStats.STR) >> [ new StatAdditon(TestStats.STR, 10) ]
         Stat stat = BaseStat.builder()
             .key(TestStats.STR)
             .name('Strength')
@@ -48,14 +40,8 @@ class BaseStatSpec extends Specification {
 
     void 'getValue() caps value when it would exceed it'() {
         setup:
-        Function<Integer, Integer> modifier = new Function<Integer, Integer>() {
-            @Override
-            Integer apply(final Integer a) {
-                return a + 10
-            }
-        }
         statHolder.getBaseValue(TestStats.STR) >> 10
-        statHolder.getStatModifiers(TestStats.STR) >> [ modifier ]
+        statHolder.getStatModifiers(TestStats.STR) >> [ new StatAdditon(TestStats.STR, 10) ]
         Stat stat = BaseStat.builder()
             .key(TestStats.STR)
             .name('Strength')
