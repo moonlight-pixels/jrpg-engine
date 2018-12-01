@@ -15,7 +15,7 @@ class BaseStatSpec extends Specification {
         statHolder.getStatModifiers(TestStats.STR) >> []
         Stat stat = BaseStat.builder()
             .key(TestStats.STR)
-            .name('Strength')
+            .name('STR')
             .shortName('STR')
             .build()
 
@@ -29,7 +29,7 @@ class BaseStatSpec extends Specification {
         statHolder.getStatModifiers(TestStats.STR) >> [ new StatAdditon(TestStats.STR, 10) ]
         Stat stat = BaseStat.builder()
             .key(TestStats.STR)
-            .name('Strength')
+            .name('STR')
             .shortName('STR')
             .build()
 
@@ -44,7 +44,7 @@ class BaseStatSpec extends Specification {
         statHolder.getStatModifiers(TestStats.STR) >> [ new StatAdditon(TestStats.STR, 10) ]
         Stat stat = BaseStat.builder()
             .key(TestStats.STR)
-            .name('Strength')
+            .name('STR')
             .shortName('STR')
             .cap(15)
             .build()
@@ -57,7 +57,7 @@ class BaseStatSpec extends Specification {
     void 'builder throws null pointer exception if key is omitted'() {
         when:
         BaseStat.builder()
-            .name('Strength')
+            .name('STR')
             .shortName('STR')
             .build()
 
@@ -80,7 +80,7 @@ class BaseStatSpec extends Specification {
         when:
         BaseStat.builder()
             .key(TestStats.STR)
-            .name('Strength')
+            .name('STR')
             .build()
 
         then:

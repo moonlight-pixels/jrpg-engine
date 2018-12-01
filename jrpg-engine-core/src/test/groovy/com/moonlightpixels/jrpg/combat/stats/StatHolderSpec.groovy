@@ -31,7 +31,7 @@ class StatHolderSpec extends Specification {
         }
         stat = BaseStat.builder()
             .key(TestStats.STR)
-            .name('Strength')
+            .name('STR')
             .shortName('STR')
             .build()
     }
