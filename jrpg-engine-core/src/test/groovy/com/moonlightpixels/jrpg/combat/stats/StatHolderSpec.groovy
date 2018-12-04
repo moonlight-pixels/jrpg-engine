@@ -4,8 +4,8 @@ import spock.lang.Specification
 
 class StatHolderSpec extends Specification {
     Map<Stat.Key, Integer> statValues
-    List<StatAdditon> additons
-    List<StatMutiplier> mutipliers
+    List<StatAddition> additons
+    List<StatMultiplier> mutipliers
     StatHolder statHolder
     Stat stat
 
@@ -20,12 +20,12 @@ class StatHolderSpec extends Specification {
             }
 
             @Override
-            List<StatAdditon> getStatAdditions(final Stat.Key stat) {
+            List<StatAddition> getStatAdditions(final Stat.Key stat) {
                 return additons
             }
 
             @Override
-            List<StatMutiplier> getStatMultipliers(final Stat.Key stat) {
+            List<StatMultiplier> getStatMultipliers(final Stat.Key stat) {
                 return mutipliers
             }
         }
@@ -39,8 +39,8 @@ class StatHolderSpec extends Specification {
     void 'stat modifiers are applied in correct order'() {
         setup:
         statValues[TestStats.STR] = 10
-        additons << new StatAdditon(TestStats.STR, 2)
-        mutipliers << new StatMutiplier(TestStats.STR, 1.5f)
+        additons << new StatAddition(TestStats.STR, 2)
+        mutipliers << new StatMultiplier(TestStats.STR, 1.5f)
 
         expect:
         stat.getValue(statHolder) == 18

@@ -12,8 +12,14 @@ class CastSpec extends Specification {
 
     void setup() {
         location = new Location(Mock(MapDefinition.Key), new TileCoordinate(1, 1))
-        player1 = PlayerCharacter.builder().key(Mock(PlayerCharacter.Key)).build()
-        player2 = PlayerCharacter.builder().key(Mock(PlayerCharacter.Key)).build()
+        player1 = PlayerCharacter.builder()
+            .key(Mock(PlayerCharacter.Key))
+            .equipmentSlots([])
+            .build()
+        player2 = PlayerCharacter.builder()
+            .key(Mock(PlayerCharacter.Key))
+            .equipmentSlots([])
+            .build()
     }
 
     void 'isValid() checks for an active party'() {

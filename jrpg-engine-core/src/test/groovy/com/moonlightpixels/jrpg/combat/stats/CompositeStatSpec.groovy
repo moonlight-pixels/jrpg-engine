@@ -58,7 +58,7 @@ class CompositeStatSpec extends Specification {
         statHolder.getBaseValue(TestStats.SPD) >> 12
         statHolder.getStatModifiers(TestStats.STR) >> []
         statHolder.getStatModifiers(TestStats.SPD) >> []
-        statHolder.getStatModifiers(TestStats.ATH) >> [ new StatAdditon(TestStats.ATH, 10) ]
+        statHolder.getStatModifiers(TestStats.ATH) >> [ new StatAddition(TestStats.ATH, 10) ]
 
         expect:
         athleticismStat.getValue(statHolder) == 32

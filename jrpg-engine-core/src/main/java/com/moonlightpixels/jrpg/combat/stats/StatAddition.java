@@ -5,7 +5,7 @@ import lombok.Value;
 
 @EqualsAndHashCode(callSuper = true)
 @Value
-public final class StatAdditon extends StatModifier {
+public final class StatAddition extends StatModifier {
     private final int addition;
 
     /**
@@ -14,7 +14,7 @@ public final class StatAdditon extends StatModifier {
      * @param stat stat to modify
      * @param addition amount to add (or subtract)
      */
-    public StatAdditon(final Stat.Key stat, final int addition) {
+    public StatAddition(final Stat.Key stat, final int addition) {
         super(stat);
         this.addition = addition;
     }

@@ -49,6 +49,7 @@ class GameStateDataProvider {
             .key(key)
             .name(key.toString())
             .animationSet(new AnimationKey(id: key.toString()))
+            .equipmentSlots([])
             .build()
 
         return playerCharacter

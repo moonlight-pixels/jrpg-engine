@@ -1,6 +1,7 @@
 package com.moonlightpixels.jrpg.config;
 
 import com.moonlightpixels.jrpg.animation.AnimationSetProvider;
+import com.moonlightpixels.jrpg.inventory.Item;
 import com.moonlightpixels.jrpg.map.MapDefinition;
 import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet;
 
@@ -23,4 +24,11 @@ public interface ContentRegistry {
      * @param map MapDefinition
      */
     void register(MapDefinition map);
+
+    /**
+     * Register an item for the Inventory System.
+     *
+     * @param item Item
+     */
+    void register(Item item);
 }

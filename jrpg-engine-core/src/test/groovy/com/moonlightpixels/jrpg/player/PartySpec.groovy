@@ -12,8 +12,14 @@ class PartySpec extends Specification {
 
     void setup() {
         location = new Location(Mock(MapDefinition.Key), new TileCoordinate(1, 1))
-        player1 = PlayerCharacter.builder().key(Mock(PlayerCharacter.Key)).build()
-        player2 = PlayerCharacter.builder().key(Mock(PlayerCharacter.Key)).build()
+        player1 = PlayerCharacter.builder()
+            .key(Mock(PlayerCharacter.Key))
+            .equipmentSlots([])
+            .build()
+        player2 = PlayerCharacter.builder()
+            .key(Mock(PlayerCharacter.Key))
+            .equipmentSlots([])
+            .build()
     }
 
     void 'attempting to create party with minimum size < 1 throws IllegalArgumentException'() {

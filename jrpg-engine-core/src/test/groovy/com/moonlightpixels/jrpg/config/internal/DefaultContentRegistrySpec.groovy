@@ -3,6 +3,7 @@ package com.moonlightpixels.jrpg.config.internal
 import com.badlogic.gdx.assets.AssetManager
 import com.moonlightpixels.jrpg.animation.AnimationSetProvider
 import com.moonlightpixels.jrpg.config.ContentRegistry
+import com.moonlightpixels.jrpg.inventory.internal.ItemRegistry
 import com.moonlightpixels.jrpg.map.JRPGMap
 import com.moonlightpixels.jrpg.map.MapDefinition
 import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet
@@ -14,13 +15,15 @@ class DefaultContentRegistrySpec extends Specification {
     AssetManager assetManager
     MapRegistry mapRegistry
     CharacterAnimationSetRegistry characterAnimationSetRegistry
+    ItemRegistry itemRegistry
     ContentRegistry contentRegistry
 
     void setup() {
         assetManager = Mock()
         mapRegistry = new MapRegistry()
         characterAnimationSetRegistry = new CharacterAnimationSetRegistry(assetManager)
-        contentRegistry = new DefaultContentRegistry(characterAnimationSetRegistry, mapRegistry)
+        itemRegistry = new ItemRegistry()
+        contentRegistry = new DefaultContentRegistry(characterAnimationSetRegistry, mapRegistry, itemRegistry)
     }
 
     void 'registering a MapDefinition adds it to the correct registry'() {

@@ -14,7 +14,10 @@ class DefaultGameStateSpec extends Specification {
     private PlayerCharacter playerCharacter
 
     void setup() {
-        playerCharacter = PlayerCharacter.builder().key(Mock(PlayerCharacter.Key)).build()
+        playerCharacter = PlayerCharacter.builder()
+            .key(Mock(PlayerCharacter.Key))
+            .equipmentSlots([])
+            .build()
     }
 
     void 'getLocation() returns location of the active party'() {

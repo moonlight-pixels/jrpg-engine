@@ -5,7 +5,7 @@ import lombok.Value;
 
 @EqualsAndHashCode(callSuper = true)
 @Value
-public final class StatMutiplier extends StatModifier {
+public final class StatMultiplier extends StatModifier {
     private final float multiplier;
 
     /**
@@ -14,7 +14,7 @@ public final class StatMutiplier extends StatModifier {
      * @param stat stat to modify
      * @param multiplier amount to multiply stat value by
      */
-    public StatMutiplier(final Stat.Key stat, final float multiplier) {
+    public StatMultiplier(final Stat.Key stat, final float multiplier) {
         super(stat);
         this.multiplier = multiplier;
     }

@@ -26,7 +26,7 @@ class BaseStatSpec extends Specification {
     void 'getValue() correctly applies modifiers'() {
         setup:
         statHolder.getBaseValue(TestStats.STR) >> 10
-        statHolder.getStatModifiers(TestStats.STR) >> [ new StatAdditon(TestStats.STR, 10) ]
+        statHolder.getStatModifiers(TestStats.STR) >> [ new StatAddition(TestStats.STR, 10) ]
         Stat stat = BaseStat.builder()
             .key(TestStats.STR)
             .name('STR')
@@ -41,7 +41,7 @@ class BaseStatSpec extends Specification {
     void 'getValue() caps value when it would exceed it'() {
         setup:
         statHolder.getBaseValue(TestStats.STR) >> 10
-        statHolder.getStatModifiers(TestStats.STR) >> [ new StatAdditon(TestStats.STR, 10) ]
+        statHolder.getStatModifiers(TestStats.STR) >> [ new StatAddition(TestStats.STR, 10) ]
         Stat stat = BaseStat.builder()
             .key(TestStats.STR)
             .name('STR')

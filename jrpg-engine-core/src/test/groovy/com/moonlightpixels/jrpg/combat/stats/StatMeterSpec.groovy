@@ -25,7 +25,7 @@ class StatMeterSpec extends Specification {
         StatMeter hp = new StatMeter(player, maxHP, maxHP.getValue(player))
 
         when:
-        modifiers << new StatAdditon(RequiredStats.MaxHP, 50)
+        modifiers << new StatAddition(RequiredStats.MaxHP, 50)
         hp.setValue(maxHP.getValue(player))
 
         then:

@@ -20,6 +20,7 @@ import com.moonlightpixels.jrpg.internal.gdx.GdxAIFacade;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
 import com.moonlightpixels.jrpg.internal.launch.GameLauncherFactory;
 import com.moonlightpixels.jrpg.internal.launch.ServiceLoaderGameLauncherFactory;
+import com.moonlightpixels.jrpg.inventory.internal.ItemRegistry;
 import com.moonlightpixels.jrpg.map.character.internal.CharacterAnimationSetRegistry;
 import com.moonlightpixels.jrpg.map.internal.MapRegistry;
 import com.moonlightpixels.jrpg.ui.standard.internal.DefaultMenuConfiguration;
@@ -48,6 +49,7 @@ public final class BaseModule extends AbstractModule {
 
         // content registries
         bind(CharacterAnimationSetRegistry.class).asEagerSingleton();
+        bind(ItemRegistry.class).asEagerSingleton();
         bind(MapRegistry.class).asEagerSingleton();
         bind(ContentRegistry.class).to(DefaultContentRegistry.class);
     }
