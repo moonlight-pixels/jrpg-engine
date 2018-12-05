@@ -16,7 +16,6 @@ class DefaultGameStateSpec extends Specification {
     void setup() {
         playerCharacter = PlayerCharacter.builder()
             .key(Mock(PlayerCharacter.Key))
-            .equipmentSlots([])
             .build()
     }
 

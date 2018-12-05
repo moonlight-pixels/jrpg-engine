@@ -4,6 +4,7 @@ import com.moonlightpixels.jrpg.animation.AnimationSetProvider;
 import com.moonlightpixels.jrpg.inventory.Item;
 import com.moonlightpixels.jrpg.map.MapDefinition;
 import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet;
+import com.moonlightpixels.jrpg.player.equipment.EquipmentSlot;
 
 /**
  * Register Game Content.
@@ -31,4 +32,11 @@ public interface ContentRegistry {
      * @param item Item
      */
     void register(Item item);
+
+    /**
+     * Registers the list of EquipmentSlots used by players.
+     *
+     * @param equipmentSlots EquipmentSlot to register
+     */
+    void registerEquimentSlots(EquipmentSlot... equipmentSlots);
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.moonlightpixels.jrpg.internal.graphics.GraphicsContext
+import com.moonlightpixels.jrpg.map.TileCoordinate
 import spock.lang.Specification
 
 class JRPGMapLayerSpec extends Specification {
@@ -83,5 +84,17 @@ class JRPGMapLayerSpec extends Specification {
 
         then:
         1 * root.removeActor(actor)
+    }
+
+    void 'isOpen() return true if there is no tile in collision layer, false otherwise'() {
+        setup:
+        TiledMapTileLayer collisionLayer = Mock(TiledMapTileLayer) {
+            getCell(1, 1) >> Mock(TiledMapTileLayer.Cell)
+        }
+        mapLayer.setCollisionLayer(collisionLayer)
+
+        expect:
+        mapLayer.isOpen(new TileCoordinate(0, 0))
+        !mapLayer.isOpen(new TileCoordinate(1, 1))
     }
 }

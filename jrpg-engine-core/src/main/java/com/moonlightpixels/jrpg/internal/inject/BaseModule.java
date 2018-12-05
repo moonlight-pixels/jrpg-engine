@@ -23,6 +23,7 @@ import com.moonlightpixels.jrpg.internal.launch.ServiceLoaderGameLauncherFactory
 import com.moonlightpixels.jrpg.inventory.internal.ItemRegistry;
 import com.moonlightpixels.jrpg.map.character.internal.CharacterAnimationSetRegistry;
 import com.moonlightpixels.jrpg.map.internal.MapRegistry;
+import com.moonlightpixels.jrpg.player.equipment.internal.EquipmentSlotConfig;
 import com.moonlightpixels.jrpg.ui.standard.internal.DefaultMenuConfiguration;
 import com.moonlightpixels.jrpg.ui.standard.internal.MenuConfigurationHandler;
 
@@ -51,6 +52,7 @@ public final class BaseModule extends AbstractModule {
         bind(CharacterAnimationSetRegistry.class).asEagerSingleton();
         bind(ItemRegistry.class).asEagerSingleton();
         bind(MapRegistry.class).asEagerSingleton();
+        bind(EquipmentSlotConfig.class).asEagerSingleton();
         bind(ContentRegistry.class).to(DefaultContentRegistry.class);
     }
 

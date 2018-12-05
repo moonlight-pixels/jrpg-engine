@@ -26,7 +26,7 @@ class NewGameActionSpec extends Specification {
         1 * configurationHandler.configureNewGame(_) >> { args ->
             GameState gameState = args[0] as GameState
             Party party = new Party(1, 1, new Location(Mock(MapDefinition.Key), new TileCoordinate(1, 1)))
-            party.addMember(PlayerCharacter.builder().key(Mock(PlayerCharacter.Key)).equipmentSlots([]).build())
+            party.addMember(PlayerCharacter.builder().key(Mock(PlayerCharacter.Key)).build())
             gameState.cast.configureParties(party)
         }
         1 * jrpg.toMap()
