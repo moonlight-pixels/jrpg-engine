@@ -35,6 +35,11 @@ final class PlayerStats implements StatHolder {
         return baseValues.get(key);
     }
 
+    @Override
+    public Type getHolderType() {
+        return Type.Player;
+    }
+
     public void setBaseValue(final Stat.Key key, final int value) {
         baseValues.put(key, value);
     }

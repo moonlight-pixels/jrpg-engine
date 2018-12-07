@@ -21,32 +21,39 @@ class StatSystemSpec extends Specification {
 
     void 'Can retrieve registered stats'() {
         when:
-        StatSystem statSystem = StatSystem.builder().stat(maxHp).stat(level).build()
+        StatSystem statSystem = new StatSystem()
+        statSystem.addStat(maxHp)
+        statSystem.addStat(level)
 
         then:
+        statSystem.isValid()
         statSystem.getStat(RequiredStats.MaxHP) == maxHp
         statSystem.getStat(RequiredStats.Level) == level
     }
 
-    void 'Builder throws IllegalArgumentException if MaxHp stat not provided.'() {
+    void 'StatSystem is not valid if MaxHp stat not provided.'() {
         when:
-        StatSystem.builder().stat(level).build()
+        StatSystem statSystem = new StatSystem()
+        statSystem.addStat(level)
 
         then:
-        thrown IllegalArgumentException
+        !statSystem.isValid()
     }
 
-    void 'Builder throws IllegalArgumentException if level stat not provided.'() {
+    void 'StatSystem is not valid  if level stat not provided.'() {
         when:
-        StatSystem.builder().stat(maxHp).build()
+        StatSystem statSystem = new StatSystem()
+        statSystem.addStat(maxHp)
 
         then:
-        thrown IllegalArgumentException
+        !statSystem.isValid()
     }
 
     void 'getStat throws IllegalArgumentException if stat doesnt exist'() {
         setup:
-        StatSystem statSystem = StatSystem.builder().stat(maxHp).stat(level).build()
+        StatSystem statSystem = new StatSystem()
+        statSystem.addStat(maxHp)
+        statSystem.addStat(level)
 
         when:
         statSystem.getStat(TestStats.STR)

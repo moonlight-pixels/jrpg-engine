@@ -20,6 +20,11 @@ class StatHolderSpec extends Specification {
             }
 
             @Override
+            StatHolder.Type getHolderType() {
+                return null
+            }
+
+            @Override
             List<StatAddition> getStatAdditions(final Stat.Key stat) {
                 return additons
             }

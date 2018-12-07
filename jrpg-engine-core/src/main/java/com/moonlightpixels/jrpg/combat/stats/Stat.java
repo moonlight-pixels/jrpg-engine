@@ -26,7 +26,7 @@ public abstract class Stat {
     @NonNull
     private final String shortName;
 
-    private final Integer cap;
+    private final StatCap cap;
 
     private final Integer minValue;
 
@@ -41,9 +41,9 @@ public abstract class Stat {
     /**
      * Get the cap for this stat, if one exists.
      *
-     * @return Optional Integer
+     * @return Optional StatCap
      */
-    public final Optional<Integer> getCap() {
+    public final Optional<StatCap> getCap() {
         return Optional.ofNullable(cap);
     }
 
@@ -55,7 +55,10 @@ public abstract class Stat {
      */
     public final int getValue(final StatHolder subject) {
         final int modifiedValue = calculateModifiedValue(subject);
-        return getCap().map(maxValue -> Math.min(maxValue, modifiedValue)).orElse(modifiedValue);
+        return getCap()
+            .filter(cap -> cap.appliesTo(subject))
+            .map(cap -> Math.min(cap.getCap(), modifiedValue))
+            .orElse(modifiedValue);
     }
 
     private int calculateModifiedValue(final StatHolder subject) {

@@ -1,6 +1,7 @@
 package com.moonlightpixels.jrpg.config;
 
 import com.moonlightpixels.jrpg.GameState;
+import com.moonlightpixels.jrpg.combat.stats.StatSystem;
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
 import com.moonlightpixels.jrpg.ui.UiStyle;
 import com.moonlightpixels.jrpg.ui.standard.MenuConfiguration;
@@ -57,6 +58,14 @@ public interface JRPGConfiguration {
      * @return Refernce to this configuration.
      */
     JRPGConfiguration newGame(Consumer<GameState> gameStateConsumer);
+
+    /**
+     * Configureshe StatSystem.
+     *
+     * @param statSystemConsumer Consumer that will configure the StatSystem
+     * @return Refernce to this configuration.
+     */
+    JRPGConfiguration stats(Consumer<StatSystem> statSystemConsumer);
 
     /**
      * Configures Content Registry.

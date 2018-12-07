@@ -21,7 +21,7 @@ public final class CompositeStat extends Stat {
     private CompositeStat(final Key key,
                           final String name,
                           final String shortName,
-                          final Integer cap,
+                          final StatCap cap,
                           final Integer minValue,
                           @Singular final List<Stat> inputs,
                           @NonNull final Function<Map<Key, Integer>, Integer> statFunction) {
@@ -39,5 +39,29 @@ public final class CompositeStat extends Stat {
                         stat -> stat.getValue(subject))
                 )
         );
+    }
+
+    public static final class CompositeStatBuilder {
+        /**
+         * Adds a stat cap tha applies to all holder types.
+         *
+         * @param cap capped Value
+         * @return this builder
+         */
+        public CompositeStatBuilder cap(final int cap) {
+            this.cap = new StatCap(cap, StatHolder.Type.Player, StatHolder.Type.Enemy);
+            return this;
+        }
+
+        /**
+         * Adds a stat cap.
+         *
+         * @param cap capped Value
+         * @return this builder
+         */
+        public CompositeStatBuilder cap(final StatCap cap) {
+            this.cap = cap;
+            return this;
+        }
     }
 }

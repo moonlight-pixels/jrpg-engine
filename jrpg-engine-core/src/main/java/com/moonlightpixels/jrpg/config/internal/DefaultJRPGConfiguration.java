@@ -2,6 +2,7 @@ package com.moonlightpixels.jrpg.config.internal;
 
 import com.google.common.base.Preconditions;
 import com.moonlightpixels.jrpg.GameState;
+import com.moonlightpixels.jrpg.combat.stats.StatSystem;
 import com.moonlightpixels.jrpg.config.ContentRegistry;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
 import com.moonlightpixels.jrpg.config.LaunchConfig;
@@ -19,6 +20,7 @@ public final class DefaultJRPGConfiguration implements JRPGConfiguration, Config
     private final List<Consumer<FrontEndConfig>> frontEndConsumers = new LinkedList<>();
     private final List<Consumer<MenuConfiguration>> menuConsumers = new LinkedList<>();
     private final List<Consumer<GameState>> gameStateConsumers = new LinkedList<>();
+    private final List<Consumer<StatSystem>> statSystemConsumers = new LinkedList<>();
     private final List<Consumer<ContentRegistry>> contentRegistryConsumers = new LinkedList<>();
 
     @Override
@@ -62,6 +64,12 @@ public final class DefaultJRPGConfiguration implements JRPGConfiguration, Config
     }
 
     @Override
+    public JRPGConfiguration stats(final Consumer<StatSystem> statSystemConsumer) {
+        statSystemConsumers.add(statSystemConsumer);
+        return this;
+    }
+
+    @Override
     public JRPGConfiguration content(final Consumer<ContentRegistry> contentRegistryConsumer) {
         contentRegistryConsumers.add(contentRegistryConsumer);
         return this;
@@ -85,6 +93,11 @@ public final class DefaultJRPGConfiguration implements JRPGConfiguration, Config
     @Override
     public void configureNewGame(final GameState gameState) {
         gameStateConsumers.forEach(consumer -> consumer.accept(gameState));
+    }
+
+    @Override
+    public void configure(final StatSystem statSystem) {
+        statSystemConsumers.forEach(consumer -> consumer.accept(statSystem));
     }
 
     @Override

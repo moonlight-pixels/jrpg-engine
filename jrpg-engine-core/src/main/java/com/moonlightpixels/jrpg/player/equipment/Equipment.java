@@ -7,21 +7,30 @@ import com.moonlightpixels.jrpg.combat.stats.StatMultiplier;
 import com.moonlightpixels.jrpg.inventory.Item;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-@Builder
 public final class Equipment implements Item, StatModifierHolder {
     private final Key key;
     private final EquipmentType type;
     private final String name;
-    @Singular
     private final List<StatAddition> statAdditions;
-    @Singular
     private final List<StatMultiplier> statMultipliers;
+
+    @Builder
+    private Equipment(final Key key,
+                     final EquipmentType type,
+                     final String name,
+                     final List<StatAddition> statAdditions,
+                     final List<StatMultiplier> statMultipliers) {
+        this.key = key;
+        this.type = type;
+        this.name = name;
+        this.statAdditions = statAdditions;
+        this.statMultipliers = statMultipliers;
+    }
 
     @Override
     public List<StatAddition> getStatAdditions(final Stat.Key stat) {
@@ -35,6 +44,32 @@ public final class Equipment implements Item, StatModifierHolder {
         return statMultipliers.stream()
             .filter(statAdditon -> statAdditon.getStat().equals(stat))
             .collect(Collectors.toList());
+    }
+
+    public static final class EquipmentBuilder {
+        /**
+         * Add a stat bonus/penalty to this piece of equipment.
+         *
+         * @param stat Stat to modify
+         * @param addition bonus or penalty (negative value)
+         * @return this EquipmentBuilder
+         */
+        public EquipmentBuilder statAddition(final Stat.Key stat, final int addition) {
+            statAdditions.add(new StatAddition(stat, addition));
+            return this;
+        }
+
+        /**
+         * Add a stat bonus/penalty to this piece of equipment.
+         *
+         * @param stat Stat to modify
+         * @param muliplier bonus (greater than 1.0) or penalty (less than 1.0)
+         * @return this EquipmentBuilder
+         */
+        public EquipmentBuilder statMultipler(final Stat.Key stat, final float muliplier) {
+            statMultipliers.add(new StatMultiplier(stat, muliplier));
+            return this;
+        }
     }
 
     public interface Key extends Item.Key { }

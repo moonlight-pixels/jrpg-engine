@@ -6,7 +6,9 @@ class BaseStatSpec extends Specification {
     StatHolder statHolder
 
     void setup() {
-        statHolder = Mock()
+        statHolder = Mock(StatHolder) {
+            getHolderType() >> StatHolder.Type.Player
+        }
     }
 
     void 'value equals base value when no modifiers are applied'() {

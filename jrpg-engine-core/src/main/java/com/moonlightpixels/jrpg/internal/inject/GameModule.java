@@ -6,6 +6,7 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.combat.internal.CombatState;
 import com.moonlightpixels.jrpg.combat.internal.DefaultCombatState;
+import com.moonlightpixels.jrpg.combat.stats.StatSystem;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
 import com.moonlightpixels.jrpg.config.internal.ConfigurationHandler;
 import com.moonlightpixels.jrpg.frontend.FrontEndConfig;
@@ -99,5 +100,13 @@ public final class GameModule extends AbstractModule {
     @Provides
     GameState provideGameState(final GameStateHolder gameStateHolder) {
         return gameStateHolder.getGameState();
+    }
+
+    @Provides
+    @Singleton
+    StatSystem provideStatSystem(final ConfigurationHandler configurationHandler) {
+        final StatSystem statSystem = new StatSystem();
+        configurationHandler.configure(statSystem);
+        return statSystem;
     }
 }

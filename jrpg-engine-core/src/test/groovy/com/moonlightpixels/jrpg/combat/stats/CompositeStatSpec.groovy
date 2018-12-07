@@ -12,7 +12,9 @@ class CompositeStatSpec extends Specification {
     Function<Map<Stat.Key, Integer>, Integer> statFunction
 
     void setup() {
-        statHolder = Mock()
+        statHolder = Mock(StatHolder) {
+            getHolderType() >> StatHolder.Type.Player
+        }
         strengthStat = BaseStat.builder()
             .key(TestStats.STR)
             .name('STR')
