@@ -6,6 +6,8 @@ import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.moonlightpixels.jrpg.GameState
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade
+import com.moonlightpixels.jrpg.internal.inject.InjectionContext
+import com.moonlightpixels.jrpg.internal.inject.TestModule
 import com.moonlightpixels.jrpg.save.SavedGameService
 import com.moonlightpixels.jrpg.save.internal.format.FormatEncodingException
 import com.moonlightpixels.jrpg.save.internal.format.SavedGameFormat
@@ -26,6 +28,8 @@ class DefaultSavedGameServiceSpec extends Specification {
     FileHandle fileHandle
 
     void setup() {
+        InjectionContext.reset()
+        InjectionContext.addModule(new TestModule())
         clock = Mock()
         fileHandle = Mock()
         files = Mock(Files) {

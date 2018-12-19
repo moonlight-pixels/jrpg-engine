@@ -2,6 +2,8 @@ package com.moonlightpixels.jrpg.player;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.moonlightpixels.jrpg.combat.stats.Stat;
+import com.moonlightpixels.jrpg.combat.stats.StatHolder;
+import com.moonlightpixels.jrpg.combat.stats.StatSystem;
 import com.moonlightpixels.jrpg.internal.inject.InjectionContext;
 import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet;
 import com.moonlightpixels.jrpg.player.equipment.internal.EquipmentSlotConfig;
@@ -13,7 +15,7 @@ import lombok.experimental.Delegate;
 import java.util.Map;
 
 @Data
-public final class PlayerCharacter {
+public final class PlayerCharacter implements StatHolder {
     private final Key key;
     private String name;
     private CharacterAnimationSet.Key animationSet;
@@ -36,10 +38,11 @@ public final class PlayerCharacter {
             nextLevelFunction,
             experience,
             new PlayerStats(
-                InjectionContext.get().getInstance(EquipmentSlotConfig.class).getEquipmentSlots()
+                InjectionContext.get().getInstance(StatSystem.class),
+                InjectionContext.get().getInstance(EquipmentSlotConfig.class).getEquipmentSlots(),
+                statValues
             )
         );
-        statValues.forEach(playerStats::setBaseValue);
     }
 
     PlayerCharacter(final Key key,

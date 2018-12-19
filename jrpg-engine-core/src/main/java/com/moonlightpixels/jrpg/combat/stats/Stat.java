@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.combat.stats;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
@@ -67,5 +68,6 @@ public abstract class Stat {
             .apply(getBaseValue(subject));
     }
 
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
     public interface Key { }
 }

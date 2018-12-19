@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.moonlightpixels.jrpg.GameState;
-import com.moonlightpixels.jrpg.combat.internal.CombatState;
+import com.moonlightpixels.jrpg.combat.CombatState;
 import com.moonlightpixels.jrpg.combat.internal.DefaultCombatState;
 import com.moonlightpixels.jrpg.combat.stats.StatSystem;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;

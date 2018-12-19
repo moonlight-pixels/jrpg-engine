@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.combat.stats;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -40,6 +41,15 @@ public final class StatSystem {
         }
 
         return true;
+    }
+
+    /**
+     * Returns Set of registered stats.
+     *
+     * @return stats
+     */
+    public Set<Stat> getStats() {
+        return Collections.unmodifiableSet(stats);
     }
 
     private Optional<Stat> findByKey(final Stat.Key key) {

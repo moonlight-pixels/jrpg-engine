@@ -9,5 +9,10 @@ public enum RequiredStats implements Stat.Key {
     /**
      * Level.
      */
-    Level
+    Level,
+
+    /**
+     * Number of 'ticks' between combat turns..
+     */
+    CombatTurnInterval
 }

@@ -1,6 +1,7 @@
 package com.moonlightpixels.jrpg.combat.internal;
 
 import com.badlogic.gdx.ai.msg.Telegram;
+import com.moonlightpixels.jrpg.combat.CombatState;
 import com.moonlightpixels.jrpg.input.ClickEvent;
 import com.moonlightpixels.jrpg.input.ControlEvent;
 import com.moonlightpixels.jrpg.input.InputScheme;

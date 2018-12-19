@@ -1,5 +1,8 @@
 package com.moonlightpixels.jrpg.player
 
+import com.moonlightpixels.jrpg.combat.stats.RequiredStats
+import com.moonlightpixels.jrpg.internal.inject.InjectionContext
+import com.moonlightpixels.jrpg.internal.inject.TestModule
 import com.moonlightpixels.jrpg.map.Location
 import com.moonlightpixels.jrpg.map.MapDefinition
 import com.moonlightpixels.jrpg.map.TileCoordinate
@@ -11,12 +14,16 @@ class CastSpec extends Specification {
     private PlayerCharacter player2
 
     void setup() {
+        InjectionContext.reset()
+        InjectionContext.addModule(new TestModule())
         location = new Location(Mock(MapDefinition.Key), new TileCoordinate(1, 1))
         player1 = PlayerCharacter.builder()
             .key(Mock(PlayerCharacter.Key))
+            .statValue(RequiredStats.MaxHP, 100)
             .build()
         player2 = PlayerCharacter.builder()
             .key(Mock(PlayerCharacter.Key))
+            .statValue(RequiredStats.MaxHP, 100)
             .build()
     }
 

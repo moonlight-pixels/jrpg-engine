@@ -1,4 +1,4 @@
-package com.moonlightpixels.jrpg.combat.internal;
+package com.moonlightpixels.jrpg.combat;
 
 import com.moonlightpixels.jrpg.internal.GameMode;
 

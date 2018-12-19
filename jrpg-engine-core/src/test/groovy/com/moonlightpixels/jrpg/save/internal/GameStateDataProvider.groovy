@@ -1,6 +1,9 @@
 package com.moonlightpixels.jrpg.save.internal
 
 import com.moonlightpixels.jrpg.GameState
+import com.moonlightpixels.jrpg.combat.stats.BaseStat
+import com.moonlightpixels.jrpg.combat.stats.RequiredStats
+import com.moonlightpixels.jrpg.combat.stats.StatSystem
 import com.moonlightpixels.jrpg.internal.DefaultGameState
 import com.moonlightpixels.jrpg.map.Location
 import com.moonlightpixels.jrpg.map.MapDefinition
@@ -14,12 +17,32 @@ import com.moonlightpixels.jrpg.save.internal.mapper.SavedPartyMapper
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedPlayerCharacterMapper
 
 class GameStateDataProvider {
+    final StatSystem statSystem
     final SavedPlayerCharacterMapper savedPlayerCharacterMapper
     final SavedPartyMapper savedPartyMapper
     final SavedGameStateMapper mapper
 
     GameStateDataProvider() {
-        savedPlayerCharacterMapper = new SavedPlayerCharacterMapper()
+        statSystem = new StatSystem()
+        statSystem.addStat(BaseStat.builder()
+            .key(RequiredStats.MaxHP)
+            .name('Max HP')
+            .shortName('HPM')
+            .build()
+        )
+        statSystem.addStat(BaseStat.builder()
+            .key(RequiredStats.Level)
+            .name('Level')
+            .shortName('LVL')
+            .build()
+        )
+        statSystem.addStat(BaseStat.builder()
+            .key(RequiredStats.CombatTurnInterval)
+            .name('Combat Turn Interval')
+            .shortName('CTI')
+            .build()
+        )
+        savedPlayerCharacterMapper = new SavedPlayerCharacterMapper(statSystem)
         savedPartyMapper = new SavedPartyMapper()
         mapper = new SavedGameStateMapper(
             savedPlayerCharacterMapper,
@@ -49,6 +72,9 @@ class GameStateDataProvider {
             .key(key)
             .name(key.toString())
             .animationSet(new AnimationKey(id: key.toString()))
+            .statValue(RequiredStats.MaxHP, 100)
+            .statValue(RequiredStats.Level, 1)
+            .statValue(RequiredStats.CombatTurnInterval, 10)
             .build()
 
         return playerCharacter

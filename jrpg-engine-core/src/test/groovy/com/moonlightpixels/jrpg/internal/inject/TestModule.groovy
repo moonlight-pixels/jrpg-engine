@@ -18,7 +18,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
-import com.moonlightpixels.jrpg.combat.internal.CombatState
+import com.moonlightpixels.jrpg.combat.CombatState
+import com.moonlightpixels.jrpg.combat.stats.BaseStat
+import com.moonlightpixels.jrpg.combat.stats.RequiredStats
+import com.moonlightpixels.jrpg.combat.stats.StatSystem
 import com.moonlightpixels.jrpg.config.JRPGConfiguration
 import com.moonlightpixels.jrpg.config.LaunchConfig
 import com.moonlightpixels.jrpg.config.internal.DefaultJRPGConfiguration
@@ -35,6 +38,7 @@ import spock.lang.Specification
 import spock.mock.DetachedMockFactory
 
 import javax.inject.Named
+import javax.inject.Singleton
 
 class TestModule extends AbstractModule {
     JRPGConfiguration jrpgConfiguration
@@ -229,5 +233,31 @@ class TestModule extends AbstractModule {
     @Named('initial')
     State<DefaultJRPG> provideInitialState() {
         return frontEndState
+    }
+
+    @Provides
+    @Singleton
+    StatSystem provideStatSystem() {
+        StatSystem statSystem = new StatSystem()
+        statSystem.addStat(BaseStat.builder()
+            .key(RequiredStats.MaxHP)
+            .name('Max HP')
+            .shortName('HPM')
+            .build()
+        )
+        statSystem.addStat(BaseStat.builder()
+            .key(RequiredStats.Level)
+            .name('Level')
+            .shortName('LVL')
+            .build()
+        )
+        statSystem.addStat(BaseStat.builder()
+            .key(RequiredStats.CombatTurnInterval)
+            .name('Combat Turn Interval')
+            .shortName('CTI')
+            .build()
+        )
+
+        return statSystem
     }
 }

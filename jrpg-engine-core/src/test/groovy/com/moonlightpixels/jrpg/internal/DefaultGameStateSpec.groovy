@@ -1,6 +1,9 @@
 package com.moonlightpixels.jrpg.internal
 
 import com.moonlightpixels.jrpg.GameState
+import com.moonlightpixels.jrpg.combat.stats.RequiredStats
+import com.moonlightpixels.jrpg.internal.inject.InjectionContext
+import com.moonlightpixels.jrpg.internal.inject.TestModule
 import com.moonlightpixels.jrpg.map.Location
 import com.moonlightpixels.jrpg.map.MapDefinition
 import com.moonlightpixels.jrpg.map.TileCoordinate
@@ -14,8 +17,11 @@ class DefaultGameStateSpec extends Specification {
     private PlayerCharacter playerCharacter
 
     void setup() {
+        InjectionContext.reset()
+        InjectionContext.addModule(new TestModule())
         playerCharacter = PlayerCharacter.builder()
             .key(Mock(PlayerCharacter.Key))
+            .statValue(RequiredStats.MaxHP, 100)
             .build()
     }
 

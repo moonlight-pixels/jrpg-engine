@@ -3,7 +3,7 @@ package com.moonlightpixels.jrpg.internal;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.google.common.base.Preconditions;
-import com.moonlightpixels.jrpg.combat.internal.CombatState;
+import com.moonlightpixels.jrpg.combat.CombatState;
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
 import com.moonlightpixels.jrpg.input.InputSystem;
 import com.moonlightpixels.jrpg.input.KeyboardMapping;

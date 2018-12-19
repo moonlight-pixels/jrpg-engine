@@ -5,6 +5,7 @@ import spock.lang.Specification
 class StatSystemSpec extends Specification {
     Stat maxHp
     Stat level
+    Stat combatTurnInterval
 
     void setup() {
         maxHp = BaseStat.builder()
@@ -17,6 +18,11 @@ class StatSystemSpec extends Specification {
             .name('Level')
             .shortName('LVL')
             .build()
+        combatTurnInterval = BaseStat.builder()
+            .key(RequiredStats.CombatTurnInterval)
+            .name('Combat Turn Interval')
+            .shortName('CTI')
+            .build()
     }
 
     void 'Can retrieve registered stats'() {
@@ -24,6 +30,7 @@ class StatSystemSpec extends Specification {
         StatSystem statSystem = new StatSystem()
         statSystem.addStat(maxHp)
         statSystem.addStat(level)
+        statSystem.addStat(combatTurnInterval)
 
         then:
         statSystem.isValid()
@@ -35,6 +42,7 @@ class StatSystemSpec extends Specification {
         when:
         StatSystem statSystem = new StatSystem()
         statSystem.addStat(level)
+        statSystem.addStat(combatTurnInterval)
 
         then:
         !statSystem.isValid()
@@ -44,6 +52,17 @@ class StatSystemSpec extends Specification {
         when:
         StatSystem statSystem = new StatSystem()
         statSystem.addStat(maxHp)
+        statSystem.addStat(combatTurnInterval)
+
+        then:
+        !statSystem.isValid()
+    }
+
+    void 'StatSystem is not valid  if combatTurnInterval stat not provided.'() {
+        when:
+        StatSystem statSystem = new StatSystem()
+        statSystem.addStat(maxHp)
+        statSystem.addStat(level)
 
         then:
         !statSystem.isValid()
@@ -54,6 +73,7 @@ class StatSystemSpec extends Specification {
         StatSystem statSystem = new StatSystem()
         statSystem.addStat(maxHp)
         statSystem.addStat(level)
+        statSystem.addStat(combatTurnInterval)
 
         when:
         statSystem.getStat(TestStats.STR)
