@@ -2,6 +2,7 @@ package com.moonlightpixels.jrpg.save.internal.mapper;
 
 import com.moonlightpixels.jrpg.combat.stats.Stat;
 import com.moonlightpixels.jrpg.combat.stats.StatSystem;
+import com.moonlightpixels.jrpg.player.internal.DefaultPlayerCharacter;
 import com.moonlightpixels.jrpg.player.PlayerCharacter;
 import com.moonlightpixels.jrpg.save.internal.SavedPlayerCharacter;
 import com.moonlightpixels.jrpg.save.internal.SavedStateLoadExcpetion;
@@ -31,7 +32,7 @@ public final class SavedPlayerCharacterMapper {
     }
 
     public PlayerCharacter map(final SavedPlayerCharacter savedPlayerCharacter) throws SavedStateLoadExcpetion {
-        PlayerCharacter.PlayerCharacterBuilder playerCharacter = PlayerCharacter.builder()
+        DefaultPlayerCharacter.DefaultPlayerCharacterBuilder playerCharacter = DefaultPlayerCharacter.builder()
             .key(savedPlayerCharacter.getKey())
             .name(savedPlayerCharacter.getName())
             .animationSet(savedPlayerCharacter.getAnimationSetKey());

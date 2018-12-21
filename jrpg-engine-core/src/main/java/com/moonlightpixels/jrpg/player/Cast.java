@@ -1,6 +1,7 @@
 package com.moonlightpixels.jrpg.player;
 
 import com.google.common.base.Preconditions;
+import com.moonlightpixels.jrpg.player.internal.DefaultPlayerCharacter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,7 +25,7 @@ public final class Cast {
     private Party activeParty;
     private final List<Party> currentParties = new LinkedList<>();
     private final List<PlayerCharacter> roster = new LinkedList<>();
-    private final Map<PlayerCharacter.Key, PlayerCharacter> cast = new HashMap<>();
+    private final Map<DefaultPlayerCharacter.Key, PlayerCharacter> cast = new HashMap<>();
 
     /**
      * Returns the game's active Party.
@@ -102,7 +103,7 @@ public final class Cast {
      * @param key PlayerCharacter key
      * @return PlayerCharacter (wrapped in Optional)
      */
-    public Optional<PlayerCharacter> getPlayerCharacter(final PlayerCharacter.Key key) {
+    public Optional<PlayerCharacter> getPlayerCharacter(final DefaultPlayerCharacter.Key key) {
         return Optional.ofNullable(cast.get(key));
     }
 
@@ -142,7 +143,7 @@ public final class Cast {
      *
      * @param key Key of PlayerCharacter to add ot roster
      */
-    public void addToRoster(final PlayerCharacter.Key key) {
+    public void addToRoster(final DefaultPlayerCharacter.Key key) {
         final PlayerCharacter playerCharacter = cast.get(key);
         if (!roster.contains(playerCharacter)) {
             roster.add(playerCharacter);
@@ -165,7 +166,7 @@ public final class Cast {
      *
      * @param key Key of the PlayerCharacter to remove.
      */
-    public void removeFromRoster(final PlayerCharacter.Key key) {
+    public void removeFromRoster(final DefaultPlayerCharacter.Key key) {
         getPlayerCharacter(key).ifPresent(roster::remove);
     }
 

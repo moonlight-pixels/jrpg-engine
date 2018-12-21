@@ -1,7 +1,7 @@
 package com.moonlightpixels.jrpg.save.internal;
 
 import com.moonlightpixels.jrpg.map.MapDefinition;
-import com.moonlightpixels.jrpg.player.PlayerCharacter;
+import com.moonlightpixels.jrpg.player.internal.DefaultPlayerCharacter;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 public class SavedParty {
     private int minimumSize;
     private int maximumSize;
-    private List<PlayerCharacter.Key> members;
+    private List<DefaultPlayerCharacter.Key> members;
     private MapDefinition.Key mapKey;
     private int x;
     private int y;

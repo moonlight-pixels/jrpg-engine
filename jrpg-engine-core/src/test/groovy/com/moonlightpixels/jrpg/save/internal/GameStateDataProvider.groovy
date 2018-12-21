@@ -12,6 +12,7 @@ import com.moonlightpixels.jrpg.map.character.CharacterAnimationSet
 import com.moonlightpixels.jrpg.player.Cast
 import com.moonlightpixels.jrpg.player.Party
 import com.moonlightpixels.jrpg.player.PlayerCharacter
+import com.moonlightpixels.jrpg.player.internal.DefaultPlayerCharacter
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedGameStateMapper
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedPartyMapper
 import com.moonlightpixels.jrpg.save.internal.mapper.SavedPlayerCharacterMapper
@@ -67,8 +68,8 @@ class GameStateDataProvider {
         return mapper.map(createGameState())
     }
 
-    private static PlayerCharacter createPlayerCharacter(final Players key) {
-        PlayerCharacter playerCharacter = PlayerCharacter.builder()
+    private static DefaultPlayerCharacter createPlayerCharacter(final Players key) {
+        DefaultPlayerCharacter playerCharacter = DefaultPlayerCharacter.builder()
             .key(key)
             .name(key.toString())
             .animationSet(new AnimationKey(id: key.toString()))

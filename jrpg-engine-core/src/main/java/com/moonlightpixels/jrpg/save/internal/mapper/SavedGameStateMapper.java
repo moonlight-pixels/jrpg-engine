@@ -3,6 +3,7 @@ package com.moonlightpixels.jrpg.save.internal.mapper;
 import com.moonlightpixels.jrpg.GameState;
 import com.moonlightpixels.jrpg.internal.DefaultGameState;
 import com.moonlightpixels.jrpg.player.Cast;
+import com.moonlightpixels.jrpg.player.internal.DefaultPlayerCharacter;
 import com.moonlightpixels.jrpg.player.Party;
 import com.moonlightpixels.jrpg.player.PlayerCharacter;
 import com.moonlightpixels.jrpg.save.internal.SavedGameState;
@@ -63,13 +64,13 @@ public final class SavedGameStateMapper {
 
     private void mapCastFromSavedData(final SavedGameState savedGameState,
                                       final Cast cast) throws SavedStateLoadExcpetion {
-        Map<PlayerCharacter.Key, PlayerCharacter> playerCharacterMap = new HashMap<>();
+        Map<DefaultPlayerCharacter.Key, PlayerCharacter> playerCharacterMap = new HashMap<>();
         for (SavedPlayerCharacter savedPlayerCharacter : savedGameState.getCast()) {
             final PlayerCharacter playerCharacter = savedPlayerCharacterMapper.map(savedPlayerCharacter);
             playerCharacterMap.put(savedPlayerCharacter.getKey(), playerCharacter);
             cast.addToCast(playerCharacter);
         }
-        for (PlayerCharacter.Key key : savedGameState.getRoster()) {
+        for (DefaultPlayerCharacter.Key key : savedGameState.getRoster()) {
             cast.addToRoster(key);
         }
         List<Party> parties = savedGameState.getParties().stream()

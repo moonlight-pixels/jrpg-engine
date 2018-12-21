@@ -1,12 +1,9 @@
 package com.moonlightpixels.jrpg.ui.standard.action
 
 import com.moonlightpixels.jrpg.GameState
-import com.moonlightpixels.jrpg.combat.stats.RequiredStats
 import com.moonlightpixels.jrpg.config.internal.ConfigurationHandler
 import com.moonlightpixels.jrpg.internal.GameStateHolder
 import com.moonlightpixels.jrpg.internal.JRPG
-import com.moonlightpixels.jrpg.internal.inject.InjectionContext
-import com.moonlightpixels.jrpg.internal.inject.TestModule
 import com.moonlightpixels.jrpg.map.Location
 import com.moonlightpixels.jrpg.map.MapDefinition
 import com.moonlightpixels.jrpg.map.TileCoordinate
@@ -17,8 +14,6 @@ import spock.lang.Specification
 class NewGameActionSpec extends Specification {
     void 'perform() configured a new Game State and starts game'() {
         setup:
-        InjectionContext.reset()
-        InjectionContext.addModule(new TestModule())
         JRPG jrpg = Mock()
         GameStateHolder gameStateHolder = new GameStateHolder()
         ConfigurationHandler configurationHandler = Mock()
@@ -31,12 +26,7 @@ class NewGameActionSpec extends Specification {
         1 * configurationHandler.configureNewGame(_) >> { args ->
             GameState gameState = args[0] as GameState
             Party party = new Party(1, 1, new Location(Mock(MapDefinition.Key), new TileCoordinate(1, 1)))
-            party.addMember(
-                PlayerCharacter.builder()
-                    .key(Mock(PlayerCharacter.Key))
-                    .statValue(RequiredStats.MaxHP, 100)
-                    .build()
-            )
+            party.addMember(Mock(PlayerCharacter))
             gameState.cast.configureParties(party)
         }
         1 * jrpg.toMap()

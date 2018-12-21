@@ -1,4 +1,4 @@
-package com.moonlightpixels.jrpg.player;
+package com.moonlightpixels.jrpg.player.internal;
 
 import com.google.common.base.Preconditions;
 import com.moonlightpixels.jrpg.combat.stats.RequiredStats;
