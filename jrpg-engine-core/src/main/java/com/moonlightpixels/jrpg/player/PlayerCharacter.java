@@ -115,10 +115,26 @@ public interface PlayerCharacter extends StatHolder {
      *
      * @return builder
      */
-    static DefaultPlayerCharacter.DefaultPlayerCharacterBuilder builder() {
+    static PlayerCharacterBuilder builder() {
         return DefaultPlayerCharacter.builder();
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
     interface Key { }
+
+    interface PlayerCharacterBuilder {
+        PlayerCharacterBuilder key(Key key);
+
+        PlayerCharacterBuilder name(String name);
+
+        PlayerCharacterBuilder animationSet(CharacterAnimationSet.Key animationSet);
+
+        PlayerCharacterBuilder nextLevelFunction(NextLevelFunction nextLevelFunction);
+
+        PlayerCharacterBuilder experience(int experience);
+
+        PlayerCharacterBuilder statValue(Stat.Key statValueKey, Integer statValueValue);
+
+        PlayerCharacter build();
+    }
 }

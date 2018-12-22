@@ -8,6 +8,7 @@ import com.moonlightpixels.jrpg.inventory.Item;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,9 @@ public final class Equipment implements Item, StatModifierHolder {
     }
 
     public static final class EquipmentBuilder {
+        private List<StatAddition> statAdditions = new ArrayList<>();
+        private List<StatMultiplier> statMultipliers = new ArrayList<>();
+
         /**
          * Add a stat bonus/penalty to this piece of equipment.
          *

@@ -62,4 +62,6 @@ public final class DefaultPlayerCharacter implements PlayerCharacter {
         this.playerStats = playerStats;
     }
 
+    public static class DefaultPlayerCharacterBuilder implements PlayerCharacter.PlayerCharacterBuilder { }
+
 }
