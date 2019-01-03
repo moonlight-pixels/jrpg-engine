@@ -5,15 +5,17 @@ import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.badlogic.gdx.ai.msg.Telegram;
-import com.google.common.base.Preconditions;
+import com.google.inject.assistedinject.Assisted;
 import com.moonlightpixels.jrpg.combat.internal.BattleEvent;
+import com.moonlightpixels.jrpg.combat.stats.StatSystem;
+import com.moonlightpixels.jrpg.player.Party;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class Battle {
@@ -29,13 +31,20 @@ public final class Battle {
 
     @Inject
     Battle(final CombatConfig config,
-           @Named("combat") final MessageDispatcher messageDispatcher) {
+           @Named("combat") final MessageDispatcher messageDispatcher,
+           final StatSystem statSystem,
+           @Assisted final Party party,
+           @Assisted final Encounter encounter) {
         this.config = config;
         this.messageDispatcher = messageDispatcher;
-        party = Collections.emptyList();
-        enemies = Collections.emptyList();
+        this.party = party.getMembers().stream()
+            .map(playerCharacter -> new PlayerCombatant(statSystem, playerCharacter))
+            .collect(Collectors.toList());
+        enemies = encounter.getEnemies().stream()
+            .map(enemy -> new EnemyCombatant(statSystem, enemy))
+            .collect(Collectors.toList());
         timeUntilNextTick = config.getTimePerTick();
-        stateMachine = new DefaultStateMachine<>(this, BattleState.CheckQueue);
+        stateMachine = new DefaultStateMachine<>(this, BattleState.Initial);
         messageDispatcher.addListener(
             stateMachine,
             CombatMessageTypes.ANIMATION_COMPLETE
@@ -77,11 +86,22 @@ public final class Battle {
     }
 
     private Optional<BattleEvent> getNextEvent() {
-        Preconditions.checkState(!eventQueue.isEmpty(), "EventQueue cannot be Empty!");
-        return (eventQueue.peek().canStart()) ? Optional.of(eventQueue.poll()) : Optional.empty();
+        return (!eventQueue.isEmpty() && eventQueue.peek().canStart())
+            ? Optional.of(eventQueue.poll())
+            : Optional.empty();
     }
 
     private enum BattleState implements State<Battle> {
+        Initial {
+            @Override
+            public void update(final Battle entity) {
+                entity.messageDispatcher.dispatchMessage(
+                    CombatMessageTypes.START_BATTLE,
+                    new BattleRoster(entity.party, entity.enemies)
+                );
+                entity.changeStateAndUpdate(CheckQueue);
+            }
+        },
         CheckQueue {
             @Override
             public void update(final Battle entity) {
