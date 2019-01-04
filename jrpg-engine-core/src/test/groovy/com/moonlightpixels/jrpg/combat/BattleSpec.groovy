@@ -75,4 +75,15 @@ class BattleSpec extends Specification {
             return true
         }
     }
+
+    void 'Battle puts a decision event on the queue when a combatants combat turn meter fills'() {
+        when:
+        battle.update((2 * TIME_PER_TICK) as float)
+
+        then:
+        1 * enemyAI.getNextAction(battle) >> CombatActionInstance.builder()
+            .combatant(Mock(Combatant))
+            .action(Mock(CombatAction))
+            .build()
+    }
 }

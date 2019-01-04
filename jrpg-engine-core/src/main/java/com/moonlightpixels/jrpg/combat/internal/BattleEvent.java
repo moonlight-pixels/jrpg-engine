@@ -1,7 +1,7 @@
 package com.moonlightpixels.jrpg.combat.internal;
 
 import com.google.common.base.Preconditions;
-import com.moonlightpixels.jrpg.combat.CombatAction;
+import com.moonlightpixels.jrpg.combat.CombatActionInstance;
 import com.moonlightpixels.jrpg.combat.Combatant;
 import lombok.Builder;
 import lombok.Data;
@@ -40,7 +40,7 @@ public final class BattleEvent implements Comparable<BattleEvent> {
 
     public enum Type {
         Decision(null),
-        Action(CombatAction.class);
+        Action(CombatActionInstance.class);
 
         private final Class<?> payloadType;
 
