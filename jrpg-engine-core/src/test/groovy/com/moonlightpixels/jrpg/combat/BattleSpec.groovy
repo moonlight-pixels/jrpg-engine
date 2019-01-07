@@ -26,7 +26,7 @@ class BattleSpec extends Specification {
 
     void setup() {
         telegraph = Mock()
-        MessageDispatcher messageDispatcher = new MessageDispatcher()
+        messageDispatcher = new MessageDispatcher()
         messageDispatcher.addListener(
             telegraph,
             CombatMessageTypes.START_ANIMATION
