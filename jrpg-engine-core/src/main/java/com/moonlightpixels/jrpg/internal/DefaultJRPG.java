@@ -4,6 +4,7 @@ import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.google.common.base.Preconditions;
 import com.moonlightpixels.jrpg.combat.CombatState;
+import com.moonlightpixels.jrpg.combat.Encounter;
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
 import com.moonlightpixels.jrpg.input.InputSystem;
 import com.moonlightpixels.jrpg.input.KeyboardMapping;
@@ -50,7 +51,7 @@ public final class DefaultJRPG implements JRPG {
         stateMachine.changeState(mapState);
     }
 
-    public void toBattle() {
+    public void toBattle(final Encounter encounter) {
         stateMachine.changeState(combatState);
     }
 

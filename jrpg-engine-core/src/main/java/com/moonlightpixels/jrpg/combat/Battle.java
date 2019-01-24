@@ -7,6 +7,8 @@ import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.google.inject.assistedinject.Assisted;
 import com.moonlightpixels.jrpg.combat.internal.BattleEvent;
+import com.moonlightpixels.jrpg.combat.internal.BattleInfo;
+import com.moonlightpixels.jrpg.combat.internal.CombatMessageTypes;
 import com.moonlightpixels.jrpg.combat.stats.StatSystem;
 import com.moonlightpixels.jrpg.player.Party;
 
@@ -97,7 +99,10 @@ public final class Battle {
             public void update(final Battle entity) {
                 entity.messageDispatcher.dispatchMessage(
                     CombatMessageTypes.START_BATTLE,
-                    new BattleRoster(entity.party, entity.enemies)
+                    BattleInfo.builder()
+                        .party(entity.party)
+                        .enemies(entity.enemies)
+                        .build()
                 );
                 entity.changeStateAndUpdate(CheckQueue);
             }

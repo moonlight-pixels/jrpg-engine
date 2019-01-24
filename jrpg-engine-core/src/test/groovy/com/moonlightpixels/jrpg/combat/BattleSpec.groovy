@@ -3,6 +3,7 @@ package com.moonlightpixels.jrpg.combat
 import com.badlogic.gdx.ai.msg.MessageDispatcher
 import com.badlogic.gdx.ai.msg.Telegram
 import com.badlogic.gdx.ai.msg.Telegraph
+import com.moonlightpixels.jrpg.combat.internal.CombatMessageTypes
 import com.moonlightpixels.jrpg.combat.stats.BaseStat
 import com.moonlightpixels.jrpg.combat.stats.RequiredStats
 import com.moonlightpixels.jrpg.combat.stats.StatSystem

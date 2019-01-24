@@ -34,8 +34,8 @@ public final class AttackAction extends CombatAction {
      * @param toHitFormula formula for calculating hit/miss
      * @param damageFormula formula for calculating damage
      */
-    public AttackAction(final BiFunction<Combatant, Combatant, Integer> damageFormula,
-                        final BiFunction<Combatant, Combatant, Boolean> toHitFormula) {
+    public AttackAction(final BiFunction<Combatant, Combatant, Boolean> toHitFormula,
+                        final BiFunction<Combatant, Combatant, Integer> damageFormula) {
         this(DEFAULT_NAME, toHitFormula, damageFormula);
     }
 
