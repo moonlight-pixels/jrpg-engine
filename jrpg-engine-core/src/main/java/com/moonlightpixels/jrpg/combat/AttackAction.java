@@ -51,8 +51,8 @@ public final class AttackAction extends CombatAction {
             combatant,
             targets.stream()
                 .map(target -> applyAttack(combatant, target))
-                .collect(Collectors.toList())
-        );
+                .collect(Collectors.toList()),
+            null); // TODO fix this
     }
 
     private CombatTargetOutcome applyAttack(final Combatant combatant, final Combatant target) {

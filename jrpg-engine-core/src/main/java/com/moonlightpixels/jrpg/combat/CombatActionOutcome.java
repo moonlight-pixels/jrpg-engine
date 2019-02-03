@@ -1,9 +1,10 @@
 package com.moonlightpixels.jrpg.combat;
 
+import com.moonlightpixels.jrpg.combat.render.BattleAnimation;
 import lombok.Data;
 
 @Data
-abstract class CombatActionOutcome {
+public abstract class CombatActionOutcome {
     private final CombatAction.Key action;
     private final Combatant combatant;
 
@@ -13,4 +14,11 @@ abstract class CombatActionOutcome {
     }
 
     abstract void apply();
+
+    /**
+     * Animation for this outcome.
+     *
+     * @return animation
+     */
+    public abstract BattleAnimation getAnimation();
 }
