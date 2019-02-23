@@ -1,10 +1,13 @@
 package com.moonlightpixels.jrpg.internal.inject;
 
+import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.moonlightpixels.jrpg.GameState;
+import com.moonlightpixels.jrpg.combat.CombatConfig;
 import com.moonlightpixels.jrpg.combat.CombatState;
+import com.moonlightpixels.jrpg.combat.internal.DefaultCombatConfig;
 import com.moonlightpixels.jrpg.combat.internal.DefaultCombatState;
 import com.moonlightpixels.jrpg.combat.stats.StatSystem;
 import com.moonlightpixels.jrpg.config.JRPGConfiguration;
@@ -108,5 +111,18 @@ public final class GameModule extends AbstractModule {
         final StatSystem statSystem = new StatSystem();
         configurationHandler.configure(statSystem);
         return statSystem;
+    }
+
+    @Provides
+    @Singleton
+    CombatConfig provideCombatConfig() {
+        return new DefaultCombatConfig();
+    }
+
+    @Provides
+    @Singleton
+    @Named("combat")
+    MessageDispatcher provideCombatMessageDispatcher() {
+        return new MessageDispatcher();
     }
 }

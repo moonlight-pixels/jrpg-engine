@@ -1,5 +1,6 @@
 package com.moonlightpixels.jrpg.ui.util;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -49,6 +50,26 @@ public final class NinePatchUtil {
         return new NinePatch(patches);
     }
 
+    /**
+     * Creates a Ninepatch with a gradient blending technique applied to the center patch.
+     *
+     * @param texture Texture representing teh complete Ninepatch graphic.
+     * @param left Pixels from left edge.
+     * @param right Pixels from right edge.
+     * @param top Pixels from top edge.
+     * @param bottom Pixels from bottom edge.
+     * @param alpha Alpha to apply to ninepatch
+     *
+     * @return Ninepatch with a gradient blending technique applied to the center patch
+     */
+    public static NinePatch createGradientNinePatch(final Texture texture, final int left, final int right,
+                                                    final int top, final int bottom, final float alpha) {
+        return new NinePatch(
+            createGradientNinePatch(texture, left, right, top, bottom),
+            new Color(1f, 1f, 1f, alpha)
+        );
+    }
+
     private static TextureRegion[] getPatches(final Texture texture, final int left, final int right,
                                               final int top, final int bottom) {
         final TextureRegion[] patches = new TextureRegion[NINEPATCH_PATCHCOUNT];
@@ -60,12 +81,12 @@ public final class NinePatchUtil {
         patches[TOP_LEFT] = new TextureRegion(texture, 0, 0, left, top);
         patches[TOP_CENTER] = new TextureRegion(texture, left, 0, centerWidth, top);
         patches[TOP_RIGHT] = new TextureRegion(texture, width - right, 0, right, top);
-        patches[MIDDLE_LEFT] = new TextureRegion(texture, 0, bottom, left, centerHeight);
+        patches[MIDDLE_LEFT] = new TextureRegion(texture, 0, top, left, centerHeight);
         patches[MIDDLE_CENTER] = new TextureRegion(texture, left, top, centerWidth, centerHeight);
-        patches[MIDDLE_RIGHT] = new TextureRegion(texture, width - right, right, left, centerHeight);
-        patches[BOTTOM_LEFT] = new TextureRegion(texture, 0, height - top, left, bottom);
-        patches[BOTTOM_CENTER] = new TextureRegion(texture, left, height - top, centerWidth, bottom);
-        patches[BOTTOM_RIGHT] = new TextureRegion(texture, width - right, height - top, right, bottom);
+        patches[MIDDLE_RIGHT] = new TextureRegion(texture, width - right, top, left, centerHeight);
+        patches[BOTTOM_LEFT] = new TextureRegion(texture, 0, height - bottom, left, bottom);
+        patches[BOTTOM_CENTER] = new TextureRegion(texture, left, height - bottom, centerWidth, bottom);
+        patches[BOTTOM_RIGHT] = new TextureRegion(texture, width - right, height - bottom, right, bottom);
 
         return patches;
     }
