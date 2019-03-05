@@ -1,2 +1,3 @@
 include 'jrpg-engine-core'
 include 'jrpg-engine-desktop'
+include 'jrpg-engine-devtools'

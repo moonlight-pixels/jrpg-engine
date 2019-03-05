@@ -20,6 +20,7 @@ import com.moonlightpixels.jrpg.internal.gdx.GdxAIFacade;
 import com.moonlightpixels.jrpg.internal.gdx.GdxFacade;
 import com.moonlightpixels.jrpg.internal.launch.GameLauncherFactory;
 import com.moonlightpixels.jrpg.internal.launch.ServiceLoaderGameLauncherFactory;
+import com.moonlightpixels.jrpg.internal.plugin.PluginSystem;
 import com.moonlightpixels.jrpg.inventory.internal.ItemRegistry;
 import com.moonlightpixels.jrpg.map.character.internal.CharacterAnimationSetRegistry;
 import com.moonlightpixels.jrpg.map.internal.MapRegistry;
@@ -47,6 +48,7 @@ public final class BaseModule extends AbstractModule {
         bind(GdxFacade.class).to(DefaultGdxFacade.class);
         bind(GdxAIFacade.class).to(DefaultGdxAIFacade.class);
         bind(JRPGEngine.class).to(DefaultJRPGEngine.class);
+        bind(PluginSystem.class).asEagerSingleton();
 
         // content registries
         bind(CharacterAnimationSetRegistry.class).asEagerSingleton();

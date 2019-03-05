@@ -8,6 +8,7 @@ import com.moonlightpixels.jrpg.combat.Encounter;
 import com.moonlightpixels.jrpg.frontend.internal.FrontEndState;
 import com.moonlightpixels.jrpg.input.InputSystem;
 import com.moonlightpixels.jrpg.input.KeyboardMapping;
+import com.moonlightpixels.jrpg.internal.plugin.PluginSystem;
 import com.moonlightpixels.jrpg.map.internal.MapState;
 
 import javax.inject.Inject;
@@ -21,22 +22,26 @@ public final class DefaultJRPG implements JRPG {
     private final CombatState combatState;
     private final StateMachine<JRPG, GameMode> stateMachine;
     private final InputSystem inputSystem;
+    private final PluginSystem pluginSystem;
 
     @Inject
     public DefaultJRPG(final FrontEndState frontEndState,
                        final MapState mapState,
                        final CombatState combatState,
                        @Named(INITIAL_STATE) final GameMode initialState,
-                       final InputSystem inputSystem) {
+                       final InputSystem inputSystem,
+                       final PluginSystem pluginSystem) {
         this.frontEndState = frontEndState;
         this.mapState = mapState;
         this.combatState = combatState;
         this.stateMachine = new DefaultStateMachine<>(this, initialState);
         this.inputSystem = inputSystem;
+        this.pluginSystem = pluginSystem;
     }
 
     @Override
     public void init() {
+        pluginSystem.loadPlugins();
         inputSystem.useKeyboard(KeyboardMapping.DEFAULT);
         stateMachine.getCurrentState().enter(this);
     }
@@ -44,7 +49,9 @@ public final class DefaultJRPG implements JRPG {
     public void update() {
         stateMachine.getCurrentState().setInputScheme(inputSystem.getInputScheme());
         inputSystem.passEventsToHandler(stateMachine.getCurrentState());
+        pluginSystem.preRender();
         stateMachine.update();
+        pluginSystem.postRender();
     }
 
     public void toMap() {
