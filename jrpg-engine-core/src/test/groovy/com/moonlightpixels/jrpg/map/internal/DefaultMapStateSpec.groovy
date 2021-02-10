@@ -75,7 +75,7 @@ class DefaultMapStateSpec extends Specification {
             characterAnimationSetRegistry,
             mapFactory,
             gameStateHolder,
-            new PlayerInputCharacterController()
+            new PlayerInputCharacterController(), menu
         )
     }
 

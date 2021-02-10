@@ -182,7 +182,7 @@ public final class Menu implements InputHandler {
         stateMachine.getCurrentState().getInputHandler().setInputScheme(inputScheme);
     }
 
-    private boolean isOpen() {
+    public boolean isOpen() {
         return (stateMachine != null);
     }
 
